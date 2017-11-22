@@ -9,19 +9,19 @@
 /* Begin PBXBuildFile section */
 		43E86ABF1FBC320500B7130B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E86ABE1FBC320500B7130B /* AppDelegate.swift */; };
 		43E86AC11FBC320500B7130B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E86AC01FBC320500B7130B /* ViewController.swift */; };
-		43E86AC41FBC320500B7130B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 43E86AC21FBC320500B7130B /* Main.storyboard */; };
 		43E86AC61FBC320500B7130B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 43E86AC51FBC320500B7130B /* Assets.xcassets */; };
 		43E86AC91FBC320500B7130B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 43E86AC71FBC320500B7130B /* LaunchScreen.storyboard */; };
+		43F6870D1FC5887300F4CED0 /* SnapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43F6870C1FC5887300F4CED0 /* SnapKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		43E86ABB1FBC320500B7130B /* animalhelp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = animalhelp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		43E86ABE1FBC320500B7130B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		43E86AC01FBC320500B7130B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		43E86AC31FBC320500B7130B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		43E86AC51FBC320500B7130B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		43E86AC81FBC320500B7130B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		43E86ACA1FBC320500B7130B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		43F6870C1FC5887300F4CED0 /* SnapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SnapKit.framework; path = Carthage/Build/iOS/SnapKit.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -29,6 +29,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43F6870D1FC5887300F4CED0 /* SnapKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -40,6 +41,7 @@
 			children = (
 				43E86ABD1FBC320500B7130B /* animalhelp */,
 				43E86ABC1FBC320500B7130B /* Products */,
+				43F687081FC5863C00F4CED0 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -56,12 +58,19 @@
 			children = (
 				43E86ABE1FBC320500B7130B /* AppDelegate.swift */,
 				43E86AC01FBC320500B7130B /* ViewController.swift */,
-				43E86AC21FBC320500B7130B /* Main.storyboard */,
 				43E86AC51FBC320500B7130B /* Assets.xcassets */,
 				43E86AC71FBC320500B7130B /* LaunchScreen.storyboard */,
 				43E86ACA1FBC320500B7130B /* Info.plist */,
 			);
 			path = animalhelp;
+			sourceTree = "<group>";
+		};
+		43F687081FC5863C00F4CED0 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				43F6870C1FC5887300F4CED0 /* SnapKit.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -74,6 +83,7 @@
 				43E86AB71FBC320500B7130B /* Sources */,
 				43E86AB81FBC320500B7130B /* Frameworks */,
 				43E86AB91FBC320500B7130B /* Resources */,
+				43F6870B1FC5866C00F4CED0 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -125,11 +135,27 @@
 			files = (
 				43E86AC91FBC320500B7130B /* LaunchScreen.storyboard in Resources */,
 				43E86AC61FBC320500B7130B /* Assets.xcassets in Resources */,
-				43E86AC41FBC320500B7130B /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		43F6870B1FC5866C00F4CED0 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/SnapKit.framework",
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/bin/carthage copy-frameworks";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		43E86AB71FBC320500B7130B /* Sources */ = {
@@ -144,14 +170,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		43E86AC21FBC320500B7130B /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				43E86AC31FBC320500B7130B /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		43E86AC71FBC320500B7130B /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -276,6 +294,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = C3RT9P7X65;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = animalhelp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.aamiranwar.animalhelp;
@@ -291,6 +313,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = C3RT9P7X65;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = animalhelp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.aamiranwar.animalhelp;
