@@ -9,57 +9,64 @@
 import UIKit
 import SnapKit
 import CoreLocation
-
-struct Clinic:Codable {
-    var _id:String
-    var name:String
-    var lon:Double
-    var lat:Double
-    var city:String
-    var mobile:String
-}
-
-struct NearestClinic:Codable {
-    var distance:Double
-    var clinic:Clinic
-}
+import Moya
+import MapKit
+import GoogleMaps
 
 class ViewController: UIViewController {
     let showLocationButton:UIButton = UIButton(type: .system)
-    let locationLabel = UILabel()
+    let appleMapView = MKMapView()
+    var googleMapView:GMSMapView = {
+        let camera = GMSCameraPosition.camera(withLatitude: -33.86, longitude: 151.20, zoom: 6.0)
+        return GMSMapView.map(withFrame: CGRect.zero, camera: camera)
+    }()
+    
     let locationManager = CLLocationManager()
     var location:CLLocation?
     let defaultSession = URLSession(configuration: .default)
+    let zoomLevel:Float = 15
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         view.backgroundColor = UIColor.white
-        view.addSubview(locationLabel)
-        view.addSubview(showLocationButton)
-        
-        locationLabel.text = "Nothing here yet"
-        locationLabel.textColor = UIColor.black
-        locationLabel.numberOfLines = 0
-        locationLabel.snp.makeConstraints { (make) in
-            make.top.equalToSuperview().inset(UIEdgeInsetsMake(90, 0, 0, 0))
-            make.centerX.equalToSuperview()
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
+//        createAppleMapsView()
+        createGoogleMapView()
+        startDetectingLocation()
+    }
+    
+    fileprivate func createAppleMapsView() {
+        view.addSubview(appleMapView)
+        appleMapView.delegate = self
+        appleMapView.showsUserLocation = true
+        appleMapView.snp.makeConstraints { (make) in
+            make.top.equalTo(view.snp.top)
+            make.left.equalToSuperview()
+            make.right.equalToSuperview()
+            make.bottom.equalToSuperview()
         }
-        
-        
-        showLocationButton.setTitle("Get Location", for: .normal)
-        showLocationButton.addTarget(self, action: #selector(didTapShowLocation), for: .touchUpInside)
-        showLocationButton.snp.makeConstraints { (make) in
-            make.top.equalTo(self.locationLabel.snp.bottom).offset(30)
-            make.centerX.equalToSuperview()
+    }
+    
+    
+    
+    fileprivate func createGoogleMapView() {
+        // Create a GMSCameraPosition that tells the map to display the
+        // coordinate -33.86,151.20 at zoom level 6.
+        view.addSubview(googleMapView)
+        googleMapView.isMyLocationEnabled = true
+        googleMapView.snp.makeConstraints { (make) in
+            make.edges.equalToSuperview()
         }
+//        // Creates a marker in the center of the map.
+//        let marker = GMSMarker()
+//        marker.position = CLLocationCoordinate2D(latitude: -33.86, longitude: 151.20)
+//        marker.title = "Sydney"
+//        marker.snippet = "Australia"
+//        marker.map = googleMapView
         
     }
     
-    @objc func didTapShowLocation() {
-        locationLabel.text = "Tapped the button"
+    func startDetectingLocation() {
         let authStatus = CLLocationManager.authorizationStatus()
         if authStatus == .notDetermined {
             locationManager.requestWhenInUseAuthorization()
@@ -68,11 +75,14 @@ class ViewController: UIViewController {
             showLocationServicesDeniedAlert()
             return
         }
-        
-        
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
         locationManager.startUpdatingLocation()
+    }
+    
+    func stopDetectingLocation() {
+        locationManager.stopUpdatingLocation()
+        locationManager.delegate = nil
     }
     
     func showLocationServicesDeniedAlert() {
@@ -80,18 +90,11 @@ class ViewController: UIViewController {
             title: "Location Services Disabled",
             message: "Please enable location services for this app in Settings.",
             preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "OK", style: .default,
-                                     handler: nil)
+        let okAction = UIAlertAction(title: "OK", style: .default)
         present(alert, animated: true, completion: nil)
         alert.addAction(okAction)
     }
-    
-    func updateLabels() {
-        if let location = self.location {
-            self.locationLabel.text = "Location is \(location.coordinate.latitude) and \(location.coordinate.longitude)"
-        }
-    }
-    
+
     func updateNearestClinic() {
         if let location = self.location {
             if let url = URL(string: "http://localhost:3000/clinics/distance?lat=\(location.coordinate.latitude)&lon=\(location.coordinate.longitude)") {
@@ -106,9 +109,7 @@ class ViewController: UIViewController {
                             DispatchQueue.main.async {
                                 self.handleJSONString(jsonString: jsonString)
                             }
-                            
                         }
-                        
                     }
                 }
                 dataTask.resume()
@@ -121,12 +122,10 @@ class ViewController: UIViewController {
         do {
             let nearestClinic = try decoder.decode(NearestClinic.self, from: jsonString.data(using: .utf8)!)
             print("Final clinic \(nearestClinic)")
-            self.locationLabel.text = "\(nearestClinic.clinic.name) is \(nearestClinic.distance)km away from you!"
+//            self.locationLabel.text = "\(nearestClinic.clinic.name) is \(nearestClinic.distance)km away from you!"
         } catch let error {
             print("error! \(error)")
         }
-        
-
     }
 }
 
@@ -135,18 +134,27 @@ class ViewController: UIViewController {
 extension ViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print("Failed to update location")
+        
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         location = locations.last
         if let location = location {
             print("Updated location with \(location)")
-            self.updateLabels()
-            self.updateNearestClinic()
-            manager.stopUpdatingLocation()
+            let camera = GMSCameraPosition.camera(withLatitude: location.coordinate.latitude,
+                                                  longitude: location.coordinate.longitude,
+                                                  zoom: zoomLevel)
+                googleMapView.animate(to: camera)
+            self.stopDetectingLocation()
         }
         
         
+    }
+}
+
+extension ViewController: MKMapViewDelegate {
+    func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
+        appleMapView.showAnnotations([userLocation], animated: true)
     }
 }
 
