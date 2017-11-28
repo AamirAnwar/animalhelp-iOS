@@ -16,6 +16,7 @@
 		438A0D5C1FCDD703005A8CA4 /* GoogleMaps.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 438A0D5B1FCDD703005A8CA4 /* GoogleMaps.framework */; };
 		438A0D5E1FCDD709005A8CA4 /* GoogleMaps.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 438A0D5D1FCDD709005A8CA4 /* GoogleMaps.bundle */; };
 		438A0D621FCDEF70005A8CA4 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 438A0D611FCDEF70005A8CA4 /* Constants.swift */; };
+		438A0D641FCDF2DA005A8CA4 /* Private.swift in Sources */ = {isa = PBXBuildFile; fileRef = 438A0D631FCDF2DA005A8CA4 /* Private.swift */; };
 		439D2FBD1FC9E8EA00E6EB91 /* Clinic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439D2FBC1FC9E8EA00E6EB91 /* Clinic.swift */; };
 		439D2FBF1FCA006400E6EB91 /* Moya.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 439D2FBE1FCA006400E6EB91 /* Moya.framework */; };
 		439D2FC91FCA00AF00E6EB91 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 439D2FC01FCA00AE00E6EB91 /* Result.framework */; };
@@ -46,8 +47,8 @@
 		438A0D551FCDCBB2005A8CA4 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		438A0D5B1FCDD703005A8CA4 /* GoogleMaps.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleMaps.framework; path = Carthage/Build/iOS/GoogleMaps.framework; sourceTree = "<group>"; };
 		438A0D5D1FCDD709005A8CA4 /* GoogleMaps.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = GoogleMaps.bundle; path = Carthage/Build/iOS/GoogleMaps.framework/Resources/GoogleMaps.bundle; sourceTree = "<group>"; };
-		438A0D5F1FCDEF51005A8CA4 /* Private.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Private.swift; sourceTree = "<group>"; };
 		438A0D611FCDEF70005A8CA4 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		438A0D631FCDF2DA005A8CA4 /* Private.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Private.swift; sourceTree = "<group>"; };
 		439D2FBC1FC9E8EA00E6EB91 /* Clinic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Clinic.swift; sourceTree = "<group>"; };
 		439D2FBE1FCA006400E6EB91 /* Moya.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Moya.framework; path = Carthage/Build/iOS/Moya.framework; sourceTree = "<group>"; };
 		439D2FC01FCA00AE00E6EB91 /* Result.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Result.framework; path = Carthage/Build/iOS/Result.framework; sourceTree = "<group>"; };
@@ -103,6 +104,7 @@
 			children = (
 				43E86ABE1FBC320500B7130B /* AppDelegate.swift */,
 				43E86AC01FBC320500B7130B /* ViewController.swift */,
+				438A0D631FCDF2DA005A8CA4 /* Private.swift */,
 				438A0D611FCDEF70005A8CA4 /* Constants.swift */,
 				439D2FBC1FC9E8EA00E6EB91 /* Clinic.swift */,
 				43E86AC51FBC320500B7130B /* Assets.xcassets */,
@@ -238,6 +240,7 @@
 			files = (
 				438A0D621FCDEF70005A8CA4 /* Constants.swift in Sources */,
 				439D2FBD1FC9E8EA00E6EB91 /* Clinic.swift in Sources */,
+				438A0D641FCDF2DA005A8CA4 /* Private.swift in Sources */,
 				43E86AC11FBC320500B7130B /* ViewController.swift in Sources */,
 				43E86ABF1FBC320500B7130B /* AppDelegate.swift in Sources */,
 			);
