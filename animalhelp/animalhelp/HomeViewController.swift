@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  HomeViewController.swift
 //  animalhelp
 //
 //  Created by Aamir  on 15/11/17.
@@ -13,9 +13,9 @@ import Moya
 import MapKit
 import GoogleMaps
 
-class ViewController: UIViewController {
+class HomeViewController: UIViewController {
     let showLocationButton:UIButton = UIButton(type: .system)
-    let appleMapView = MKMapView()
+    lazy var appleMapView = MKMapView()
     var googleMapView:GMSMapView = {
         let camera = GMSCameraPosition.camera(withLatitude: -33.86, longitude: 151.20, zoom: 6.0)
         return GMSMapView.map(withFrame: CGRect.zero, camera: camera)
@@ -30,7 +30,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         view.backgroundColor = UIColor.white
-//        createAppleMapsView()
+        self.navigationItem.title = "Your Location"
         createGoogleMapView()
         startDetectingLocation()
     }
@@ -40,14 +40,12 @@ class ViewController: UIViewController {
         appleMapView.delegate = self
         appleMapView.showsUserLocation = true
         appleMapView.snp.makeConstraints { (make) in
-            make.top.equalTo(view.snp.top)
+            make.top.equalTo(self.navigationController!.navigationBar.snp.bottom)
             make.left.equalToSuperview()
             make.right.equalToSuperview()
             make.bottom.equalToSuperview()
         }
     }
-    
-    
     
     fileprivate func createGoogleMapView() {
         // Create a GMSCameraPosition that tells the map to display the
@@ -131,7 +129,7 @@ class ViewController: UIViewController {
 
 
 
-extension ViewController: CLLocationManagerDelegate {
+extension HomeViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print("Failed to update location")
         
@@ -152,7 +150,7 @@ extension ViewController: CLLocationManagerDelegate {
     }
 }
 
-extension ViewController: MKMapViewDelegate {
+extension HomeViewController: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
         appleMapView.showAnnotations([userLocation], animated: true)
     }
