@@ -21,8 +21,10 @@
 		439D2FBF1FCA006400E6EB91 /* Moya.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 439D2FBE1FCA006400E6EB91 /* Moya.framework */; };
 		439D2FC91FCA00AF00E6EB91 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 439D2FC01FCA00AE00E6EB91 /* Result.framework */; };
 		439D2FD01FCA00AF00E6EB91 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 439D2FC71FCA00AF00E6EB91 /* Alamofire.framework */; };
+		439E489C1FCEBB2000FAFB67 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439E489B1FCEBB2000FAFB67 /* APIService.swift */; };
+		439E489E1FCF060400FAFB67 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439E489D1FCF060400FAFB67 /* HomeViewModel.swift */; };
 		43E86ABF1FBC320500B7130B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E86ABE1FBC320500B7130B /* AppDelegate.swift */; };
-		43E86AC11FBC320500B7130B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E86AC01FBC320500B7130B /* ViewController.swift */; };
+		43E86AC11FBC320500B7130B /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E86AC01FBC320500B7130B /* HomeViewController.swift */; };
 		43E86AC61FBC320500B7130B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 43E86AC51FBC320500B7130B /* Assets.xcassets */; };
 		43E86AC91FBC320500B7130B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 43E86AC71FBC320500B7130B /* LaunchScreen.storyboard */; };
 		43F6870D1FC5887300F4CED0 /* SnapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43F6870C1FC5887300F4CED0 /* SnapKit.framework */; };
@@ -53,9 +55,11 @@
 		439D2FBE1FCA006400E6EB91 /* Moya.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Moya.framework; path = Carthage/Build/iOS/Moya.framework; sourceTree = "<group>"; };
 		439D2FC01FCA00AE00E6EB91 /* Result.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Result.framework; path = Carthage/Build/iOS/Result.framework; sourceTree = "<group>"; };
 		439D2FC71FCA00AF00E6EB91 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
+		439E489B1FCEBB2000FAFB67 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
+		439E489D1FCF060400FAFB67 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		43E86ABB1FBC320500B7130B /* animalhelp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = animalhelp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		43E86ABE1FBC320500B7130B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		43E86AC01FBC320500B7130B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		43E86AC01FBC320500B7130B /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		43E86AC51FBC320500B7130B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		43E86AC81FBC320500B7130B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		43E86ACA1FBC320500B7130B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -103,7 +107,9 @@
 			isa = PBXGroup;
 			children = (
 				43E86ABE1FBC320500B7130B /* AppDelegate.swift */,
-				43E86AC01FBC320500B7130B /* ViewController.swift */,
+				43E86AC01FBC320500B7130B /* HomeViewController.swift */,
+				439E489B1FCEBB2000FAFB67 /* APIService.swift */,
+				439E489D1FCF060400FAFB67 /* HomeViewModel.swift */,
 				438A0D631FCDF2DA005A8CA4 /* Private.swift */,
 				438A0D611FCDEF70005A8CA4 /* Constants.swift */,
 				439D2FBC1FC9E8EA00E6EB91 /* Clinic.swift */,
@@ -240,8 +246,10 @@
 			files = (
 				438A0D621FCDEF70005A8CA4 /* Constants.swift in Sources */,
 				439D2FBD1FC9E8EA00E6EB91 /* Clinic.swift in Sources */,
+				439E489E1FCF060400FAFB67 /* HomeViewModel.swift in Sources */,
 				438A0D641FCDF2DA005A8CA4 /* Private.swift in Sources */,
-				43E86AC11FBC320500B7130B /* ViewController.swift in Sources */,
+				43E86AC11FBC320500B7130B /* HomeViewController.swift in Sources */,
+				439E489C1FCEBB2000FAFB67 /* APIService.swift in Sources */,
 				43E86ABF1FBC320500B7130B /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

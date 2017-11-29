@@ -29,7 +29,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
         window?.backgroundColor = UIColor.white
-        window?.rootViewController = ViewController()
+        let homeVC = HomeViewController()
+        homeVC.viewModel = HomeViewModel()
+        let nav = UINavigationController(rootViewController: homeVC)
+        window?.rootViewController = nav
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
