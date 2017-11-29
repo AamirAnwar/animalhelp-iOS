@@ -15,6 +15,7 @@ struct Clinic:Codable {
     var lat:Double
     var city:String
     var mobile:String
+    var address:String
 }
 
 struct NearestClinic:Codable {
