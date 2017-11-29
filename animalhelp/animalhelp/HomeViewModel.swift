@@ -40,6 +40,7 @@ class HomeViewModel:NSObject {
         else {
             
             locationManager.desiredAccuracy = kCLLocationAccuracyBest
+            self.startLocationDetectionTimer()
             locationManager.startUpdatingLocation()
         }
     }
