@@ -86,6 +86,33 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4387C4491FFA212800810698 /* Home Page */ = {
+			isa = PBXGroup;
+			children = (
+				439E489D1FCF060400FAFB67 /* HomeViewModel.swift */,
+				43E86AC01FBC320500B7130B /* HomeViewController.swift */,
+			);
+			path = "Home Page";
+			sourceTree = "<group>";
+		};
+		4387C44A1FFA213F00810698 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				439D2FBC1FC9E8EA00E6EB91 /* Clinic.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		4387C44B1FFA214500810698 /* Commons */ = {
+			isa = PBXGroup;
+			children = (
+				439E489B1FCEBB2000FAFB67 /* APIService.swift */,
+				438A0D631FCDF2DA005A8CA4 /* Private.swift */,
+				438A0D611FCDEF70005A8CA4 /* Constants.swift */,
+			);
+			path = Commons;
+			sourceTree = "<group>";
+		};
 		43E86AB21FBC320500B7130B = {
 			isa = PBXGroup;
 			children = (
@@ -106,13 +133,10 @@
 		43E86ABD1FBC320500B7130B /* animalhelp */ = {
 			isa = PBXGroup;
 			children = (
+				4387C4491FFA212800810698 /* Home Page */,
+				4387C44B1FFA214500810698 /* Commons */,
+				4387C44A1FFA213F00810698 /* Models */,
 				43E86ABE1FBC320500B7130B /* AppDelegate.swift */,
-				43E86AC01FBC320500B7130B /* HomeViewController.swift */,
-				439E489B1FCEBB2000FAFB67 /* APIService.swift */,
-				439E489D1FCF060400FAFB67 /* HomeViewModel.swift */,
-				438A0D631FCDF2DA005A8CA4 /* Private.swift */,
-				438A0D611FCDEF70005A8CA4 /* Constants.swift */,
-				439D2FBC1FC9E8EA00E6EB91 /* Clinic.swift */,
 				43E86AC51FBC320500B7130B /* Assets.xcassets */,
 				43E86AC71FBC320500B7130B /* LaunchScreen.storyboard */,
 				43E86ACA1FBC320500B7130B /* Info.plist */,
