@@ -16,7 +16,7 @@ enum APIService {
 
 extension APIService: TargetType {
     var baseURL: URL {
-        return URL(string: "http://localhost:3000")!
+        return URL(string: "https://lit-escarpment-51045.herokuapp.com")!
     }
     
     var path: String {
