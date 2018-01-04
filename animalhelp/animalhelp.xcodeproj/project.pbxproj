@@ -25,6 +25,9 @@
 		439E489C1FCEBB2000FAFB67 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439E489B1FCEBB2000FAFB67 /* APIService.swift */; };
 		439E489E1FCF060400FAFB67 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439E489D1FCF060400FAFB67 /* HomeViewModel.swift */; };
 		43AC0A011FFE5BAD009F8D70 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AC0A001FFE5BAD009F8D70 /* BaseViewController.swift */; };
+		43AC0A031FFE7BD0009F8D70 /* CustomFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AC0A021FFE7BD0009F8D70 /* CustomFonts.swift */; };
+		43AC0A051FFE7D25009F8D70 /* DrawerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AC0A041FFE7D25009F8D70 /* DrawerView.swift */; };
+		43AC0A071FFE7E25009F8D70 /* CustomColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AC0A061FFE7E25009F8D70 /* CustomColors.swift */; };
 		43BE2F181FFE59BC0005EDD0 /* PetSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BE2F171FFE59BC0005EDD0 /* PetSearchViewController.swift */; };
 		43E86ABF1FBC320500B7130B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E86ABE1FBC320500B7130B /* AppDelegate.swift */; };
 		43E86AC11FBC320500B7130B /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E86AC01FBC320500B7130B /* HomeViewController.swift */; };
@@ -62,6 +65,9 @@
 		439E489B1FCEBB2000FAFB67 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 		439E489D1FCF060400FAFB67 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		43AC0A001FFE5BAD009F8D70 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
+		43AC0A021FFE7BD0009F8D70 /* CustomFonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFonts.swift; sourceTree = "<group>"; };
+		43AC0A041FFE7D25009F8D70 /* DrawerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawerView.swift; sourceTree = "<group>"; };
+		43AC0A061FFE7E25009F8D70 /* CustomColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomColors.swift; sourceTree = "<group>"; };
 		43BE2F171FFE59BC0005EDD0 /* PetSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetSearchViewController.swift; sourceTree = "<group>"; };
 		43E86ABB1FBC320500B7130B /* animalhelp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = animalhelp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		43E86ABE1FBC320500B7130B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -105,6 +111,7 @@
 			children = (
 				439E489D1FCF060400FAFB67 /* HomeViewModel.swift */,
 				43E86AC01FBC320500B7130B /* HomeViewController.swift */,
+				43AC0A041FFE7D25009F8D70 /* DrawerView.swift */,
 			);
 			path = "Home Page";
 			sourceTree = "<group>";
@@ -124,6 +131,8 @@
 				438A0D631FCDF2DA005A8CA4 /* Private.swift */,
 				438A0D611FCDEF70005A8CA4 /* Constants.swift */,
 				43AC0A001FFE5BAD009F8D70 /* BaseViewController.swift */,
+				43AC0A021FFE7BD0009F8D70 /* CustomFonts.swift */,
+				43AC0A061FFE7E25009F8D70 /* CustomColors.swift */,
 			);
 			path = Commons;
 			sourceTree = "<group>";
@@ -294,13 +303,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				438A0D621FCDEF70005A8CA4 /* Constants.swift in Sources */,
+				43AC0A071FFE7E25009F8D70 /* CustomColors.swift in Sources */,
 				439D2FBD1FC9E8EA00E6EB91 /* Clinic.swift in Sources */,
 				439E489E1FCF060400FAFB67 /* HomeViewModel.swift in Sources */,
+				43AC0A051FFE7D25009F8D70 /* DrawerView.swift in Sources */,
 				438A0D641FCDF2DA005A8CA4 /* Private.swift in Sources */,
 				43E86AC11FBC320500B7130B /* HomeViewController.swift in Sources */,
 				43AC0A011FFE5BAD009F8D70 /* BaseViewController.swift in Sources */,
 				439E489C1FCEBB2000FAFB67 /* APIService.swift in Sources */,
 				43E86ABF1FBC320500B7130B /* AppDelegate.swift in Sources */,
+				43AC0A031FFE7BD0009F8D70 /* CustomFonts.swift in Sources */,
 				433B09CA1FFE587C00EA0906 /* AccountViewController.swift in Sources */,
 				43BE2F181FFE59BC0005EDD0 /* PetSearchViewController.swift in Sources */,
 			);

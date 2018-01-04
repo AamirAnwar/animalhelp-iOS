@@ -7,4 +7,7 @@
 //
 
 import Foundation
+import UIKit
+
 var GoogleMapsAPIKey:String?
+let kCornerRadius:CGFloat = 4
