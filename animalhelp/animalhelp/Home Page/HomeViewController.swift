@@ -13,7 +13,7 @@ import MapKit
 import GoogleMaps
 import Moya
 
-class HomeViewController: UIViewController, HomeViewModelDelegate {
+class HomeViewController: BaseViewController, HomeViewModelDelegate {
     let myLocationButton:UIButton = {
        let button = UIButton(type: .system)
         button.setTitle("My Location", for: .normal)
@@ -38,6 +38,15 @@ class HomeViewController: UIViewController, HomeViewModelDelegate {
     }()
     let zoomLevel:Float = 15
     var viewModel:HomeViewModel!
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("Init with coder not implemented")
+    }
+    
+    init() {
+        super.init(nibName: nil, bundle: nil)
+        self.tabBarItem.title = "Clinics"
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
