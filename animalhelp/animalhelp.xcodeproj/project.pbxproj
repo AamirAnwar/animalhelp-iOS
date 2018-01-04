@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		433B09CA1FFE587C00EA0906 /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433B09C91FFE587C00EA0906 /* AccountViewController.swift */; };
 		438A0D431FCDCB25005A8CA4 /* GoogleMapsCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 438A0D411FCDCB25005A8CA4 /* GoogleMapsCore.framework */; };
 		438A0D451FCDCB27005A8CA4 /* GoogleMapsBase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 438A0D441FCDCB27005A8CA4 /* GoogleMapsBase.framework */; };
 		438A0D4F1FCDCB90005A8CA4 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 438A0D4E1FCDCB90005A8CA4 /* libc++.tbd */; };
@@ -23,6 +24,8 @@
 		439D2FD01FCA00AF00E6EB91 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 439D2FC71FCA00AF00E6EB91 /* Alamofire.framework */; };
 		439E489C1FCEBB2000FAFB67 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439E489B1FCEBB2000FAFB67 /* APIService.swift */; };
 		439E489E1FCF060400FAFB67 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439E489D1FCF060400FAFB67 /* HomeViewModel.swift */; };
+		43AC0A011FFE5BAD009F8D70 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AC0A001FFE5BAD009F8D70 /* BaseViewController.swift */; };
+		43BE2F181FFE59BC0005EDD0 /* PetSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BE2F171FFE59BC0005EDD0 /* PetSearchViewController.swift */; };
 		43E86ABF1FBC320500B7130B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E86ABE1FBC320500B7130B /* AppDelegate.swift */; };
 		43E86AC11FBC320500B7130B /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E86AC01FBC320500B7130B /* HomeViewController.swift */; };
 		43E86AC61FBC320500B7130B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 43E86AC51FBC320500B7130B /* Assets.xcassets */; };
@@ -31,6 +34,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		433B09C91FFE587C00EA0906 /* AccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
 		438A0D411FCDCB25005A8CA4 /* GoogleMapsCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleMapsCore.framework; path = Carthage/Build/iOS/GoogleMapsCore.framework; sourceTree = "<group>"; };
 		438A0D441FCDCB27005A8CA4 /* GoogleMapsBase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleMapsBase.framework; path = Carthage/Build/iOS/GoogleMapsBase.framework; sourceTree = "<group>"; };
 		438A0D461FCDCB4C005A8CA4 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
@@ -57,6 +61,8 @@
 		439D2FC71FCA00AF00E6EB91 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
 		439E489B1FCEBB2000FAFB67 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 		439E489D1FCF060400FAFB67 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
+		43AC0A001FFE5BAD009F8D70 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
+		43BE2F171FFE59BC0005EDD0 /* PetSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetSearchViewController.swift; sourceTree = "<group>"; };
 		43E86ABB1FBC320500B7130B /* animalhelp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = animalhelp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		43E86ABE1FBC320500B7130B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		43E86AC01FBC320500B7130B /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
@@ -86,6 +92,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		433B09CB1FFE588000EA0906 /* Account Page */ = {
+			isa = PBXGroup;
+			children = (
+				433B09C91FFE587C00EA0906 /* AccountViewController.swift */,
+			);
+			path = "Account Page";
+			sourceTree = "<group>";
+		};
 		4387C4491FFA212800810698 /* Home Page */ = {
 			isa = PBXGroup;
 			children = (
@@ -109,8 +123,17 @@
 				439E489B1FCEBB2000FAFB67 /* APIService.swift */,
 				438A0D631FCDF2DA005A8CA4 /* Private.swift */,
 				438A0D611FCDEF70005A8CA4 /* Constants.swift */,
+				43AC0A001FFE5BAD009F8D70 /* BaseViewController.swift */,
 			);
 			path = Commons;
+			sourceTree = "<group>";
+		};
+		43AC09FF1FFE5A6E009F8D70 /* Pet Search page */ = {
+			isa = PBXGroup;
+			children = (
+				43BE2F171FFE59BC0005EDD0 /* PetSearchViewController.swift */,
+			);
+			path = "Pet Search page";
 			sourceTree = "<group>";
 		};
 		43E86AB21FBC320500B7130B = {
@@ -133,6 +156,8 @@
 		43E86ABD1FBC320500B7130B /* animalhelp */ = {
 			isa = PBXGroup;
 			children = (
+				43AC09FF1FFE5A6E009F8D70 /* Pet Search page */,
+				433B09CB1FFE588000EA0906 /* Account Page */,
 				4387C4491FFA212800810698 /* Home Page */,
 				4387C44B1FFA214500810698 /* Commons */,
 				4387C44A1FFA213F00810698 /* Models */,
@@ -273,8 +298,11 @@
 				439E489E1FCF060400FAFB67 /* HomeViewModel.swift in Sources */,
 				438A0D641FCDF2DA005A8CA4 /* Private.swift in Sources */,
 				43E86AC11FBC320500B7130B /* HomeViewController.swift in Sources */,
+				43AC0A011FFE5BAD009F8D70 /* BaseViewController.swift in Sources */,
 				439E489C1FCEBB2000FAFB67 /* APIService.swift in Sources */,
 				43E86ABF1FBC320500B7130B /* AppDelegate.swift in Sources */,
+				433B09CA1FFE587C00EA0906 /* AccountViewController.swift in Sources */,
+				43BE2F181FFE59BC0005EDD0 /* PetSearchViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

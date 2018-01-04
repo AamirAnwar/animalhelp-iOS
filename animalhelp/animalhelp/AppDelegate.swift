@@ -29,9 +29,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
         window?.backgroundColor = UIColor.white
+        let tabBarController = UITabBarController()
+        
+        // Home Page
         let homeVC = HomeViewController()
         homeVC.viewModel = HomeViewModel()
-        let nav = UINavigationController(rootViewController: homeVC)
+        
+        // Settings Page
+        let settingsVC = AccountViewController()
+        
+        // Pet Search Page
+        let petSearchVC = PetSearchViewController()
+        
+        tabBarController.viewControllers = [homeVC, petSearchVC ,settingsVC]
+        let nav = UINavigationController(rootViewController: tabBarController)
         window?.rootViewController = nav
     }
 

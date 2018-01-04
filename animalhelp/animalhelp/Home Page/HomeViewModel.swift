@@ -81,7 +81,7 @@ class HomeViewModel:NSObject {
         let decoder = JSONDecoder()
         do {
             nearestClinic = try decoder.decode(NearestClinic.self, from: JSONSerialization.data(withJSONObject: json, options: .init(rawValue: 0)))
-            print("Final clinic \(nearestClinic)")
+//            print("Final clinic \(nearestClinic)")
         } catch let error {
             print("error! \(error)")
             return;
