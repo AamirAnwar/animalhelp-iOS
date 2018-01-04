@@ -173,6 +173,19 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
     @objc func didTapShowNearestClinic() {
         self.showNearestClinic(withMarker: self.nearestClinicMarker)
     }
+    
+    func createBlurredMapImage()->UIImage? {
+        UIGraphicsBeginImageContextWithOptions(self.view.bounds.size, true, 1)
+        self.googleMapView.drawHierarchy(in: self.view.bounds, afterScreenUpdates: true)
+        let screenshot = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+        let blurredImage = screenshot.applyBlur(withRadius: 7, tintColor: UIColor.white.withAlphaComponent(0.3), saturationDeltaFactor: 1.8, maskImage: nil)
+        return blurredImage
+        
+//        let imageView = UIImageView(image: blurredImage)
+//        imageView.frame = self.view.bounds
+//        self.view.insertSubview(imageView, belowSubview: self.drawerView)
+    }
 
 }
 
