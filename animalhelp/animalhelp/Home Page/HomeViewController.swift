@@ -14,6 +14,9 @@ import GoogleMaps
 import Moya
 
 class HomeViewController: BaseViewController, HomeViewModelDelegate {
+    
+    let drawerView = DrawerView()
+    
     let myLocationButton:UIButton = {
        let button = UIButton(type: .system)
         button.setTitle("My Location", for: .normal)
@@ -55,8 +58,20 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
         self.createGoogleMapView()
         self.setupMyLocationButton()
         self.setupNearestClinicButton()
+        self.setupDrawerView()
         self.viewModel.delegate = self
         self.viewModel.startDetectingLocation()
+    }
+    
+    fileprivate func setupDrawerView() {
+        self.view.addSubview(self.drawerView)
+        drawerView.snp.makeConstraints { (make) in
+            make.bottom.equalToSuperview().offset(-44)
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            
+//            make.height.equalTo(self.view.snp.height).multipliedBy(0.4)
+        }
     }
     
     fileprivate func setupMyLocationButton() {
