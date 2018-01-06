@@ -181,10 +181,6 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
         UIGraphicsEndImageContext()
         let blurredImage = screenshot.applyBlur(withRadius: 7, tintColor: UIColor.white.withAlphaComponent(0.3), saturationDeltaFactor: 1.8, maskImage: nil)
         return blurredImage
-        
-//        let imageView = UIImageView(image: blurredImage)
-//        imageView.frame = self.view.bounds
-//        self.view.insertSubview(imageView, belowSubview: self.drawerView)
     }
 
 }
