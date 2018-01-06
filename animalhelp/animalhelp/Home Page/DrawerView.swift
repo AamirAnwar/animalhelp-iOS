@@ -28,8 +28,8 @@ class DrawerView:UIView {
         self.addGestureRecognizer(tapGesture)
         self.createLayout()
     }
-    func createLayout() {
-        
+    
+    fileprivate func createLayout() {
         self.addSubview(locationPinImageView)
         self.addSubview(infoLabel)
         self.addSubview(manualLocationButton)
@@ -52,8 +52,6 @@ class DrawerView:UIView {
         manualLocationButton.layer.borderWidth = 1
         manualLocationButton.titleLabel?.font = CustomFontButtonTitle
         manualLocationButton.layer.borderColor = CustomColorLightGray.cgColor
-        
-        
         
         locationPinImageView.snp.makeConstraints { (make) in
             make.top.equalToSuperview().offset(20)
@@ -84,7 +82,7 @@ class DrawerView:UIView {
     }
     
     
-    @objc func drawerTapped() {
+    @objc fileprivate func drawerTapped() {
         UIView.animate(withDuration: 0.2) {
             if self.transform.isIdentity {
                 self.transform = CGAffineTransform.init(translationX: 0, y: 50)
@@ -93,14 +91,5 @@ class DrawerView:UIView {
                 self.transform = .identity
             }
         }
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        print("Did layout subviews")
-    }
-    
-    override func didMoveToSuperview() {
-        
     }
 }

@@ -131,6 +131,7 @@
 		4387C44B1FFA214500810698 /* Commons */ = {
 			isa = PBXGroup;
 			children = (
+				4313A85B1FFE9A3D0043C927 /* animalhelp-Bridging-Header.h */,
 				4313A85C1FFE9A3F0043C927 /* UIImage+ImageEffects.h */,
 				4313A85D1FFE9A3F0043C927 /* UIImage+ImageEffects.m */,
 				439E489B1FCEBB2000FAFB67 /* APIService.swift */,
@@ -139,7 +140,6 @@
 				43AC0A001FFE5BAD009F8D70 /* BaseViewController.swift */,
 				43AC0A021FFE7BD0009F8D70 /* CustomFonts.swift */,
 				43AC0A061FFE7E25009F8D70 /* CustomColors.swift */,
-				4313A85B1FFE9A3D0043C927 /* animalhelp-Bridging-Header.h */,
 			);
 			path = Commons;
 			sourceTree = "<group>";
