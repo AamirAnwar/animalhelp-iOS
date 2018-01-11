@@ -69,8 +69,6 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
             make.bottom.equalToSuperview().offset(-44)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
-            
-//            make.height.equalTo(self.view.snp.height).multipliedBy(0.4)
         }
     }
     
