@@ -69,9 +69,9 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
             make.bottom.equalToSuperview().offset(-44)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
-            
-//            make.height.equalTo(self.view.snp.height).multipliedBy(0.4)
         }
+        // Drawer view is initially hidden
+        self.hideDrawer()
     }
     
     fileprivate func setupMyLocationButton() {
@@ -142,7 +142,8 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
     func showNearestClinic(withMarker clinicMarker: GMSMarker?) {
         if let marker = clinicMarker {
             let bounds = GMSCoordinateBounds(coordinate: marker.position, coordinate: googleMapView.myLocation!.coordinate)
-            let camera = googleMapView.camera(for: bounds , insets: UIEdgeInsetsMake(50, 0, 50, 0))!
+            
+            let camera = googleMapView.camera(for: bounds , insets: UIEdgeInsetsMake(50 + self.tabBarHeight, 0, 50 + self.tabBarHeight, 0))!
             googleMapView.camera = camera
         }
     }
@@ -183,6 +184,14 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
         return blurredImage
     }
 
+    func showDrawer() {
+        self.drawerView.isHidden = false
+    }
+    
+    func hideDrawer() {
+        self.drawerView.isHidden = true
+    }
+    
 }
 
 extension HomeViewController: MKMapViewDelegate {

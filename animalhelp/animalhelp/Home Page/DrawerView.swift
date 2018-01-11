@@ -10,12 +10,19 @@ import Foundation
 import UIKit
 import SnapKit
 
+protocol DrawerViewDelegate {
+    func didTapDetectLocation()
+    func didTapManuallySelectLocation()
+}
+
+
 class DrawerView:UIView {
     let locationPinImageView = UIImageView(image: #imageLiteral(resourceName: "LocationPin"))
     let infoLabel = UILabel()
     let detectLocationButton = UIButton(type: .system)
     let manualLocationButton = UIButton(type: .system)
     let tapGesture = UITapGestureRecognizer()
+    var delegate:DrawerViewDelegate? = nil
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init with coder not implemented")
@@ -23,7 +30,7 @@ class DrawerView:UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        tapGesture.addTarget(self, action: #selector(drawerTapped))
+//        tapGesture.addTarget(self, action: #selector(drawerTapped))
         self.backgroundColor = UIColor.white
         self.addGestureRecognizer(tapGesture)
         self.createLayout()
@@ -79,6 +86,14 @@ class DrawerView:UIView {
             make.height.equalTo(detectLocationButton.snp.height)
             make.bottom.equalTo(self.snp.bottom).offset(-20)
         }
+    }
+    
+    @objc func detectLocationButtonTapped() {
+        self.delegate?.didTapDetectLocation()
+    }
+    
+    @objc func manuallySelectLocationButtonTapped() {
+        self.delegate?.didTapManuallySelectLocation()
     }
     
     
