@@ -15,6 +15,8 @@ protocol HomeViewModelDelegate {
     func locationServicesDenied() -> Void
     func didUpdate(_ nearestClinic:NearestClinic) -> Void
     func showUserLocation(location:CLLocation)->Void
+    func showDrawer()
+    func hideDrawer()
 }
 
 class HomeViewModel:NSObject {
@@ -125,6 +127,7 @@ extension HomeViewModel: CLLocationManagerDelegate {
             
             if self.detectedLocation == nil || self.detectedLocation!.horizontalAccuracy > location.horizontalAccuracy {
                 self.detectedLocation = location
+                self.delegate?.hideDrawer()
                 self.delegate?.showUserLocation(location: location)
                 self.stopDetectingLocation()
             }
@@ -134,5 +137,18 @@ extension HomeViewModel: CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         self.startDetectingLocation()
+    }
+}
+
+extension HomeViewModel:DrawerViewDelegate {
+    func didTapManuallySelectLocation() {
+        // Start manual selection flow
+    }
+    
+    func didTapDetectLocation() {
+        //Start detecting location if there is no location
+        if self.detectedLocation == nil {
+            self.startDetectingLocation()
+        }
     }
 }
