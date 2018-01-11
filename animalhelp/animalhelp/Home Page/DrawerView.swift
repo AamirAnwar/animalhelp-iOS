@@ -52,6 +52,7 @@ class DrawerView:UIView {
         detectLocationButton.backgroundColor = CustomColorMainTheme
         detectLocationButton.layer.cornerRadius = kCornerRadius
         detectLocationButton.titleLabel?.font = CustomFontButtonTitle
+        detectLocationButton.addTarget(self, action: #selector(detectLocationButtonTapped), for: .touchUpInside)
         
         manualLocationButton.setTitle("Manually Select Location", for: .normal)
         manualLocationButton.setTitleColor(CustomColorLightGray, for: .normal)
@@ -59,6 +60,7 @@ class DrawerView:UIView {
         manualLocationButton.layer.borderWidth = 1
         manualLocationButton.titleLabel?.font = CustomFontButtonTitle
         manualLocationButton.layer.borderColor = CustomColorLightGray.cgColor
+        manualLocationButton.addTarget(self, action: #selector(manuallySelectLocationButtonTapped), for: .touchUpInside)
         
         locationPinImageView.snp.makeConstraints { (make) in
             make.top.equalToSuperview().offset(20)

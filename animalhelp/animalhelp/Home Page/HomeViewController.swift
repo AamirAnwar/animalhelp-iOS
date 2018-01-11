@@ -55,12 +55,18 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.white
         self.navigationItem.title = "Your Location"
+        self.viewModel.delegate = self
+        self.setupDrawerView()
+    }
+    
+    fileprivate func setupViewsIfNeeded() {
+        guard self.viewModel.detectedLocation != nil else {
+            return
+        }
+        
         self.createGoogleMapView()
         self.setupMyLocationButton()
         self.setupNearestClinicButton()
-        self.setupDrawerView()
-        self.viewModel.delegate = self
-        self.viewModel.startDetectingLocation()
     }
     
     fileprivate func setupDrawerView() {
@@ -70,8 +76,9 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
         }
-        // Drawer view is initially hidden
-        self.hideDrawer()
+        // Set delegate
+        self.drawerView.delegate = self.viewModel
+        
     }
     
     fileprivate func setupMyLocationButton() {
@@ -150,10 +157,14 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
     
 
     func showUserLocation(location:CLLocation) {
+        
+        self.setupViewsIfNeeded()
+        
         let camera = GMSCameraPosition.camera(withLatitude: location.coordinate.latitude,
                                               longitude: location.coordinate.longitude,
                                               zoom: zoomLevel)
         googleMapView.animate(to: camera)
+        
         
     }
     
