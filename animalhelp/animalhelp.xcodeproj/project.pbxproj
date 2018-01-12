@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4313A85E1FFE9A3F0043C927 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 4313A85D1FFE9A3F0043C927 /* UIImage+ImageEffects.m */; };
+		43367EED2008A771004D6B2C /* ClinicCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43367EEC2008A771004D6B2C /* ClinicCollectionViewCell.swift */; };
 		433B09CA1FFE587C00EA0906 /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433B09C91FFE587C00EA0906 /* AccountViewController.swift */; };
 		438A0D431FCDCB25005A8CA4 /* GoogleMapsCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 438A0D411FCDCB25005A8CA4 /* GoogleMapsCore.framework */; };
 		438A0D451FCDCB27005A8CA4 /* GoogleMapsBase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 438A0D441FCDCB27005A8CA4 /* GoogleMapsBase.framework */; };
@@ -41,6 +42,7 @@
 		4313A85B1FFE9A3D0043C927 /* animalhelp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "animalhelp-Bridging-Header.h"; sourceTree = "<group>"; };
 		4313A85C1FFE9A3F0043C927 /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageEffects.h"; sourceTree = "<group>"; };
 		4313A85D1FFE9A3F0043C927 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
+		43367EEC2008A771004D6B2C /* ClinicCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClinicCollectionViewCell.swift; sourceTree = "<group>"; };
 		433B09C91FFE587C00EA0906 /* AccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
 		438A0D411FCDCB25005A8CA4 /* GoogleMapsCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleMapsCore.framework; path = Carthage/Build/iOS/GoogleMapsCore.framework; sourceTree = "<group>"; };
 		438A0D441FCDCB27005A8CA4 /* GoogleMapsBase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleMapsBase.framework; path = Carthage/Build/iOS/GoogleMapsBase.framework; sourceTree = "<group>"; };
@@ -116,6 +118,7 @@
 				439E489D1FCF060400FAFB67 /* HomeViewModel.swift */,
 				43E86AC01FBC320500B7130B /* HomeViewController.swift */,
 				43AC0A041FFE7D25009F8D70 /* DrawerView.swift */,
+				43367EEC2008A771004D6B2C /* ClinicCollectionViewCell.swift */,
 			);
 			path = "Home Page";
 			sourceTree = "<group>";
@@ -312,6 +315,7 @@
 			files = (
 				438A0D621FCDEF70005A8CA4 /* Constants.swift in Sources */,
 				43AC0A071FFE7E25009F8D70 /* CustomColors.swift in Sources */,
+				43367EED2008A771004D6B2C /* ClinicCollectionViewCell.swift in Sources */,
 				4313A85E1FFE9A3F0043C927 /* UIImage+ImageEffects.m in Sources */,
 				439D2FBD1FC9E8EA00E6EB91 /* Clinic.swift in Sources */,
 				439E489E1FCF060400FAFB67 /* HomeViewModel.swift in Sources */,
