@@ -139,6 +139,7 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
     }
     
     func showDrawerWith(clinic: NearestClinic) {
+        self.showDrawer()
         self.drawerView.showClinic(clinic: clinic)
     }
     
@@ -183,6 +184,7 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
     }
 
     func showDrawer() {
+        self.view.bringSubview(toFront: self.drawerView)
         self.drawerView.isHidden = false
     }
     

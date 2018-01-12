@@ -14,7 +14,7 @@ protocol DrawerViewDelegate {
     func didTapDetectLocation()
     func didTapManuallySelectLocation()
 }
-
+let kCollectionViewHeight:CGFloat = 257
 
 class DrawerView:UIView {
     let locationPinImageView = UIImageView(image: #imageLiteral(resourceName: "LocationPin"))
@@ -23,21 +23,32 @@ class DrawerView:UIView {
     let manualLocationButton = UIButton(type: .system)
     let tapGesture = UITapGestureRecognizer()
     var delegate:DrawerViewDelegate? = nil
-    
-    
+    var flowLayout = UICollectionViewFlowLayout()
+    var collectionView:UICollectionView!
+    let clinicCellReuseIdentifier = "ClinicCellReuseIdentifier"
+    var nearestClinic:NearestClinic? = nil
     required init?(coder aDecoder: NSCoder) {
         fatalError("init with coder not implemented")
     }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-//        tapGesture.addTarget(self, action: #selector(drawerTapped))
         self.backgroundColor = UIColor.white
-        self.addGestureRecognizer(tapGesture)
-        self.createLayout()
+        
+        self.flowLayout = UICollectionViewFlowLayout()
+        self.collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: self.flowLayout)
+        self.collectionView.delegate = self
+        self.collectionView.dataSource = self
+        self.collectionView.backgroundColor = UIColor.white
+        self.collectionView.register(ClinicCollectionViewCell.self, forCellWithReuseIdentifier: self.clinicCellReuseIdentifier)
+        self.addSubview(self.collectionView)
+        self.collectionView.snp.makeConstraints { (make) in
+            make.edges.equalToSuperview()
+            make.height.equalTo(kCollectionViewHeight)
+        }
     }
     
-    fileprivate func createLayout() {
+    fileprivate func createOnboardingView() {
         self.addSubview(locationPinImageView)
         self.addSubview(infoLabel)
         self.addSubview(manualLocationButton)
@@ -79,7 +90,7 @@ class DrawerView:UIView {
             make.leading.equalToSuperview().offset(24)
             make.trailing.equalToSuperview().offset(-24)
             make.top.equalTo(infoLabel.snp.bottom).offset(16)
-            make.height.equalTo(50)
+            make.height.equalTo(kStandardButtonHeight)
         }
         
         manualLocationButton.snp.makeConstraints { (make) in
@@ -92,7 +103,8 @@ class DrawerView:UIView {
     }
     
     func showClinic(clinic:NearestClinic) {
-        print("I am going to show the clinic now!")
+        self.nearestClinic = clinic
+        self.collectionView.reloadData()
     }
     
     @objc func detectLocationButtonTapped() {
@@ -112,5 +124,20 @@ class DrawerView:UIView {
                 self.transform = .identity
             }
         }
+    }
+}
+
+extension DrawerView:UICollectionViewDelegate,UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: self.clinicCellReuseIdentifier, for: indexPath) as! ClinicCollectionViewCell
+        cell.setNearestClinic(self.nearestClinic)
+        return cell
+    }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: self.collectionView.frame.size.width, height: self.collectionView.frame.size.height)
     }
 }
