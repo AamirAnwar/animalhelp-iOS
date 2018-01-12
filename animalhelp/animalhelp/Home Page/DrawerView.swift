@@ -91,8 +91,8 @@ class DrawerView:UIView {
         }
     }
     
-    func showClinic(clinic:Clinic) {
-        
+    func showClinic(clinic:NearestClinic) {
+        print("I am going to show the clinic now!")
     }
     
     @objc func detectLocationButtonTapped() {
