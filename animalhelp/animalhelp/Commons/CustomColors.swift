@@ -11,6 +11,7 @@ import UIKit
 
 let CustomColorMainTheme = UIColor.init(hex:0xEB4545)
 let CustomColorLightGray = UIColor.init(hex:0x8F8F8F)
+let CustomColorTextBlack = UIColor.init(hex:0x494949)
 
 
 extension UIColor {
