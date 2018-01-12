@@ -9,13 +9,15 @@
 import Foundation
 import Moya
 import CoreLocation
+import GoogleMaps
 
 
 protocol HomeViewModelDelegate {
     func locationServicesDenied() -> Void
-    func didUpdate(_ nearestClinic:NearestClinic) -> Void
+    func didUpdate(_ updatedMarker:GMSMarker) -> Void
     func showUserLocation(location:CLLocation)->Void
     func showDrawer()
+    func showDrawerWith(clinic:NearestClinic)
     func hideDrawer()
 }
 
@@ -27,7 +29,12 @@ class HomeViewModel:NSObject {
     var timeoutDuration:CFTimeInterval = 10.0
     var delegate:HomeViewModelDelegate?
     var nearestClinic:NearestClinic?
-    
+    var nearestClinicMarker:GMSMarker?
+    var isLocationPermissionGranted:Bool {
+        get {
+            return CLLocationManager.authorizationStatus() == .authorizedWhenInUse || CLLocationManager.authorizationStatus() == .authorizedAlways
+        }
+    }
     func startDetectingLocation() {
         let authStatus = CLLocationManager.authorizationStatus()
         guard authStatus != .denied || authStatus != .restricted else {
@@ -88,11 +95,16 @@ class HomeViewModel:NSObject {
             return;
         }
         if let nearestClinic = nearestClinic {
-            self.delegate?.didUpdate(nearestClinic)
+            let marker = GMSMarker()
+            marker.position = CLLocationCoordinate2D(latitude: nearestClinic.clinic.lat, longitude: nearestClinic.clinic.lon)
+            marker.title = nearestClinic.clinic.name
+            marker.snippet = nearestClinic.clinic.address
+            self.nearestClinicMarker = marker
+            self.delegate?.didUpdate(marker)
         }
     }
     
-    func startLocationDetectionTimer() {
+    fileprivate func startLocationDetectionTimer() {
         self.timer = Timer.scheduledTimer(withTimeInterval: timeoutDuration, repeats: false, block: { (timer) in
             print("Stopping location services!")
             if self.detectedLocation == nil {
@@ -150,5 +162,14 @@ extension HomeViewModel:DrawerViewDelegate {
         if self.detectedLocation == nil {
             self.startDetectingLocation()
         }
+    }
+}
+
+extension HomeViewModel:GMSMapViewDelegate {
+    func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
+        if let nearestClinic = self.nearestClinic, self.nearestClinicMarker == marker {
+            self.delegate?.showDrawerWith(clinic: nearestClinic)
+        }
+        return true
     }
 }

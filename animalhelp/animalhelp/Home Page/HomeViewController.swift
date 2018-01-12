@@ -14,7 +14,7 @@ import GoogleMaps
 import Moya
 
 class HomeViewController: BaseViewController, HomeViewModelDelegate {
-    
+  
     let drawerView = DrawerView()
     
     let myLocationButton:UIButton = {
@@ -32,7 +32,6 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
         button.backgroundColor = UIColor.red
         return button
     }()
-    var nearestClinicMarker:GMSMarker?
     
     var googleMapView:GMSMapView = {
         let camera = GMSCameraPosition.camera(withLatitude: -33.86, longitude: 151.20, zoom: 6.0)
@@ -55,17 +54,20 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
         self.view.backgroundColor = UIColor.white
         self.navigationItem.title = "Your Location"
         self.viewModel.delegate = self
+        self.setupViewsIfNeeded()
         self.setupDrawerView()
+        
     }
     
     fileprivate func setupViewsIfNeeded() {
-        guard self.viewModel.detectedLocation != nil else {
+        guard self.viewModel.isLocationPermissionGranted else {
             return
         }
         
         self.createGoogleMapView()
         self.setupMyLocationButton()
         self.setupNearestClinicButton()
+        self.viewModel.startDetectingLocation()
     }
     
     fileprivate func setupDrawerView() {
@@ -77,6 +79,9 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
         }
         // Set delegate
         self.drawerView.delegate = self.viewModel
+        if self.viewModel.isLocationPermissionGranted {
+            self.drawerView.isHidden = true
+        }
         
     }
     
@@ -102,6 +107,7 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
     
     fileprivate func createGoogleMapView() {
         view.addSubview(googleMapView)
+        self.googleMapView.delegate = self.viewModel
         googleMapView.isMyLocationEnabled = true
         googleMapView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
@@ -118,18 +124,9 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
         alert.addAction(okAction)
     }
     
-    func updateMarkerWith(NearestClinic nearestClinic:NearestClinic) {
-        let marker = GMSMarker()
-        marker.position = CLLocationCoordinate2D(latitude: nearestClinic.clinic.lat, longitude: nearestClinic.clinic.lon)
-        marker.title = nearestClinic.clinic.name
-        marker.snippet = nearestClinic.clinic.address
-        marker.map = self.googleMapView
-        self.nearestClinicMarker = marker
-    }
-    
-    func didUpdate(_ nearestClinic:NearestClinic) -> Void {
-        updateMarkerWith(NearestClinic: nearestClinic)
-        showNearestClinic(withMarker: self.nearestClinicMarker)
+    func didUpdate(_ updatedMarker:GMSMarker) -> Void {
+        updatedMarker.map = self.googleMapView
+        showNearestClinic(withMarker: updatedMarker)
     }
     
     func showNearestClinic(withMarker clinicMarker: GMSMarker?) {
@@ -139,6 +136,10 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
             let camera = googleMapView.camera(for: bounds , insets: UIEdgeInsetsMake(50 + self.tabBarHeight, 0, 50 + self.tabBarHeight, 0))!
             googleMapView.camera = camera
         }
+    }
+    
+    func showDrawerWith(clinic: NearestClinic) {
+        self.drawerView.showClinic(clinic: clinic)
     }
     
 
@@ -169,7 +170,7 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
     }
     
     @objc func didTapShowNearestClinic() {
-        self.showNearestClinic(withMarker: self.nearestClinicMarker)
+        self.showNearestClinic(withMarker: self.viewModel.nearestClinicMarker)
     }
     
     func createBlurredMapImage()->UIImage? {
@@ -190,5 +191,4 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
     }
     
 }
-
 
