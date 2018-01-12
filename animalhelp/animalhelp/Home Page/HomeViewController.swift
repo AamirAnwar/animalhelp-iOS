@@ -32,7 +32,6 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
         button.backgroundColor = UIColor.red
         return button
     }()
-    lazy var appleMapView = MKMapView()
     var nearestClinicMarker:GMSMarker?
     
     var googleMapView:GMSMapView = {
@@ -100,19 +99,6 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
         self.showNearestClinicButton.addTarget(self, action: #selector(didTapShowNearestClinic), for: .touchUpInside)
     }
     
-    
-    
-    fileprivate func createAppleMapsView() {
-        view.addSubview(appleMapView)
-        appleMapView.delegate = self
-        appleMapView.showsUserLocation = true
-        appleMapView.snp.makeConstraints { (make) in
-            make.top.equalTo(self.navigationController!.navigationBar.snp.bottom)
-            make.left.equalToSuperview()
-            make.right.equalToSuperview()
-            make.bottom.equalToSuperview()
-        }
-    }
     
     fileprivate func createGoogleMapView() {
         view.addSubview(googleMapView)
@@ -205,9 +191,4 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
     
 }
 
-extension HomeViewController: MKMapViewDelegate {
-    func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
-        appleMapView.showAnnotations([userLocation], animated: true)
-    }
-}
 

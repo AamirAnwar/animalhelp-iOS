@@ -24,6 +24,7 @@ class DrawerView:UIView {
     let tapGesture = UITapGestureRecognizer()
     var delegate:DrawerViewDelegate? = nil
     
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init with coder not implemented")
     }
@@ -90,6 +91,10 @@ class DrawerView:UIView {
         }
     }
     
+    func showClinic(clinic:Clinic) {
+        
+    }
+    
     @objc func detectLocationButtonTapped() {
         self.delegate?.didTapDetectLocation()
     }
@@ -97,7 +102,6 @@ class DrawerView:UIView {
     @objc func manuallySelectLocationButtonTapped() {
         self.delegate?.didTapManuallySelectLocation()
     }
-    
     
     @objc fileprivate func drawerTapped() {
         UIView.animate(withDuration: 0.2) {
