@@ -21,6 +21,7 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
     let myLocationButton:UIButton = {
        let button = UIButton(type: .system)
         button.setTitle("My Location", for: .normal)
+        button.titleLabel?.font = CustomFontSmallBodyMedium
         button.setTitleColor(CustomColorTextBlack, for: .normal)
         button.backgroundColor = UIColor.white
         button.layer.cornerRadius = kCornerRadius
@@ -33,6 +34,7 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
         let button = UIButton(type: .system)
         button.setTitle("Nearest Clinic", for: .normal)
         button.setTitleColor(CustomColorTextBlack, for: .normal)
+        button.titleLabel?.font = CustomFontSmallBodyMedium
         button.backgroundColor = UIColor.white
         button.layer.cornerRadius = kCornerRadius
         button.contentEdgeInsets = UIEdgeInsetsMake(inset, inset, inset, inset)
