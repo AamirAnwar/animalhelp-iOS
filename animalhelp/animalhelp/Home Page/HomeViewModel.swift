@@ -19,6 +19,7 @@ protocol HomeViewModelDelegate {
     func showDrawer()
     func showDrawerWith(clinic:NearestClinic)
     func hideDrawer()
+    func expandDrawerView()
 }
 
 class HomeViewModel:NSObject {
@@ -151,6 +152,10 @@ extension HomeViewModel: CLLocationManagerDelegate {
 }
 
 extension HomeViewModel:DrawerViewDelegate {
+    func expandDrawer() {
+        self.delegate?.expandDrawerView()
+    }
+    
     func didTapManuallySelectLocation() {
         //TODO Start manual selection flow
     }
@@ -171,3 +176,5 @@ extension HomeViewModel:GMSMapViewDelegate {
         return true
     }
 }
+
+

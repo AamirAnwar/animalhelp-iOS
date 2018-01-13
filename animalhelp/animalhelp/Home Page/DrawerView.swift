@@ -13,6 +13,7 @@ import SnapKit
 protocol DrawerViewDelegate {
     func didTapDetectLocation()
     func didTapManuallySelectLocation()
+    func expandDrawer()
 }
 let kCollectionViewHeight:CGFloat = 257
 
@@ -23,7 +24,11 @@ class DrawerView:UIView {
     let manualLocationButton = UIButton(type: .system)
     let tapGesture = UITapGestureRecognizer()
     var delegate:DrawerViewDelegate? = nil
-    var flowLayout = UICollectionViewFlowLayout()
+    var flowLayout:UICollectionViewFlowLayout = {
+       let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        return layout
+    }()
     var collectionView:UICollectionView!
     let clinicCellReuseIdentifier = "ClinicCellReuseIdentifier"
     var nearestClinic:NearestClinic? = nil
@@ -34,17 +39,16 @@ class DrawerView:UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = UIColor.white
-        
-        self.flowLayout = UICollectionViewFlowLayout()
         self.collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: self.flowLayout)
         self.collectionView.delegate = self
         self.collectionView.dataSource = self
+        self.collectionView.isPagingEnabled = true
         self.collectionView.backgroundColor = UIColor.white
         self.collectionView.register(ClinicCollectionViewCell.self, forCellWithReuseIdentifier: self.clinicCellReuseIdentifier)
         self.addSubview(self.collectionView)
         self.collectionView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
-            make.height.equalTo(kCollectionViewHeight)
+            make.height.greaterThanOrEqualTo(kCollectionViewHeight)
         }
     }
     
@@ -127,18 +131,45 @@ class DrawerView:UIView {
     }
 }
 
-extension DrawerView:UICollectionViewDelegate,UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
+extension DrawerView:UICollectionViewDelegate,UICollectionViewDelegateFlowLayout, UICollectionViewDataSource,ClinicCollectionViewCellDelegate {
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 1
+        return 10
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: self.clinicCellReuseIdentifier, for: indexPath) as! ClinicCollectionViewCell
         cell.setNearestClinic(self.nearestClinic)
+        cell.delegate = self
         return cell
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         // TODO implement self sizing cells
-        return CGSize(width: self.collectionView.frame.size.width, height: self.collectionView.frame.size.height)
+        return CGSize(width: self.collectionView.frame.size.width, height: 250)
     }
+    func didTapGoogleMapsButton(sender: UICollectionViewCell) {
+        if let indexPath = self.collectionView.indexPath(for: sender) {
+            print("Tapped cell number \(indexPath.row)")
+            if self.flowLayout.scrollDirection == .vertical {
+                self.flowLayout.scrollDirection = .horizontal
+                self.collectionView.isPagingEnabled = true
+            }
+            else {
+                self.collectionView.setContentOffset(CGPoint(x: 0, y: 0), animated: false)
+                self.flowLayout.scrollDirection = .vertical
+                self.collectionView.isPagingEnabled = false
+            }
+            self.collectionView.setCollectionViewLayout(self.flowLayout, animated: false)
+            self.delegate?.expandDrawer()
+        }
+    }
+    
 }

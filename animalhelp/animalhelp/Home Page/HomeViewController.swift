@@ -16,7 +16,7 @@ import Moya
 class HomeViewController: BaseViewController, HomeViewModelDelegate {
   
     let drawerView = DrawerView()
-    
+    var drawerViewTopConstraint:ConstraintMakerEditable? = nil
     let myLocationButton:UIButton = {
        let button = UIButton(type: .system)
         button.setTitle("My Location", for: .normal)
@@ -83,6 +83,29 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
             self.drawerView.isHidden = true
         }
         
+    }
+    
+    func expandDrawerView() {
+        if self.drawerViewTopConstraint == nil {
+            drawerView.snp.makeConstraints { (make) in
+                self.drawerViewTopConstraint = make.top.equalToSuperview().offset(40)
+            }
+        }
+        else {
+            if let isActive = self.drawerViewTopConstraint?.constraint.isActive {
+                if isActive {
+                    self.drawerViewTopConstraint?.constraint.deactivate()
+                }
+                else {
+                    self.drawerViewTopConstraint?.constraint.activate()
+                }
+            }
+        }
+        
+        UIView.animate(withDuration: 0.2) {
+            self.view.layoutIfNeeded()
+        }
+ 
     }
     
     fileprivate func setupMyLocationButton() {
@@ -191,6 +214,7 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
     func hideDrawer() {
         self.drawerView.isHidden = true
     }
+    
     
 }
 
