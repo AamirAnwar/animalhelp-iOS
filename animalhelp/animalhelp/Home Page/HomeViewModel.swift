@@ -76,8 +76,6 @@ class HomeViewModel:NSObject {
                         // Error occured
                         print(error)
                     }
-                    
-                    
                 case .failure(let error):
                     print(error)
                     
@@ -108,7 +106,7 @@ class HomeViewModel:NSObject {
         self.timer = Timer.scheduledTimer(withTimeInterval: timeoutDuration, repeats: false, block: { (timer) in
             print("Stopping location services!")
             if self.detectedLocation == nil {
-                // Unable to get your location. Send a callback to the viewcontroller/view
+                // TODO Unable to get your location. Send a callback to the viewcontroller/view
             }
             else {
                 self.stopDetectingLocation()
@@ -154,7 +152,7 @@ extension HomeViewModel: CLLocationManagerDelegate {
 
 extension HomeViewModel:DrawerViewDelegate {
     func didTapManuallySelectLocation() {
-        // Start manual selection flow
+        //TODO Start manual selection flow
     }
     
     func didTapDetectLocation() {

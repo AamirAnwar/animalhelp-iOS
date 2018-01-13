@@ -138,6 +138,7 @@ extension DrawerView:UICollectionViewDelegate,UICollectionViewDelegateFlowLayout
         return cell
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        // TODO implement self sizing cells
         return CGSize(width: self.collectionView.frame.size.width, height: self.collectionView.frame.size.height)
     }
 }
