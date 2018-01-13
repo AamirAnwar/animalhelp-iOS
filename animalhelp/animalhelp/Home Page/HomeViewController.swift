@@ -16,20 +16,26 @@ import Moya
 class HomeViewController: BaseViewController, HomeViewModelDelegate {
   
     let drawerView = DrawerView()
+    static let inset:CGFloat = 10
     var drawerViewTopConstraint:ConstraintMakerEditable? = nil
     let myLocationButton:UIButton = {
        let button = UIButton(type: .system)
         button.setTitle("My Location", for: .normal)
-        button.setTitleColor(UIColor.white, for: .normal)
-        button.backgroundColor = UIColor.red
+        button.setTitleColor(CustomColorTextBlack, for: .normal)
+        button.backgroundColor = UIColor.white
+        button.layer.cornerRadius = kCornerRadius
+        button.contentEdgeInsets = UIEdgeInsetsMake(inset, inset, inset, inset)
+        
         return button
     }()
     
     let showNearestClinicButton:UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Nearest Clinic", for: .normal)
-        button.setTitleColor(UIColor.white, for: .normal)
-        button.backgroundColor = UIColor.red
+        button.setTitleColor(CustomColorTextBlack, for: .normal)
+        button.backgroundColor = UIColor.white
+        button.layer.cornerRadius = kCornerRadius
+        button.contentEdgeInsets = UIEdgeInsetsMake(inset, inset, inset, inset)
         return button
     }()
     
