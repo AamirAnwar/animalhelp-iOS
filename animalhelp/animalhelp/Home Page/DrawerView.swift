@@ -22,6 +22,7 @@ class DrawerView:UIView {
     let infoLabel = UILabel()
     let detectLocationButton = UIButton(type: .system)
     let manualLocationButton = UIButton(type: .system)
+    let onboardingContainerView = UIView()
     let tapGesture = UITapGestureRecognizer()
     var delegate:DrawerViewDelegate? = nil
     var flowLayout:UICollectionViewFlowLayout = {
@@ -50,13 +51,19 @@ class DrawerView:UIView {
             make.edges.equalToSuperview()
             make.height.greaterThanOrEqualTo(kCollectionViewHeight)
         }
+//        self.collectionView.isHidden = true
+//        createOnboardingView()
     }
     
     fileprivate func createOnboardingView() {
-        self.addSubview(locationPinImageView)
-        self.addSubview(infoLabel)
-        self.addSubview(manualLocationButton)
-        self.addSubview(detectLocationButton)
+        self.addSubview(onboardingContainerView)
+        onboardingContainerView.snp.makeConstraints { (make) in
+            make.edges.equalToSuperview()
+        }
+        onboardingContainerView.addSubview(locationPinImageView)
+        onboardingContainerView.addSubview(infoLabel)
+        onboardingContainerView.addSubview(manualLocationButton)
+        onboardingContainerView.addSubview(detectLocationButton)
         
         infoLabel.text = "We need your location to find clinics around you"
         infoLabel.numberOfLines = 0
