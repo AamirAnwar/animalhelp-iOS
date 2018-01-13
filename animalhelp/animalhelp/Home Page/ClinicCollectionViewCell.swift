@@ -10,7 +10,12 @@ import Foundation
 import UIKit
 import SnapKit
 
+protocol ClinicCollectionViewCellDelegate {
+    func didTapGoogleMapsButton(sender:UICollectionViewCell)
+}
+
 class ClinicCollectionViewCell:UICollectionViewCell {
+    var delegate:ClinicCollectionViewCellDelegate? = nil
     let bannerLabel:UILabel = {
        let label = UILabel(frame: CGRect.zero)
         label.text = "Nearest Help Center"
@@ -101,6 +106,8 @@ class ClinicCollectionViewCell:UICollectionViewCell {
             make.trailing.equalToSuperview().offset(-24)
             make.height.equalTo(kStandardButtonHeight)
         }
+        
+        googleMapsButton.addTarget(self, action: #selector(googleMapsButtonTapped), for: .touchUpInside)
     }
     
     func setNearestClinic(_ clinic:NearestClinic?) {
@@ -112,5 +119,7 @@ class ClinicCollectionViewCell:UICollectionViewCell {
             
         }
     }
-    
+    @objc func googleMapsButtonTapped() {
+        self.delegate?.didTapGoogleMapsButton(sender:self)
+    }
 }
