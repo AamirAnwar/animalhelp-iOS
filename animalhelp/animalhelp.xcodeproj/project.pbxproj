@@ -10,6 +10,7 @@
 		4313A85E1FFE9A3F0043C927 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 4313A85D1FFE9A3F0043C927 /* UIImage+ImageEffects.m */; };
 		43367EED2008A771004D6B2C /* ClinicCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43367EEC2008A771004D6B2C /* ClinicCollectionViewCell.swift */; };
 		433B09CA1FFE587C00EA0906 /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433B09C91FFE587C00EA0906 /* AccountViewController.swift */; };
+		438216842009D5980077FA5E /* animalhelpTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 438216832009D5980077FA5E /* animalhelpTests.swift */; };
 		438A0D431FCDCB25005A8CA4 /* GoogleMapsCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 438A0D411FCDCB25005A8CA4 /* GoogleMapsCore.framework */; };
 		438A0D451FCDCB27005A8CA4 /* GoogleMapsBase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 438A0D441FCDCB27005A8CA4 /* GoogleMapsBase.framework */; };
 		438A0D4F1FCDCB90005A8CA4 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 438A0D4E1FCDCB90005A8CA4 /* libc++.tbd */; };
@@ -38,12 +39,25 @@
 		43F6870D1FC5887300F4CED0 /* SnapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43F6870C1FC5887300F4CED0 /* SnapKit.framework */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		438216862009D5980077FA5E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43E86AB31FBC320500B7130B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43E86ABA1FBC320500B7130B;
+			remoteInfo = animalhelp;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		4313A85B1FFE9A3D0043C927 /* animalhelp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "animalhelp-Bridging-Header.h"; sourceTree = "<group>"; };
 		4313A85C1FFE9A3F0043C927 /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageEffects.h"; sourceTree = "<group>"; };
 		4313A85D1FFE9A3F0043C927 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
 		43367EEC2008A771004D6B2C /* ClinicCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClinicCollectionViewCell.swift; sourceTree = "<group>"; };
 		433B09C91FFE587C00EA0906 /* AccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
+		438216812009D5980077FA5E /* animalhelpTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = animalhelpTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		438216832009D5980077FA5E /* animalhelpTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = animalhelpTests.swift; sourceTree = "<group>"; };
+		438216852009D5980077FA5E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		438A0D411FCDCB25005A8CA4 /* GoogleMapsCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleMapsCore.framework; path = Carthage/Build/iOS/GoogleMapsCore.framework; sourceTree = "<group>"; };
 		438A0D441FCDCB27005A8CA4 /* GoogleMapsBase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleMapsBase.framework; path = Carthage/Build/iOS/GoogleMapsBase.framework; sourceTree = "<group>"; };
 		438A0D461FCDCB4C005A8CA4 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
@@ -85,6 +99,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		4382167E2009D5980077FA5E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		43E86AB81FBC320500B7130B /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -110,6 +131,15 @@
 				433B09C91FFE587C00EA0906 /* AccountViewController.swift */,
 			);
 			path = "Account Page";
+			sourceTree = "<group>";
+		};
+		438216822009D5980077FA5E /* animalhelpTests */ = {
+			isa = PBXGroup;
+			children = (
+				438216832009D5980077FA5E /* animalhelpTests.swift */,
+				438216852009D5980077FA5E /* Info.plist */,
+			);
+			path = animalhelpTests;
 			sourceTree = "<group>";
 		};
 		4387C4491FFA212800810698 /* Home Page */ = {
@@ -159,6 +189,7 @@
 			isa = PBXGroup;
 			children = (
 				43E86ABD1FBC320500B7130B /* animalhelp */,
+				438216822009D5980077FA5E /* animalhelpTests */,
 				43E86ABC1FBC320500B7130B /* Products */,
 				43F687081FC5863C00F4CED0 /* Frameworks */,
 			);
@@ -168,6 +199,7 @@
 			isa = PBXGroup;
 			children = (
 				43E86ABB1FBC320500B7130B /* animalhelp.app */,
+				438216812009D5980077FA5E /* animalhelpTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -220,6 +252,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		438216802009D5980077FA5E /* animalhelpTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 438216882009D5980077FA5E /* Build configuration list for PBXNativeTarget "animalhelpTests" */;
+			buildPhases = (
+				4382167D2009D5980077FA5E /* Sources */,
+				4382167E2009D5980077FA5E /* Frameworks */,
+				4382167F2009D5980077FA5E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				438216872009D5980077FA5E /* PBXTargetDependency */,
+			);
+			name = animalhelpTests;
+			productName = animalhelpTests;
+			productReference = 438216812009D5980077FA5E /* animalhelpTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		43E86ABA1FBC320500B7130B /* animalhelp */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 43E86ACD1FBC320500B7130B /* Build configuration list for PBXNativeTarget "animalhelp" */;
@@ -244,10 +294,15 @@
 		43E86AB31FBC320500B7130B /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0900;
+				LastSwiftUpdateCheck = 0910;
 				LastUpgradeCheck = 0900;
 				ORGANIZATIONNAME = AamirAnwar;
 				TargetAttributes = {
+					438216802009D5980077FA5E = {
+						CreatedOnToolsVersion = 9.1;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 43E86ABA1FBC320500B7130B;
+					};
 					43E86ABA1FBC320500B7130B = {
 						CreatedOnToolsVersion = 9.0;
 						LastSwiftMigration = 0910;
@@ -269,11 +324,19 @@
 			projectRoot = "";
 			targets = (
 				43E86ABA1FBC320500B7130B /* animalhelp */,
+				438216802009D5980077FA5E /* animalhelpTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		4382167F2009D5980077FA5E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		43E86AB91FBC320500B7130B /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -309,6 +372,14 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		4382167D2009D5980077FA5E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				438216842009D5980077FA5E /* animalhelpTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		43E86AB71FBC320500B7130B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -333,6 +404,14 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		438216872009D5980077FA5E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43E86ABA1FBC320500B7130B /* animalhelp */;
+			targetProxy = 438216862009D5980077FA5E /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin PBXVariantGroup section */
 		43E86AC71FBC320500B7130B /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
@@ -345,6 +424,40 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		438216892009D5980077FA5E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = C3RT9P7X65;
+				INFOPLIST_FILE = animalhelpTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.aamiranwar.animalhelpTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/animalhelp.app/animalhelp";
+			};
+			name = Debug;
+		};
+		4382168A2009D5980077FA5E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = C3RT9P7X65;
+				INFOPLIST_FILE = animalhelpTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.aamiranwar.animalhelpTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/animalhelp.app/animalhelp";
+			};
+			name = Release;
+		};
 		43E86ACB1FBC320500B7130B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -499,6 +612,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		438216882009D5980077FA5E /* Build configuration list for PBXNativeTarget "animalhelpTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				438216892009D5980077FA5E /* Debug */,
+				4382168A2009D5980077FA5E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		43E86AB61FBC320500B7130B /* Build configuration list for PBXProject "animalhelp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
