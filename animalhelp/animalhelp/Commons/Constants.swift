@@ -12,3 +12,4 @@ import UIKit
 var GoogleMapsAPIKey:String?
 let kCornerRadius:CGFloat = 4
 let kStandardButtonHeight = 50
+let kCollectionViewHeight:CGFloat = 257
