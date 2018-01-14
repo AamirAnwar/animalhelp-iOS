@@ -29,7 +29,6 @@ class ClinicCollectionViewCell:UICollectionViewCell {
         let label = UILabel(frame: CGRect.zero)
         label.font = CustomFontButtonTitle
         label.textColor = CustomColorTextBlack
-        
         return label
     }()
     

@@ -16,6 +16,7 @@ import Moya
 
 enum HomeViewState {
     case UserLocationUnknown
+    case HiddenDrawer
     case MinimizedDrawer
     case SingleClinicDrawer
     case MaximizedDrawer
@@ -25,6 +26,11 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
     let drawerView = DrawerView()
     static let inset:CGFloat = 10
     var drawerViewTopConstraint:ConstraintMakerEditable? = nil
+    var state:HomeViewState = .UserLocationUnknown {
+        didSet {
+            self.refreshDrawerWithState(self.state)
+        }
+    }
     let myLocationButton:UIButton = {
        let button = UIButton(type: .system)
         button.setTitle("My Location", for: .normal)
@@ -108,7 +114,7 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
         view.addSubview(self.showNearestClinicButton)
         self.showNearestClinicButton.snp.makeConstraints { (make) in
             make.trailing.equalTo(myLocationButton.snp.trailing)
-            make.top.equalTo(myLocationButton.snp.bottom).offset(50)
+            make.top.equalTo(myLocationButton.snp.bottom).offset(20)
         }
         self.showNearestClinicButton.addTarget(self, action: #selector(didTapShowNearestClinic), for: .touchUpInside)
     }
@@ -132,7 +138,7 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
         alert.addAction(okAction)
     }
     
-    func expandDrawerView() {
+    fileprivate func expandDrawerView() {
         if self.drawerViewTopConstraint == nil {
             drawerView.snp.makeConstraints { (make) in
                 self.drawerViewTopConstraint = make.top.equalToSuperview().offset(40)
@@ -154,6 +160,27 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
         }
     }
     
+    fileprivate func refreshDrawerWithState(_ state:HomeViewState) {
+        if let topConstraint = self.drawerViewTopConstraint?.constraint {
+            if state == .MaximizedDrawer {
+                topConstraint.activate()
+            }
+            else if state == .SingleClinicDrawer {
+                topConstraint.deactivate()
+            }
+        }
+        else {
+            drawerView.snp.makeConstraints { (make) in
+                self.drawerViewTopConstraint = make.top.equalToSuperview().offset(40)
+            }
+            self.refreshDrawerWithState(state)
+            return
+        }
+        
+        UIView.animate(withDuration: 0.2) {
+            self.view.layoutIfNeeded()
+        }
+    }
     
     func didUpdate(_ updatedMarker:GMSMarker) -> Void {
         updatedMarker.map = self.googleMapView
@@ -173,7 +200,7 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
     }
     
     func showDrawerWith(clinic: NearestClinic) {
-        self.showDrawer()
+//        self.showDrawer()
         self.drawerView.showClinic(clinic: clinic)
     }
     
@@ -213,20 +240,18 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
         return blurredImage
     }
 
-    func showDrawer() {
-        self.view.bringSubview(toFront: self.drawerView)
-        self.drawerView.isHidden = false
-    }
-    
-    func hideDrawer() {
-        self.drawerView.isHidden = true
-    }
-    
     func transitionTo(state:HomeViewState) {
+        guard self.state != state else {
+            return
+        }
+        
         switch state {
         case .UserLocationUnknown:
             self.updateVisibleMapElements(self,true)
             self.drawerView.showUnknownLocationState()
+            
+        case .HiddenDrawer:
+            self.drawerView.isHidden = true
             
         case .MinimizedDrawer:
             self.updateVisibleMapElements(self,false)
@@ -234,6 +259,7 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
             
         case .SingleClinicDrawer:
             self.updateVisibleMapElements(self,false)
+            self.drawerView.isHidden = false
             //Tell drawer to show nearest clinic only with left to right swipeable inteface
             if let clinic = self.viewModel.nearestClinic {
                 self.drawerView.showClinic(clinic: clinic)
@@ -244,7 +270,7 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
             //Tell drawer to expand to cover it's superview and show all clinics like a list view
             
         }
-        
+        self.state = state
     }
     
 }

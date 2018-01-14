@@ -14,6 +14,7 @@ protocol DrawerViewDelegate {
     func didTapDetectLocation()
     func didTapManuallySelectLocation()
     func didTapOpenInGoogleMaps(forIndex indexPath:IndexPath)
+    func didTapStickyButton(seeMore:Bool)
 }
 
 class DrawerView:UIView {
@@ -21,6 +22,7 @@ class DrawerView:UIView {
     let infoLabel = UILabel()
     let detectLocationButton = UIButton(type: .system)
     let manualLocationButton = UIButton(type: .system)
+    let stickyButton = UIButton(type: .system)
     let onboardingContainerView = UIView()
     let tapGesture = UITapGestureRecognizer()
     var delegate:DrawerViewDelegate? = nil
@@ -52,7 +54,21 @@ class DrawerView:UIView {
             make.edges.equalToSuperview()
             make.height.greaterThanOrEqualTo(kCollectionViewHeight)
         }
-
+        
+        self.addSubview(self.stickyButton)
+        self.stickyButton.setTitleColor(CustomColorMainTheme, for: .normal)
+        self.stickyButton.titleLabel?.font = CustomFontHeadingSmall
+        self.stickyButton.layer.borderWidth = 1
+        self.stickyButton.layer.borderColor = CustomColorMainTheme.cgColor
+        let inset:CGFloat = 8
+        self.stickyButton.contentEdgeInsets = UIEdgeInsetsMake(3, inset, 3, inset)
+        self.stickyButton.setTitle("See more clinics", for: .normal)
+        self.stickyButton.layer.cornerRadius = 2*kCornerRadius
+        self.stickyButton.snp.makeConstraints { (make) in
+            make.bottom.equalToSuperview().inset(10)
+            make.centerX.equalToSuperview()
+        }
+        self.stickyButton.addTarget(self, action: #selector(didTapSeeAllClinics), for: .touchUpInside)
     }
     
     fileprivate func setupUnkownLocationView() {
@@ -120,6 +136,7 @@ class DrawerView:UIView {
     func showClinic(clinic:NearestClinic) {
         self.onboardingContainerView.isHidden = true
         self.collectionView.isHidden = false
+        self.stickyButton.isHidden = false
         self.nearestClinic = clinic
         self.collectionView.reloadData()
     }
@@ -127,6 +144,7 @@ class DrawerView:UIView {
     public func showUnknownLocationState() {
         self.onboardingContainerView.isHidden = false
         self.collectionView.isHidden = true
+        self.stickyButton.isHidden = true
         setupUnkownLocationView()
     }
 
@@ -176,21 +194,39 @@ extension DrawerView:UICollectionViewDelegate,UICollectionViewDelegateFlowLayout
         // TODO implement self sizing cells
         return CGSize(width: self.collectionView.frame.size.width, height: 250)
     }
+    
     func didTapGoogleMapsButton(sender: UICollectionViewCell) {
         if let indexPath = self.collectionView.indexPath(for: sender) {
-            print("Tapped cell number \(indexPath.row)")
-            if self.flowLayout.scrollDirection == .vertical {
-                self.flowLayout.scrollDirection = .horizontal
-                self.collectionView.isPagingEnabled = true
-            }
-            else {
-                self.collectionView.setContentOffset(CGPoint(x: 0, y: 0), animated: false)
-                self.flowLayout.scrollDirection = .vertical
-                self.collectionView.isPagingEnabled = false
-            }
-            self.collectionView.setCollectionViewLayout(self.flowLayout, animated: false)
             self.delegate?.didTapOpenInGoogleMaps(forIndex: indexPath)
         }
     }
+    
+    @objc func didTapSeeAllClinics() {
+        var seeMore = false
+        if self.flowLayout.scrollDirection == .vertical {
+            self.flowLayout.scrollDirection = .horizontal
+            self.collectionView.isPagingEnabled = true
+            UIView.transition(with: self.stickyButton, duration: 0.3, options: .transitionCrossDissolve, animations: {
+                self.stickyButton.setTitleColor(CustomColorMainTheme, for: .normal)
+                self.stickyButton.backgroundColor = UIColor.white
+            }, completion: nil)
+            
+        }
+        else {
+            self.collectionView.setContentOffset(CGPoint(x: 0, y: 0), animated: false)
+            self.flowLayout.scrollDirection = .vertical
+            self.collectionView.isPagingEnabled = false
+            UIView.transition(with: self.stickyButton, duration: 0.3, options: .transitionCrossDissolve, animations: {
+                self.stickyButton.setTitleColor(UIColor.white, for: .normal)
+                self.stickyButton.backgroundColor = CustomColorMainTheme
+            }, completion: nil)
+            seeMore = true
+        }
+        self.collectionView.setCollectionViewLayout(self.flowLayout, animated: false)
+        // TODO - Transition to maximized drawer
+        self.delegate?.didTapStickyButton(seeMore: seeMore)
+    }
+    
+    
     
 }

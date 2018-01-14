@@ -16,11 +16,8 @@ protocol HomeViewModelDelegate {
     func locationServicesDenied() -> Void
     func didUpdate(_ updatedMarker:GMSMarker) -> Void
     func showUserLocation(location:CLLocation)->Void
-    func showDrawerWith(clinic:NearestClinic)
-    func showDrawer()
-    func hideDrawer()
-    func expandDrawerView()
     func transitionTo(state:HomeViewState)
+    func showDrawerWith(clinic:NearestClinic)
 }
 
 class HomeViewModel:NSObject {
@@ -154,7 +151,7 @@ extension HomeViewModel: CLLocationManagerDelegate {
             
             if self.detectedLocation == nil || self.detectedLocation!.horizontalAccuracy > location.horizontalAccuracy {
                 self.detectedLocation = location
-                self.delegate?.hideDrawer()
+                self.delegate?.transitionTo(state: .HiddenDrawer)
                 self.delegate?.showUserLocation(location: location)
                 self.stopDetectingLocation()
             }
@@ -168,6 +165,16 @@ extension HomeViewModel: CLLocationManagerDelegate {
 }
 
 extension HomeViewModel:DrawerViewDelegate {
+    func didTapStickyButton(seeMore: Bool) {
+        if seeMore {
+                self.delegate?.transitionTo(state: .MaximizedDrawer)
+        }
+        else {
+            self.delegate?.transitionTo(state: .SingleClinicDrawer)
+        }
+        
+    }
+    
     func didTapOpenInGoogleMaps(forIndex indexPath: IndexPath) {
         // TODO Open google maps for clinic at this indexpath
     }
@@ -187,6 +194,7 @@ extension HomeViewModel:DrawerViewDelegate {
 extension HomeViewModel:GMSMapViewDelegate {
     func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
         if let nearestClinic = self.nearestClinic, self.nearestClinicMarker == marker {
+            self.delegate?.transitionTo(state: .SingleClinicDrawer)
             self.delegate?.showDrawerWith(clinic: nearestClinic)
         }
         return true
