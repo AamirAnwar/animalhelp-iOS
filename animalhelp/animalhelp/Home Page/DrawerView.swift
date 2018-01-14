@@ -13,9 +13,8 @@ import SnapKit
 protocol DrawerViewDelegate {
     func didTapDetectLocation()
     func didTapManuallySelectLocation()
-    func expandDrawer()
+    func didTapOpenInGoogleMaps(forIndex indexPath:IndexPath)
 }
-let kCollectionViewHeight:CGFloat = 257
 
 class DrawerView:UIView {
     let locationPinImageView = UIImageView(image: #imageLiteral(resourceName: "LocationPin"))
@@ -33,6 +32,8 @@ class DrawerView:UIView {
     var collectionView:UICollectionView!
     let clinicCellReuseIdentifier = "ClinicCellReuseIdentifier"
     var nearestClinic:NearestClinic? = nil
+    
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init with coder not implemented")
     }
@@ -51,11 +52,14 @@ class DrawerView:UIView {
             make.edges.equalToSuperview()
             make.height.greaterThanOrEqualTo(kCollectionViewHeight)
         }
-//        self.collectionView.isHidden = true
-//        createOnboardingView()
+
     }
     
-    fileprivate func createOnboardingView() {
+    fileprivate func setupUnkownLocationView() {
+        guard onboardingContainerView.superview == nil else {
+            return
+        }
+        
         self.addSubview(onboardingContainerView)
         onboardingContainerView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
@@ -114,15 +118,25 @@ class DrawerView:UIView {
     }
     
     func showClinic(clinic:NearestClinic) {
+        self.onboardingContainerView.isHidden = true
+        self.collectionView.isHidden = false
         self.nearestClinic = clinic
         self.collectionView.reloadData()
     }
     
-    @objc func detectLocationButtonTapped() {
+    public func showUnknownLocationState() {
+        self.onboardingContainerView.isHidden = false
+        self.collectionView.isHidden = true
+        setupUnkownLocationView()
+    }
+
+    
+    //MARK: Button Callbacks
+    @objc fileprivate func detectLocationButtonTapped() {
         self.delegate?.didTapDetectLocation()
     }
     
-    @objc func manuallySelectLocationButtonTapped() {
+    @objc fileprivate func manuallySelectLocationButtonTapped() {
         self.delegate?.didTapManuallySelectLocation()
     }
     
@@ -175,7 +189,7 @@ extension DrawerView:UICollectionViewDelegate,UICollectionViewDelegateFlowLayout
                 self.collectionView.isPagingEnabled = false
             }
             self.collectionView.setCollectionViewLayout(self.flowLayout, animated: false)
-            self.delegate?.expandDrawer()
+            self.delegate?.didTapOpenInGoogleMaps(forIndex: indexPath)
         }
     }
     

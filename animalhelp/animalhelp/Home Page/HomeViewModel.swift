@@ -16,10 +16,11 @@ protocol HomeViewModelDelegate {
     func locationServicesDenied() -> Void
     func didUpdate(_ updatedMarker:GMSMarker) -> Void
     func showUserLocation(location:CLLocation)->Void
-    func showDrawer()
     func showDrawerWith(clinic:NearestClinic)
+    func showDrawer()
     func hideDrawer()
     func expandDrawerView()
+    func transitionTo(state:HomeViewState)
 }
 
 class HomeViewModel:NSObject {
@@ -36,9 +37,24 @@ class HomeViewModel:NSObject {
             return CLLocationManager.authorizationStatus() == .authorizedWhenInUse || CLLocationManager.authorizationStatus() == .authorizedAlways
         }
     }
+    
+    func updateViewState() {
+        if self.isLocationPermissionGranted == false {
+            self.delegate?.transitionTo(state: .UserLocationUnknown)
+        }
+        else {
+            if self.detectedLocation != nil {
+                self.updateNearestClinic()
+            }
+            else {
+                self.startDetectingLocation()
+            }
+        }
+    }
+    
     func startDetectingLocation() {
         let authStatus = CLLocationManager.authorizationStatus()
-        guard authStatus != .denied || authStatus != .restricted else {
+        guard authStatus != .denied && authStatus != .restricted else {
             self.delegate?.locationServicesDenied()
             return
         }
@@ -58,7 +74,6 @@ class HomeViewModel:NSObject {
     func stopDetectingLocation() {
         locationManager.stopUpdatingLocation()
     }
-    
     
     func updateNearestClinic() {
         if let location = self.detectedLocation {
@@ -99,6 +114,7 @@ class HomeViewModel:NSObject {
             marker.title = nearestClinic.clinic.name
             marker.snippet = nearestClinic.clinic.address
             self.nearestClinicMarker = marker
+            self.delegate?.transitionTo(state: .SingleClinicDrawer)
             self.delegate?.didUpdate(marker)
         }
     }
@@ -152,8 +168,8 @@ extension HomeViewModel: CLLocationManagerDelegate {
 }
 
 extension HomeViewModel:DrawerViewDelegate {
-    func expandDrawer() {
-        self.delegate?.expandDrawerView()
+    func didTapOpenInGoogleMaps(forIndex indexPath: IndexPath) {
+        // TODO Open google maps for clinic at this indexpath
     }
     
     func didTapManuallySelectLocation() {
