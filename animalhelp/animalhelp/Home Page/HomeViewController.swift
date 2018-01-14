@@ -167,6 +167,9 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
             let camera = googleMapView.camera(for: bounds , insets: UIEdgeInsetsMake(50 + self.tabBarHeight, 0, 50 + self.tabBarHeight, 0))!
             googleMapView.camera = camera
         }
+        else {
+            self.viewModel.updateNearestClinic()
+        }
     }
     
     func showDrawerWith(clinic: NearestClinic) {

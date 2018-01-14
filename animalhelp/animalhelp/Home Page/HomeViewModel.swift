@@ -44,7 +44,7 @@ class HomeViewModel:NSObject {
         }
         else {
             if self.detectedLocation != nil {
-                self.updateNearestClinic()
+//                self.updateNearestClinic()
             }
             else {
                 self.startDetectingLocation()
@@ -94,7 +94,6 @@ class HomeViewModel:NSObject {
                     }
                 case .failure(let error):
                     print(error)
-                    
                 }
             })
         }
@@ -122,12 +121,13 @@ class HomeViewModel:NSObject {
     fileprivate func startLocationDetectionTimer() {
         self.timer = Timer.scheduledTimer(withTimeInterval: timeoutDuration, repeats: false, block: { (timer) in
             print("Stopping location services!")
-            if self.detectedLocation == nil {
-                // TODO Unable to get your location. Send a callback to the viewcontroller/view
+            if let location = self.detectedLocation {
+                self.delegate?.transitionTo(state: .MinimizedDrawer)
+                self.delegate?.showUserLocation(location: location)
+                self.stopDetectingLocation()
             }
             else {
-                self.stopDetectingLocation()
-                self.updateNearestClinic()
+                // TODO Unable to get your location. Send a callback to the viewcontroller/view
             }
             timer.invalidate()
         })
