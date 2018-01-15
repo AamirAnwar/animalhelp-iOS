@@ -29,6 +29,9 @@ class ClinicCollectionViewCell:UICollectionViewCell {
         let label = UILabel(frame: CGRect.zero)
         label.font = CustomFontButtonTitle
         label.textColor = CustomColorTextBlack
+        label.numberOfLines = 2
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.5
         return label
     }()
     
@@ -52,7 +55,6 @@ class ClinicCollectionViewCell:UICollectionViewCell {
         let label = UILabel(frame: CGRect.zero)
         label.font = CustomFontButtonTitle
         label.textColor = CustomColorMainTheme
-        label.lineBreakMode = .byTruncatingTail
         return label
     }()
     
@@ -91,13 +93,12 @@ class ClinicCollectionViewCell:UICollectionViewCell {
         nameLabel.snp.makeConstraints { (make) in
             make.top.equalTo(bannerLabel.snp.bottom).offset(8)
             make.leading.equalTo(bannerLabel.snp.leading)
-
         }
         
         distanceLabel.snp.makeConstraints { (make) in
             make.top.equalTo(nameLabel.snp.top)
             make.trailing.equalTo(bannerLabel.snp.trailing)
-            make.leading.equalTo(nameLabel.snp.trailing).offset(10)
+            make.leading.greaterThanOrEqualTo(nameLabel.snp.trailing).offset(10)
             
         }
         
@@ -119,20 +120,43 @@ class ClinicCollectionViewCell:UICollectionViewCell {
             make.trailing.equalToSuperview().offset(-24)
             make.height.equalTo(kStandardButtonHeight)
         }
-        
         googleMapsButton.addTarget(self, action: #selector(googleMapsButtonTapped), for: .touchUpInside)
+        nameLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        distanceLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
+        
     }
     
-    func setNearestClinic(_ clinic:NearestClinic?) {
+    func setNearestClinic(_ clinic:Clinic?) {
         if let clinic = clinic {
             // TODO fix this clinic.clinic with a better model
-            nameLabel.text = clinic.clinic.name
-            addressLabel.text = "Address - \(clinic.clinic.address)"
-            phoneLabel.text = "Phone - \(clinic.clinic.mobile)"
-            distanceLabel.text = "\(clinic.distance) km"
+            nameLabel.text = clinic.name
+            addressLabel.text = "Address - \(clinic.address)"
+            phoneLabel.text = "Phone - \(clinic.mobile)"
+            if let distance = clinic.distance {
+                distanceLabel.text = "\(distance) km"
+            }
+            
+        }
+    }
+    
+    func setClinic(_ clinic:Clinic?) {
+        if let clinic = clinic {
+            // TODO fix this clinic.clinic with a better model
+            nameLabel.text = clinic.name
+            addressLabel.text = "Address - \(clinic.address)"
+            phoneLabel.text = "Phone - \(clinic.mobile)"
+            if let distance = clinic.distance {
+                distanceLabel.text = "\(distance) km"
+            }
         }
     }
     @objc func googleMapsButtonTapped() {
         self.delegate?.didTapGoogleMapsButton(sender:self)
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        distanceLabel.preferredMaxLayoutWidth = self.frame.size.width/2
+        
     }
 }
