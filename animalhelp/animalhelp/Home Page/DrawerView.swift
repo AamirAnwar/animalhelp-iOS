@@ -16,6 +16,7 @@ protocol DrawerViewDelegate {
     func didTapOpenInGoogleMaps(forIndex indexPath:IndexPath)
     func didTapStickyButton(seeMore:Bool)
     func didTapHideDrawerButton()
+    func didSwipeToClinicAt(index:Int)
 }
 
 class DrawerView:UIView {
@@ -46,8 +47,8 @@ class DrawerView:UIView {
     }()
     var collectionView:UICollectionView!
     let clinicCellReuseIdentifier = "ClinicCellReuseIdentifier"
-    var nearestClinic:NearestClinic? = nil
-    
+    var nearestClinic:Clinic? = nil
+    var nearbyClinics:[Clinic]?
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init with coder not implemented")
@@ -155,13 +156,17 @@ class DrawerView:UIView {
         
         
     }
-    
-    func showClinic(clinic:NearestClinic) {
+    func showClinics(_ clinics:[Clinic]) {
         self.onboardingContainerView.isHidden = true
         self.collectionView.isHidden = false
         self.stickyButton.isHidden = false
-        self.nearestClinic = clinic
+        self.nearbyClinics = clinics
         self.collectionView.reloadData()
+    }
+    func showClinics(_ clinics:[Clinic], selectedIndex:Int) {
+        guard selectedIndex < clinics.count else {return}
+        self.showClinics(clinics)
+        self.collectionView.scrollToItem(at: IndexPath.init(row: selectedIndex, section: 0), at: .centeredHorizontally, animated: true)
     }
     
     public func showUnknownLocationState() {
@@ -205,15 +210,24 @@ extension DrawerView:UICollectionViewDelegate,UICollectionViewDelegateFlowLayout
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return self.nearbyClinics?.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: self.clinicCellReuseIdentifier, for: indexPath) as! ClinicCollectionViewCell
-        cell.setNearestClinic(self.nearestClinic)
+        cell.setClinic(self.nearbyClinics?[indexPath.row])
         cell.delegate = self
         return cell
     }
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        print(self.collectionView.indexPathsForVisibleItems)
+        if let visibleIndexPath = self.collectionView.indexPathsForVisibleItems.first {
+            self.delegate?.didSwipeToClinicAt(index: visibleIndexPath.row)
+        }
+    }
+    
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         // TODO implement self sizing cells
         return CGSize(width: self.collectionView.frame.size.width, height: 250)
