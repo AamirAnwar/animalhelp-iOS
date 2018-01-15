@@ -74,6 +74,7 @@ class DrawerView:UIView {
         self.stickyButton.titleLabel?.font = CustomFontHeadingSmall
         self.stickyButton.layer.borderWidth = 1
         self.stickyButton.layer.borderColor = CustomColorMainTheme.cgColor
+        self.stickyButton.backgroundColor = UIColor.white
         let inset:CGFloat = 8
         self.stickyButton.contentEdgeInsets = UIEdgeInsetsMake(3, inset, 3, inset)
         self.stickyButton.setTitle("See more clinics", for: .normal)
