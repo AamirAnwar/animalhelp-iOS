@@ -37,7 +37,6 @@ class ClinicCollectionViewCell:UICollectionViewCell {
         label.font = CustomFontSmallBodyMedium
         label.textColor = CustomColorTextBlack
         label.numberOfLines = 0
-        
         return label
     }()
     
@@ -46,7 +45,14 @@ class ClinicCollectionViewCell:UICollectionViewCell {
         label.font = CustomFontSmallBodyMedium
         label.textColor = CustomColorTextBlack
         label.numberOfLines = 0
-        
+        return label
+    }()
+    
+    let distanceLabel:UILabel = {
+        let label = UILabel(frame: CGRect.zero)
+        label.font = CustomFontButtonTitle
+        label.textColor = CustomColorMainTheme
+        label.lineBreakMode = .byTruncatingTail
         return label
     }()
     
@@ -73,6 +79,7 @@ class ClinicCollectionViewCell:UICollectionViewCell {
         self.contentView.addSubview(addressLabel)
         self.contentView.addSubview(phoneLabel)
         self.contentView.addSubview(googleMapsButton)
+        self.contentView.addSubview(distanceLabel)
         
         
         bannerLabel.snp.makeConstraints { (make) in
@@ -84,7 +91,14 @@ class ClinicCollectionViewCell:UICollectionViewCell {
         nameLabel.snp.makeConstraints { (make) in
             make.top.equalTo(bannerLabel.snp.bottom).offset(8)
             make.leading.equalTo(bannerLabel.snp.leading)
+
+        }
+        
+        distanceLabel.snp.makeConstraints { (make) in
+            make.top.equalTo(nameLabel.snp.top)
             make.trailing.equalTo(bannerLabel.snp.trailing)
+            make.leading.equalTo(nameLabel.snp.trailing).offset(10)
+            
         }
         
         addressLabel.snp.makeConstraints { (make) in
@@ -115,7 +129,7 @@ class ClinicCollectionViewCell:UICollectionViewCell {
             nameLabel.text = clinic.clinic.name
             addressLabel.text = "Address - \(clinic.clinic.address)"
             phoneLabel.text = "Phone - \(clinic.clinic.mobile)"
-            
+            distanceLabel.text = "\(clinic.distance) km"
         }
     }
     @objc func googleMapsButtonTapped() {
