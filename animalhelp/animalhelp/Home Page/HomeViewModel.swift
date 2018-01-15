@@ -48,6 +48,9 @@ class HomeViewModel:NSObject {
             return CLLocationManager.authorizationStatus() == .authorizedWhenInUse || CLLocationManager.authorizationStatus() == .authorizedAlways
         }
     }
+    let geocoder = CLGeocoder()
+    var placeMark:CLPlacemark? = nil
+    var performingReverseGeocoding = false
     
     func updateViewState() {
         if self.isLocationPermissionGranted == false {
@@ -192,10 +195,28 @@ extension HomeViewModel: CLLocationManagerDelegate {
             }
             
             if self.detectedLocation == nil || self.detectedLocation!.horizontalAccuracy > location.horizontalAccuracy {
-                self.detectedLocation = location
-                self.delegate?.transitionTo(state: .HiddenDrawer)
-                self.delegate?.showUserLocation(location: location)
-                self.stopDetectingLocation()
+                
+                if self.performingReverseGeocoding == false {
+                    performingReverseGeocoding = true
+                    geocoder.reverseGeocodeLocation(location, completionHandler: { (placemarks, error) in
+                        self.performingReverseGeocoding = false
+                        if let error = error {
+                            print("Reverse geocode failed! \(error.localizedDescription)")
+                            return
+                        }
+                        if let place = placemarks?.first {
+                            self.placeMark = place
+                            self.detectedLocation = location
+                            self.delegate?.transitionTo(state: .HiddenDrawer)
+                            self.delegate?.showUserLocation(location: location)
+                            self.stopDetectingLocation()
+                        }
+                        
+                    })
+                }
+                
+                
+                
             }
         }
         
