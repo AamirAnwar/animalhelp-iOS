@@ -165,6 +165,10 @@ extension HomeViewModel: CLLocationManagerDelegate {
 }
 
 extension HomeViewModel:DrawerViewDelegate {
+    func didTapHideDrawerButton() {
+        self.delegate?.transitionTo(state: .HiddenDrawer)
+    }
+    
     func didTapStickyButton(seeMore: Bool) {
         if seeMore {
                 self.delegate?.transitionTo(state: .MaximizedDrawer)
@@ -176,8 +180,17 @@ extension HomeViewModel:DrawerViewDelegate {
     }
     
     func didTapOpenInGoogleMaps(forIndex indexPath: IndexPath) {
-        // TODO Open google maps for clinic at this indexpath
-    }
+        if let clinic = self.nearestClinic {
+            let urlString = "comgooglemaps://?daddr=\(clinic.clinic.address)&directionsmode=driving".addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)
+            if let urlString = urlString ,let url = URL(string:urlString) ,(UIApplication.shared.canOpenURL(URL(string:"comgooglemaps://")!)) {
+                
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                
+            } else {
+                print("Unable to open in google maps \(clinic)");
+            }
+        }
+   }
     
     func didTapManuallySelectLocation() {
         //TODO Start manual selection flow
