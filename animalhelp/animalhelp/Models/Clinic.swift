@@ -16,9 +16,7 @@ struct Clinic:Codable {
     var city:String
     var mobile:String
     var address:String
+    var distance:Double? = nil
 }
 
-struct NearestClinic:Codable {
-    var distance:Double
-    var clinic:Clinic
-}
+
