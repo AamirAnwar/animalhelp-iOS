@@ -15,6 +15,7 @@ import Moya
 
 
 enum HomeViewState {
+    case InitialSetup
     case UserLocationUnknown
     case HiddenDrawer
     case MinimizedDrawer
@@ -26,7 +27,8 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
     let drawerView = DrawerView()
     static let inset:CGFloat = 10
     var drawerViewTopConstraint:ConstraintMakerEditable? = nil
-    var state:HomeViewState = .UserLocationUnknown {
+    var mapViewBottomConstraint:ConstraintMakerEditable? = nil
+    var state:HomeViewState = .InitialSetup {
         didSet {
             self.refreshDrawerWithState(self.state)
         }
@@ -83,6 +85,17 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
         self.viewModel.updateViewState()
     }
     
+    @objc func didTapRightBarButton() {
+        if self.state == .MaximizedDrawer {
+            self.navigationItem.rightBarButtonItem?.title = "Map"
+            self.transitionTo(state:.HiddenDrawer)
+        }
+        else {
+            self.navigationItem.rightBarButtonItem?.title = "List"
+            self.transitionTo(state:.MaximizedDrawer)
+        }
+    }
+    
     fileprivate func setupViews() {
         self.createGoogleMapView()
         self.setupMyLocationButton()
@@ -124,7 +137,10 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
         view.addSubview(googleMapView)
         self.googleMapView.delegate = self.viewModel
         googleMapView.snp.makeConstraints { (make) in
-            make.edges.equalToSuperview()
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.top.equalToSuperview()
+         self.mapViewBottomConstraint =  make.bottom.equalToSuperview()
         }
     }
     
@@ -138,34 +154,12 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
         alert.addAction(okAction)
     }
     
-    fileprivate func expandDrawerView() {
-        if self.drawerViewTopConstraint == nil {
-            drawerView.snp.makeConstraints { (make) in
-                self.drawerViewTopConstraint = make.top.equalToSuperview().offset(40)
-            }
-        }
-        else {
-            if let isActive = self.drawerViewTopConstraint?.constraint.isActive {
-                if isActive {
-                    self.drawerViewTopConstraint?.constraint.deactivate()
-                }
-                else {
-                    self.drawerViewTopConstraint?.constraint.activate()
-                }
-            }
-        }
-        
-        UIView.animate(withDuration: 0.2) {
-            self.view.layoutIfNeeded()
-        }
-    }
-    
     fileprivate func refreshDrawerWithState(_ state:HomeViewState) {
         if let topConstraint = self.drawerViewTopConstraint?.constraint {
             if state == .MaximizedDrawer {
                 topConstraint.activate()
             }
-            else if state == .SingleClinicDrawer {
+            else if state == .SingleClinicDrawer || state == .UserLocationUnknown {
                 topConstraint.deactivate()
             }
         }
@@ -244,32 +238,49 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
         guard self.state != state else {
             return
         }
-        
         switch state {
         case .UserLocationUnknown:
             self.updateVisibleMapElements(self,true)
             self.drawerView.showUnknownLocationState()
+            self.mapViewBottomConstraint?.constraint.update(inset: 0)
             
         case .HiddenDrawer:
-            self.drawerView.isHidden = true
+            UIView.animate(withDuration: 0.3, animations: {
+                self.drawerView.transform.translatedBy(x: 0, y: self.view.frame.size.height)
+            }, completion: { (_) in
+                self.drawerView.isHidden = true
+                self.drawerView.transform = .identity
+            })
+            self.mapViewBottomConstraint?.constraint.update(inset: 0)
             
         case .MinimizedDrawer:
             self.updateVisibleMapElements(self,false)
             //Tell drawer to minimize itself with a message
             
         case .SingleClinicDrawer:
-            self.updateVisibleMapElements(self,false)
-            self.drawerView.isHidden = false
             //Tell drawer to show nearest clinic only with left to right swipeable inteface
-            if let clinic = self.viewModel.nearestClinic {
+            // Must have a non-nil nearest clinic
+            if let clinic = self.viewModel.nearestClinic, let marker = self.viewModel.nearestClinicMarker {
+                self.updateVisibleMapElements(self,false)
+                self.drawerView.isHidden = false
                 self.drawerView.showClinic(clinic: clinic)
+                let updatedInset = kCollectionViewHeight + self.tabBarHeight
+                self.mapViewBottomConstraint?.constraint.update(inset: updatedInset)
+                let bounds = GMSCoordinateBounds(coordinate: marker.position, coordinate: googleMapView.myLocation!.coordinate)
+                let cameraInsets = kCollectionViewHeight - (50 + self.tabBarHeight)
+                let camera = googleMapView.camera(for: bounds , insets: UIEdgeInsetsMake(50 + self.navBarHeight, 0, cameraInsets, 0))!
+                googleMapView.camera = camera
             }
             
         case .MaximizedDrawer:
-            self.updateVisibleMapElements(self,false)
             //Tell drawer to expand to cover it's superview and show all clinics like a list view
+            self.updateVisibleMapElements(self,false)
             
+        case .InitialSetup:
+            print("Drawer view still in initial setup")
+//            Do Nothing
         }
+        
         self.state = state
     }
     
