@@ -15,11 +15,24 @@ protocol DrawerViewDelegate {
     func didTapManuallySelectLocation()
     func didTapOpenInGoogleMaps(forIndex indexPath:IndexPath)
     func didTapStickyButton(seeMore:Bool)
+    func didTapHideDrawerButton()
 }
 
 class DrawerView:UIView {
     let locationPinImageView = UIImageView(image: #imageLiteral(resourceName: "LocationPin"))
     let infoLabel = UILabel()
+    let hideButton:UIButton = {
+        let button = UIButton(type: .system)
+        button.titleLabel?.font = CustomFontHeadingSmall
+        button.setTitle("Hide", for: .normal)
+        button.setTitleColor(UIColor.white, for: .normal)
+        button.addTarget(self, action: #selector(didTapHideDrawer), for: .touchUpInside)
+        button.layer.cornerRadius = 2*kCornerRadius
+        button.backgroundColor = CustomColorMainTheme
+        button.contentEdgeInsets = UIEdgeInsetsMake(0, 3, 0, 3)
+        
+        return button
+    }()
     let detectLocationButton = UIButton(type: .system)
     let manualLocationButton = UIButton(type: .system)
     let stickyButton = UIButton(type: .system)
@@ -69,6 +82,14 @@ class DrawerView:UIView {
             make.centerX.equalToSuperview()
         }
         self.stickyButton.addTarget(self, action: #selector(didTapSeeAllClinics), for: .touchUpInside)
+        
+        self.addSubview(self.hideButton)
+        
+        self.hideButton.snp.makeConstraints { (make) in
+            make.trailing.equalToSuperview().inset(10)
+            make.top.equalToSuperview().offset(8)
+        }
+        
     }
     
     fileprivate func setupUnkownLocationView() {
@@ -106,7 +127,7 @@ class DrawerView:UIView {
         manualLocationButton.addTarget(self, action: #selector(manuallySelectLocationButtonTapped), for: .touchUpInside)
         
         locationPinImageView.snp.makeConstraints { (make) in
-            make.top.equalToSuperview().offset(20)
+            make.top.greaterThanOrEqualTo(self.snp.top).offset(20)
             make.centerX.equalToSuperview()
         }
         
@@ -131,6 +152,8 @@ class DrawerView:UIView {
             make.height.equalTo(detectLocationButton.snp.height)
             make.bottom.equalTo(self.snp.bottom).offset(-20)
         }
+        
+        
     }
     
     func showClinic(clinic:NearestClinic) {
@@ -145,6 +168,7 @@ class DrawerView:UIView {
         self.onboardingContainerView.isHidden = false
         self.collectionView.isHidden = true
         self.stickyButton.isHidden = true
+        self.hideButton.isHidden = true
         setupUnkownLocationView()
     }
 
@@ -210,7 +234,7 @@ extension DrawerView:UICollectionViewDelegate,UICollectionViewDelegateFlowLayout
                 self.stickyButton.setTitleColor(CustomColorMainTheme, for: .normal)
                 self.stickyButton.backgroundColor = UIColor.white
             }, completion: nil)
-            
+            self.hideButton.isHidden = false
         }
         else {
             self.collectionView.setContentOffset(CGPoint(x: 0, y: 0), animated: false)
@@ -221,12 +245,15 @@ extension DrawerView:UICollectionViewDelegate,UICollectionViewDelegateFlowLayout
                 self.stickyButton.backgroundColor = CustomColorMainTheme
             }, completion: nil)
             seeMore = true
+            self.hideButton.isHidden = true
         }
         self.collectionView.setCollectionViewLayout(self.flowLayout, animated: false)
         // TODO - Transition to maximized drawer
         self.delegate?.didTapStickyButton(seeMore: seeMore)
     }
     
-    
+    @objc func didTapHideDrawer() {
+        self.delegate?.didTapHideDrawerButton()
+    }
     
 }
