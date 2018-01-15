@@ -223,7 +223,7 @@ extension DrawerView:UICollectionViewDelegate,UICollectionViewDelegateFlowLayout
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         print(self.collectionView.indexPathsForVisibleItems)
-        if let visibleIndexPath = self.collectionView.indexPathsForVisibleItems.first {
+        if self.flowLayout.scrollDirection == .horizontal, let visibleIndexPath = self.collectionView.indexPathsForVisibleItems.first {
             self.delegate?.didSwipeToClinicAt(index: visibleIndexPath.row)
         }
     }

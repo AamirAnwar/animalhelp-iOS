@@ -160,9 +160,9 @@ class HomeViewModel:NSObject {
     fileprivate func startLocationDetectionTimer() {
         self.timer = Timer.scheduledTimer(withTimeInterval: timeoutDuration, repeats: false, block: { (timer) in
             print("Stopping location services!")
-            if let location = self.detectedLocation {
-                self.delegate?.transitionTo(state: .MinimizedDrawer)
-                self.delegate?.showUserLocation(location: location)
+            if let _ = self.detectedLocation {
+//                self.delegate?.transitionTo(state: .MinimizedDrawer)
+//                self.delegate?.showUserLocation(location: location)
                 self.stopDetectingLocation()
             }
             else {
