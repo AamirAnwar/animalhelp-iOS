@@ -181,6 +181,10 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
         showNearestClinic(withMarker: updatedMarker)
     }
     
+    func zoomIntoNearestClinic() {
+        self.showNearestClinic(withMarker: self.viewModel.nearestClinicMarker)
+    }
+    
     func showNearestClinic(withMarker clinicMarker: GMSMarker?) {
         if let marker = clinicMarker {
             let bounds = GMSCoordinateBounds(coordinate: marker.position, coordinate: googleMapView.myLocation!.coordinate)
@@ -189,13 +193,24 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
             googleMapView.camera = camera
         }
         else {
-            self.viewModel.updateNearestClinic()
+            self.viewModel.getNearbyClinics()
         }
     }
     
-    func showDrawerWith(clinic: NearestClinic) {
-//        self.showDrawer()
-        self.drawerView.showClinic(clinic: clinic)
+    func showMarkers(markers:[GMSMarker]) {
+        for marker in markers {
+            marker.map = self.googleMapView
+        }
+    }
+    
+    func showDrawerWith(clinic: Clinic) {
+        //TODO
+//        self.drawerView.showClinic(clinic: clinic)
+    }
+    
+    func showDrawerWith(selectedIndex:Int, clinics:[Clinic]) {
+        // TODO fix parameter ordering
+        self.drawerView.showClinics(clinics, selectedIndex: selectedIndex)
     }
     
 
@@ -204,6 +219,13 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
                                               longitude: location.coordinate.longitude,
                                               zoom: zoomLevel)
         googleMapView.isMyLocationEnabled = true
+        googleMapView.animate(to: camera)
+    }
+    
+    func zoomToMarker(_ marker:GMSMarker) {
+        let camera = GMSCameraPosition.camera(withLatitude: marker.position.latitude,
+                                              longitude: marker.position.longitude,
+                                              zoom: zoomLevel)
         googleMapView.animate(to: camera)
     }
     
@@ -250,8 +272,9 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
             }, completion: { (_) in
                 self.drawerView.isHidden = true
                 self.drawerView.transform = .identity
+                self.mapViewBottomConstraint?.constraint.update(inset: 0)
             })
-            self.mapViewBottomConstraint?.constraint.update(inset: 0)
+            
             
         case .MinimizedDrawer:
             self.updateVisibleMapElements(self,false)
@@ -260,17 +283,14 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
         case .SingleClinicDrawer:
             //Tell drawer to show nearest clinic only with left to right swipeable inteface
             // Must have a non-nil nearest clinic
-            if let clinic = self.viewModel.nearestClinic, let marker = self.viewModel.nearestClinicMarker {
+            if let clinics = self.viewModel.nearbyClinics, let markers = self.viewModel.nearbyClinicsMarkers, clinics.isEmpty == false && markers.isEmpty == false {
                 self.updateVisibleMapElements(self,false)
                 self.drawerView.isHidden = false
-                self.drawerView.showClinic(clinic: clinic)
+                self.drawerView.showClinics(clinics)
                 let updatedInset = kCollectionViewHeight + self.tabBarHeight
                 self.mapViewBottomConstraint?.constraint.update(inset: updatedInset)
-                let bounds = GMSCoordinateBounds(coordinate: marker.position, coordinate: googleMapView.myLocation!.coordinate)
-                let cameraInsets = kCollectionViewHeight - (50 + self.tabBarHeight)
-                let camera = googleMapView.camera(for: bounds , insets: UIEdgeInsetsMake(50 + self.navBarHeight, 0, cameraInsets, 0))!
-                googleMapView.camera = camera
             }
+            
             
         case .MaximizedDrawer:
             //Tell drawer to expand to cover it's superview and show all clinics like a list view
