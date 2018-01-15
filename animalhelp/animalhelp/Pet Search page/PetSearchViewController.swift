@@ -12,16 +12,10 @@ class PetSearchViewController:BaseViewController {
     
     let tableView = UITableView(frame: CGRect.zero, style: UITableViewStyle.plain)
     let pets = ["Doggo","Doggo","Doggo","Doggo","Doggo"]
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("Init with coder not implemented")
-    }
-    
-    init() {
-        super.init(nibName: nil, bundle: nil)
-        self.tabBarItem.title = "Pet Search"
-    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationController?.tabBarItem.title = "Pet Search"
         createTableView()
     }
     
@@ -32,7 +26,7 @@ class PetSearchViewController:BaseViewController {
         self.tableView.delegate = self
         self.tableView.dataSource = self
         self.tableView.snp.makeConstraints { (make) in
-            make.top.equalTo(self.view.snp.top)
+            make.top.equalTo(self.customNavBar.snp.bottom)
             make.left.equalToSuperview()
             make.right.equalToSuperview()
             make.bottom.equalToSuperview()
