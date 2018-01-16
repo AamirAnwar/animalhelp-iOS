@@ -67,33 +67,33 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
         homeView.showNearestClinicButton.isHidden = isHidden
     }
     
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("Init with coder not implemented")
-    }
-    
-    init() {
-        super.init(nibName: nil, bundle: nil)
-        self.tabBarItem.title = "Clinics"
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = UIColor.white
-        self.navigationItem.title = "Your Location"
         self.setupViews()
         self.viewModel.delegate = self
         self.viewModel.updateViewState()
+        self.customNavBar.rightBarButton =  {
+            let button = UIButton(type:.system)
+            button.setTitleColor(CustomColorMainTheme, for: .normal)
+            button.titleLabel?.font = CustomFontBodyMedium
+            button.setTitle("List", for: .normal)
+            return button
+        }()
     }
     
-    @objc func didTapRightBarButton() {
+    override func didTapRightBarButton() {
         if self.state == .MaximizedDrawer {
-            self.navigationItem.rightBarButtonItem?.title = "Map"
+            self.customNavBar.rightBarButton?.setTitle("List", for: .normal)
             self.transitionTo(state:.HiddenDrawer)
         }
         else {
-            self.navigationItem.rightBarButtonItem?.title = "List"
+            self.customNavBar.rightBarButton?.setTitle("Map", for: .normal)
             self.transitionTo(state:.MaximizedDrawer)
         }
+    }
+    
+    override func didTapLocationButton() {
+        // Open location selection flow
     }
     
     fileprivate func setupViews() {
@@ -139,7 +139,8 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
         googleMapView.snp.makeConstraints { (make) in
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
-            make.top.equalToSuperview()
+            // Adding some space for the navigation bar shadow
+            make.top.equalTo(self.customNavBar.snp.bottom).offset(4)
          self.mapViewBottomConstraint =  make.bottom.equalToSuperview()
         }
     }
@@ -165,7 +166,7 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
         }
         else {
             drawerView.snp.makeConstraints { (make) in
-                self.drawerViewTopConstraint = make.top.equalToSuperview().offset(40)
+                self.drawerViewTopConstraint = make.top.equalToSuperview().offset(CustomNavigationBar.kCustomNavBarHeight + 4)
             }
             self.refreshDrawerWithState(state)
             return
@@ -215,6 +216,10 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
     
 
     func showUserLocation(location:CLLocation) {
+        // update current location
+        if let locality = self.viewModel.placeMark?.locality {
+            self.customNavBar.setTitle(locality)
+        }
         let camera = GMSCameraPosition.camera(withLatitude: location.coordinate.latitude,
                                               longitude: location.coordinate.longitude,
                                               zoom: zoomLevel)
@@ -285,16 +290,20 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
             // Must have a non-nil nearest clinic
             if let clinics = self.viewModel.nearbyClinics, let markers = self.viewModel.nearbyClinicsMarkers, clinics.isEmpty == false && markers.isEmpty == false {
                 self.updateVisibleMapElements(self,false)
-                self.drawerView.isHidden = false
+                self.drawerView.switchToSingleDrawer()
                 self.drawerView.showClinics(clinics)
                 let updatedInset = kCollectionViewHeight + self.tabBarHeight
                 self.mapViewBottomConstraint?.constraint.update(inset: updatedInset)
+                self.drawerView.isHidden = false
             }
             
             
         case .MaximizedDrawer:
             //Tell drawer to expand to cover it's superview and show all clinics like a list view
             self.updateVisibleMapElements(self,false)
+            self.drawerView.switchToMaximizedDrawer()
+            self.drawerView.isHidden = false
+            
             
         case .InitialSetup:
             print("Drawer view still in initial setup")
@@ -303,5 +312,7 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
         
         self.state = state
     }
+    
+    
     
 }

@@ -34,16 +34,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Home Page
         let homeVC = HomeViewController()
         homeVC.viewModel = HomeViewModel()
+        let homeNav = UINavigationController(rootViewController: homeVC)
+        homeNav.tabBarItem.title = "Clinics"
         
-        // Settings Page
-        let settingsVC = AccountViewController()
+        // Account Page
+        let accountVC = AccountViewController()
+        let accountNav = UINavigationController(rootViewController: accountVC)
+        accountNav.tabBarItem.title = "Account"
         
         // Pet Search Page
         let petSearchVC = PetSearchViewController()
+        let petNav = UINavigationController(rootViewController: petSearchVC)
+        petNav.tabBarItem.title = "Pet Search"
         
-        tabBarController.viewControllers = [homeVC, petSearchVC ,settingsVC]
-        let nav = UINavigationController(rootViewController: tabBarController)
-        window?.rootViewController = nav
+        tabBarController.viewControllers = [homeNav, petNav, accountNav]
+        window?.rootViewController = tabBarController
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
