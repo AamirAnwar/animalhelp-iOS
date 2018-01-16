@@ -12,25 +12,19 @@ class AccountViewController:BaseViewController {
     let cellIdentifier = "AccountViewControllerCell"
     let tableView = UITableView(frame: CGRect.zero, style: .plain)
     let accountItems = ["Profile", "Pet Lookout" ,"Push Notifications", "Email Alerts", "Terms and Conditions", "Feedback", "How to help", "Logout"]
-    
-    init() {
-        super.init(nibName: nil, bundle: nil)
-        self.tabBarItem.title = "Account"
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("Init with coder not implemented")
-    }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.tabBarItem.title = "Account"
+        self.customNavBar.setTitle("Account")
+        self.customNavBar.disableLocationButton()
         self.view.addSubview(self.tableView)
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: self.cellIdentifier)
         self.tableView.delegate = self
         self.tableView.dataSource = self
         self.tableView.tableFooterView = UIView(frame:CGRect.zero)
         self.tableView.snp.makeConstraints { (make) in
-            make.top.equalToSuperview()
+            make.top.equalTo(self.customNavBar.snp.bottom)
             make.bottom.equalToSuperview()
             make.left.equalToSuperview()
             make.right.equalToSuperview()

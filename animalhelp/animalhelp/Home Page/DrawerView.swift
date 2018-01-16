@@ -243,28 +243,37 @@ extension DrawerView:UICollectionViewDelegate,UICollectionViewDelegateFlowLayout
     @objc func didTapSeeAllClinics() {
         var seeMore = false
         if self.flowLayout.scrollDirection == .vertical {
-            self.flowLayout.scrollDirection = .horizontal
-            self.collectionView.isPagingEnabled = true
-            UIView.transition(with: self.stickyButton, duration: 0.3, options: .transitionCrossDissolve, animations: {
-                self.stickyButton.setTitleColor(CustomColorMainTheme, for: .normal)
-                self.stickyButton.backgroundColor = UIColor.white
-            }, completion: nil)
-            self.hideButton.isHidden = false
+            self.switchToSingleDrawer()
         }
         else {
-            self.collectionView.setContentOffset(CGPoint(x: 0, y: 0), animated: false)
-            self.flowLayout.scrollDirection = .vertical
-            self.collectionView.isPagingEnabled = false
-            UIView.transition(with: self.stickyButton, duration: 0.3, options: .transitionCrossDissolve, animations: {
-                self.stickyButton.setTitleColor(UIColor.white, for: .normal)
-                self.stickyButton.backgroundColor = CustomColorMainTheme
-            }, completion: nil)
             seeMore = true
-            self.hideButton.isHidden = true
+            self.switchToMaximizedDrawer()
         }
         self.collectionView.setCollectionViewLayout(self.flowLayout, animated: false)
         // TODO - Transition to maximized drawer
         self.delegate?.didTapStickyButton(seeMore: seeMore)
+    }
+    
+    func switchToMaximizedDrawer() {
+        self.collectionView.setContentOffset(CGPoint(x: 0, y: 0), animated: false)
+        self.flowLayout.scrollDirection = .vertical
+        self.collectionView.isPagingEnabled = false
+        UIView.transition(with: self.stickyButton, duration: 0.3, options: .transitionCrossDissolve, animations: {
+            self.stickyButton.setTitleColor(UIColor.white, for: .normal)
+            self.stickyButton.backgroundColor = CustomColorMainTheme
+        }, completion: nil)
+        
+        self.hideButton.isHidden = true
+    }
+    
+    func switchToSingleDrawer() {
+        self.flowLayout.scrollDirection = .horizontal
+        self.collectionView.isPagingEnabled = true
+        UIView.transition(with: self.stickyButton, duration: 0.3, options: .transitionCrossDissolve, animations: {
+            self.stickyButton.setTitleColor(CustomColorMainTheme, for: .normal)
+            self.stickyButton.backgroundColor = UIColor.white
+        }, completion: nil)
+        self.hideButton.isHidden = false
     }
     
     @objc func didTapHideDrawer() {

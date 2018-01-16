@@ -8,8 +8,10 @@
 
 import Foundation
 import UIKit
-class BaseViewController:UIViewController {
+class BaseViewController:UIViewController, CustomNavigationBarDelegate {
 
+    let customNavBar = CustomNavigationBar()
+    
     var navBarHeight:CGFloat {
         get {
             if let navBarHeight = self.navigationController?.navigationBar.frame.size.height {
@@ -35,5 +37,21 @@ class BaseViewController:UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.white
+        self.view.addSubview(customNavBar)
+        self.navigationController?.isNavigationBarHidden = true
+        customNavBar.delegate = self
+        customNavBar.snp.makeConstraints { (make) in
+            make.top.equalToSuperview()
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+        }        
+    }
+    
+    func didTapRightBarButton() {
+        
+    }
+    
+    func didTapLocationButton() {
+        
     }
 }
