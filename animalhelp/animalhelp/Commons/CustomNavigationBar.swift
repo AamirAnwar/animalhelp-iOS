@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import SnapKit
 
 protocol CustomNavigationBarDelegate {
     func didTapLocationButton()
@@ -21,11 +22,13 @@ class CustomNavigationBar:UIView {
         let button = UIButton(type:.system)
         button.setTitleColor(CustomColorTextBlack, for: .normal)
         button.titleLabel?.font = CustomFontTitleBold
-        
+        button.titleLabel?.numberOfLines = 0
+        button.titleLabel?.textAlignment = .center
         // TODO
         button.setTitle("Delhi", for: .normal)
         return button
     }()
+    fileprivate var locationButtonCenterY:ConstraintMakerEditable?
     
     var rightBarButton:UIButton? {
         didSet {
@@ -53,7 +56,7 @@ class CustomNavigationBar:UIView {
         }
         self.addSubview(self.locationButton)
         self.locationButton.snp.makeConstraints { (make) in
-            make.centerY.equalToSuperview().offset(10)
+            self.locationButtonCenterY = make.centerY.equalToSuperview().offset(10)
             make.centerX.equalToSuperview()
         }
        
@@ -64,6 +67,20 @@ class CustomNavigationBar:UIView {
     
     public func setTitle(_ title:String) {
         self.locationButton.setTitle(title, for: .normal)
+    }
+    
+    public func setAttributedTitle(_ title:NSAttributedString) {
+        self.locationButton.setTitle(nil, for: .normal)
+        self.locationButtonCenterY?.offset(5)
+        self.locationButton.setAttributedTitle(title, for: .normal)
+    }
+    
+    public func enableRightButtonWithTitle(_ title:String) {
+        let button = UIButton(type:.system)
+        button.setTitleColor(CustomColorMainTheme, for: .normal)
+        button.titleLabel?.font = CustomFontBodyMedium
+        button.setTitle(title, for: .normal)
+        self.rightBarButton = button
     }
     
     public func disableLocationButton() {

@@ -72,13 +72,7 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
         self.setupViews()
         self.viewModel.delegate = self
         self.viewModel.updateViewState()
-        self.customNavBar.rightBarButton =  {
-            let button = UIButton(type:.system)
-            button.setTitleColor(CustomColorMainTheme, for: .normal)
-            button.titleLabel?.font = CustomFontBodyMedium
-            button.setTitle("List", for: .normal)
-            return button
-        }()
+        self.customNavBar.enableRightButtonWithTitle("List")
     }
     
     override func didTapRightBarButton() {
@@ -312,7 +306,5 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
         
         self.state = state
     }
-    
-    
-    
+        
 }
