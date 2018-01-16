@@ -10,8 +10,9 @@ import Foundation
 import Moya
 
 enum APIService {
+    static let defaultHeaders = ["user_client":"ios"]
     case nearestClinic(lat:String, lon:String)
-    case clinics
+    case clinics(lat:String, lon:String)
 }
 
 extension APIService: TargetType {
@@ -42,16 +43,12 @@ extension APIService: TargetType {
     
     var task: Moya.Task {
         switch self {
-        case .nearestClinic(let lat, let lon): return Moya.Task.requestParameters(parameters: ["lat":lat,"lon":lon], encoding: URLEncoding.queryString)
-         case .clinics: return Moya.Task.requestPlain
+        case .clinics(let lat, let lon),.nearestClinic(let lat, let lon): return Moya.Task.requestParameters(parameters: ["lat":lat,"lon":lon], encoding: URLEncoding.queryString)
         }
     }
     
     var headers: [String : String]? {
-        switch self {
-        case .nearestClinic:return nil
-        case .clinics:return nil
-        }
+        return APIService.defaultHeaders
     }
     
     

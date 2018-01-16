@@ -10,6 +10,17 @@ import Foundation
 import UIKit
 class BaseViewController:UIViewController {
 
+    var navBarHeight:CGFloat {
+        get {
+            if let navBarHeight = self.navigationController?.navigationBar.frame.size.height {
+                return navBarHeight
+            }
+            else {
+                return 0.0
+            }
+        }
+    }
+    
     var tabBarHeight:CGFloat {
         get {
             if let tabBar = self.tabBarController?.tabBar {

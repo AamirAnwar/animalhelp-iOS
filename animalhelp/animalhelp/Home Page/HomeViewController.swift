@@ -13,11 +13,26 @@ import MapKit
 import GoogleMaps
 import Moya
 
+
+enum HomeViewState {
+    case InitialSetup
+    case UserLocationUnknown
+    case HiddenDrawer
+    case MinimizedDrawer
+    case SingleClinicDrawer
+    case MaximizedDrawer
+}
 class HomeViewController: BaseViewController, HomeViewModelDelegate {
   
     let drawerView = DrawerView()
     static let inset:CGFloat = 10
     var drawerViewTopConstraint:ConstraintMakerEditable? = nil
+    var mapViewBottomConstraint:ConstraintMakerEditable? = nil
+    var state:HomeViewState = .InitialSetup {
+        didSet {
+            self.refreshDrawerWithState(self.state)
+        }
+    }
     let myLocationButton:UIButton = {
        let button = UIButton(type: .system)
         button.setTitle("My Location", for: .normal)
@@ -26,7 +41,6 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
         button.backgroundColor = UIColor.white
         button.layer.cornerRadius = kCornerRadius
         button.contentEdgeInsets = UIEdgeInsetsMake(inset, inset, inset, inset)
-        
         return button
     }()
     
@@ -45,8 +59,13 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
         let camera = GMSCameraPosition.camera(withLatitude: -33.86, longitude: 151.20, zoom: 6.0)
         return GMSMapView.map(withFrame: CGRect.zero, camera: camera)
     }()
-    let zoomLevel:Float = 15
+    let zoomLevel:Float = 15.0
     var viewModel:HomeViewModel!
+    var updateVisibleMapElements = { (homeView:HomeViewController,isHidden:Bool) in
+        homeView.googleMapView.isHidden = isHidden
+        homeView.myLocationButton.isHidden = isHidden
+        homeView.showNearestClinicButton.isHidden = isHidden
+    }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("Init with coder not implemented")
@@ -61,21 +80,27 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.white
         self.navigationItem.title = "Your Location"
+        self.setupViews()
         self.viewModel.delegate = self
-        self.setupViewsIfNeeded()
-        self.setupDrawerView()
-        
+        self.viewModel.updateViewState()
     }
     
-    fileprivate func setupViewsIfNeeded() {
-        guard self.viewModel.isLocationPermissionGranted else {
-            return
+    @objc func didTapRightBarButton() {
+        if self.state == .MaximizedDrawer {
+            self.navigationItem.rightBarButtonItem?.title = "Map"
+            self.transitionTo(state:.HiddenDrawer)
         }
-        
+        else {
+            self.navigationItem.rightBarButtonItem?.title = "List"
+            self.transitionTo(state:.MaximizedDrawer)
+        }
+    }
+    
+    fileprivate func setupViews() {
         self.createGoogleMapView()
         self.setupMyLocationButton()
         self.setupNearestClinicButton()
-        self.viewModel.startDetectingLocation()
+        self.setupDrawerView()
     }
     
     fileprivate func setupDrawerView() {
@@ -87,33 +112,6 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
         }
         // Set delegate
         self.drawerView.delegate = self.viewModel
-        if self.viewModel.isLocationPermissionGranted {
-            self.drawerView.isHidden = true
-        }
-        
-    }
-    
-    func expandDrawerView() {
-        if self.drawerViewTopConstraint == nil {
-            drawerView.snp.makeConstraints { (make) in
-                self.drawerViewTopConstraint = make.top.equalToSuperview().offset(40)
-            }
-        }
-        else {
-            if let isActive = self.drawerViewTopConstraint?.constraint.isActive {
-                if isActive {
-                    self.drawerViewTopConstraint?.constraint.deactivate()
-                }
-                else {
-                    self.drawerViewTopConstraint?.constraint.activate()
-                }
-            }
-        }
-        
-        UIView.animate(withDuration: 0.2) {
-            self.view.layoutIfNeeded()
-        }
- 
     }
     
     fileprivate func setupMyLocationButton() {
@@ -129,9 +127,8 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
         view.addSubview(self.showNearestClinicButton)
         self.showNearestClinicButton.snp.makeConstraints { (make) in
             make.trailing.equalTo(myLocationButton.snp.trailing)
-            make.top.equalTo(myLocationButton.snp.bottom).offset(50)
+            make.top.equalTo(myLocationButton.snp.bottom).offset(20)
         }
-        
         self.showNearestClinicButton.addTarget(self, action: #selector(didTapShowNearestClinic), for: .touchUpInside)
     }
     
@@ -139,9 +136,11 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
     fileprivate func createGoogleMapView() {
         view.addSubview(googleMapView)
         self.googleMapView.delegate = self.viewModel
-        googleMapView.isMyLocationEnabled = true
         googleMapView.snp.makeConstraints { (make) in
-            make.edges.equalToSuperview()
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.top.equalToSuperview()
+         self.mapViewBottomConstraint =  make.bottom.equalToSuperview()
         }
     }
     
@@ -155,9 +154,35 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
         alert.addAction(okAction)
     }
     
+    fileprivate func refreshDrawerWithState(_ state:HomeViewState) {
+        if let topConstraint = self.drawerViewTopConstraint?.constraint {
+            if state == .MaximizedDrawer {
+                topConstraint.activate()
+            }
+            else if state == .SingleClinicDrawer || state == .UserLocationUnknown {
+                topConstraint.deactivate()
+            }
+        }
+        else {
+            drawerView.snp.makeConstraints { (make) in
+                self.drawerViewTopConstraint = make.top.equalToSuperview().offset(40)
+            }
+            self.refreshDrawerWithState(state)
+            return
+        }
+        
+        UIView.animate(withDuration: 0.2) {
+            self.view.layoutIfNeeded()
+        }
+    }
+    
     func didUpdate(_ updatedMarker:GMSMarker) -> Void {
         updatedMarker.map = self.googleMapView
         showNearestClinic(withMarker: updatedMarker)
+    }
+    
+    func zoomIntoNearestClinic() {
+        self.showNearestClinic(withMarker: self.viewModel.nearestClinicMarker)
     }
     
     func showNearestClinic(withMarker clinicMarker: GMSMarker?) {
@@ -167,24 +192,41 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
             let camera = googleMapView.camera(for: bounds , insets: UIEdgeInsetsMake(50 + self.tabBarHeight, 0, 50 + self.tabBarHeight, 0))!
             googleMapView.camera = camera
         }
+        else {
+            self.viewModel.getNearbyClinics()
+        }
     }
     
-    func showDrawerWith(clinic: NearestClinic) {
-        self.showDrawer()
-        self.drawerView.showClinic(clinic: clinic)
+    func showMarkers(markers:[GMSMarker]) {
+        for marker in markers {
+            marker.map = self.googleMapView
+        }
+    }
+    
+    func showDrawerWith(clinic: Clinic) {
+        //TODO
+//        self.drawerView.showClinic(clinic: clinic)
+    }
+    
+    func showDrawerWith(selectedIndex:Int, clinics:[Clinic]) {
+        // TODO fix parameter ordering
+        self.drawerView.showClinics(clinics, selectedIndex: selectedIndex)
     }
     
 
     func showUserLocation(location:CLLocation) {
-        
-        self.setupViewsIfNeeded()
-        
         let camera = GMSCameraPosition.camera(withLatitude: location.coordinate.latitude,
                                               longitude: location.coordinate.longitude,
                                               zoom: zoomLevel)
+        googleMapView.isMyLocationEnabled = true
         googleMapView.animate(to: camera)
-        
-        
+    }
+    
+    func zoomToMarker(_ marker:GMSMarker) {
+        let camera = GMSCameraPosition.camera(withLatitude: marker.position.latitude,
+                                              longitude: marker.position.longitude,
+                                              zoom: zoomLevel)
+        googleMapView.animate(to: camera)
     }
     
     func locationServicesDenied() {
@@ -214,15 +256,52 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
         return blurredImage
     }
 
-    func showDrawer() {
-        self.view.bringSubview(toFront: self.drawerView)
-        self.drawerView.isHidden = false
+    func transitionTo(state:HomeViewState) {
+        guard self.state != state else {
+            return
+        }
+        switch state {
+        case .UserLocationUnknown:
+            self.updateVisibleMapElements(self,true)
+            self.drawerView.showUnknownLocationState()
+            self.mapViewBottomConstraint?.constraint.update(inset: 0)
+            
+        case .HiddenDrawer:
+            UIView.animate(withDuration: 0.3, animations: {
+                self.drawerView.transform.translatedBy(x: 0, y: self.view.frame.size.height)
+            }, completion: { (_) in
+                self.drawerView.isHidden = true
+                self.drawerView.transform = .identity
+                self.mapViewBottomConstraint?.constraint.update(inset: 0)
+            })
+            
+            
+        case .MinimizedDrawer:
+            self.updateVisibleMapElements(self,false)
+            //Tell drawer to minimize itself with a message
+            
+        case .SingleClinicDrawer:
+            //Tell drawer to show nearest clinic only with left to right swipeable inteface
+            // Must have a non-nil nearest clinic
+            if let clinics = self.viewModel.nearbyClinics, let markers = self.viewModel.nearbyClinicsMarkers, clinics.isEmpty == false && markers.isEmpty == false {
+                self.updateVisibleMapElements(self,false)
+                self.drawerView.isHidden = false
+                self.drawerView.showClinics(clinics)
+                let updatedInset = kCollectionViewHeight + self.tabBarHeight
+                self.mapViewBottomConstraint?.constraint.update(inset: updatedInset)
+            }
+            
+            
+        case .MaximizedDrawer:
+            //Tell drawer to expand to cover it's superview and show all clinics like a list view
+            self.updateVisibleMapElements(self,false)
+            
+        case .InitialSetup:
+            print("Drawer view still in initial setup")
+//            Do Nothing
+        }
+        
+        self.state = state
     }
-    
-    func hideDrawer() {
-        self.drawerView.isHidden = true
-    }
-    
     
 }
-

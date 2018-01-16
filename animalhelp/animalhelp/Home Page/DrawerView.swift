@@ -13,15 +13,30 @@ import SnapKit
 protocol DrawerViewDelegate {
     func didTapDetectLocation()
     func didTapManuallySelectLocation()
-    func expandDrawer()
+    func didTapOpenInGoogleMaps(forIndex indexPath:IndexPath)
+    func didTapStickyButton(seeMore:Bool)
+    func didTapHideDrawerButton()
+    func didSwipeToClinicAt(index:Int)
 }
-let kCollectionViewHeight:CGFloat = 257
 
 class DrawerView:UIView {
     let locationPinImageView = UIImageView(image: #imageLiteral(resourceName: "LocationPin"))
     let infoLabel = UILabel()
+    let hideButton:UIButton = {
+        let button = UIButton(type: .system)
+        button.titleLabel?.font = CustomFontHeadingSmall
+        button.setTitle("Hide", for: .normal)
+        button.setTitleColor(UIColor.white, for: .normal)
+        button.addTarget(self, action: #selector(didTapHideDrawer), for: .touchUpInside)
+        button.layer.cornerRadius = 2*kCornerRadius
+        button.backgroundColor = CustomColorMainTheme
+        button.contentEdgeInsets = UIEdgeInsetsMake(0, 3, 0, 3)
+        
+        return button
+    }()
     let detectLocationButton = UIButton(type: .system)
     let manualLocationButton = UIButton(type: .system)
+    let stickyButton = UIButton(type: .system)
     let onboardingContainerView = UIView()
     let tapGesture = UITapGestureRecognizer()
     var delegate:DrawerViewDelegate? = nil
@@ -32,7 +47,9 @@ class DrawerView:UIView {
     }()
     var collectionView:UICollectionView!
     let clinicCellReuseIdentifier = "ClinicCellReuseIdentifier"
-    var nearestClinic:NearestClinic? = nil
+    var nearestClinic:Clinic? = nil
+    var nearbyClinics:[Clinic]?
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init with coder not implemented")
     }
@@ -51,11 +68,37 @@ class DrawerView:UIView {
             make.edges.equalToSuperview()
             make.height.greaterThanOrEqualTo(kCollectionViewHeight)
         }
-//        self.collectionView.isHidden = true
-//        createOnboardingView()
+        
+        self.addSubview(self.stickyButton)
+        self.stickyButton.setTitleColor(CustomColorMainTheme, for: .normal)
+        self.stickyButton.titleLabel?.font = CustomFontHeadingSmall
+        self.stickyButton.layer.borderWidth = 1
+        self.stickyButton.layer.borderColor = CustomColorMainTheme.cgColor
+        self.stickyButton.backgroundColor = UIColor.white
+        let inset:CGFloat = 8
+        self.stickyButton.contentEdgeInsets = UIEdgeInsetsMake(3, inset, 3, inset)
+        self.stickyButton.setTitle("See more clinics", for: .normal)
+        self.stickyButton.layer.cornerRadius = 2*kCornerRadius
+        self.stickyButton.snp.makeConstraints { (make) in
+            make.bottom.equalToSuperview().inset(10)
+            make.centerX.equalToSuperview()
+        }
+        self.stickyButton.addTarget(self, action: #selector(didTapSeeAllClinics), for: .touchUpInside)
+        
+        self.addSubview(self.hideButton)
+        
+        self.hideButton.snp.makeConstraints { (make) in
+            make.trailing.equalToSuperview().inset(10)
+            make.top.equalToSuperview().offset(8)
+        }
+        
     }
     
-    fileprivate func createOnboardingView() {
+    fileprivate func setupUnkownLocationView() {
+        guard onboardingContainerView.superview == nil else {
+            return
+        }
+        
         self.addSubview(onboardingContainerView)
         onboardingContainerView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
@@ -86,7 +129,7 @@ class DrawerView:UIView {
         manualLocationButton.addTarget(self, action: #selector(manuallySelectLocationButtonTapped), for: .touchUpInside)
         
         locationPinImageView.snp.makeConstraints { (make) in
-            make.top.equalToSuperview().offset(20)
+            make.top.greaterThanOrEqualTo(self.snp.top).offset(20)
             make.centerX.equalToSuperview()
         }
         
@@ -111,18 +154,37 @@ class DrawerView:UIView {
             make.height.equalTo(detectLocationButton.snp.height)
             make.bottom.equalTo(self.snp.bottom).offset(-20)
         }
+        
+        
     }
-    
-    func showClinic(clinic:NearestClinic) {
-        self.nearestClinic = clinic
+    func showClinics(_ clinics:[Clinic]) {
+        self.onboardingContainerView.isHidden = true
+        self.collectionView.isHidden = false
+        self.stickyButton.isHidden = false
+        self.nearbyClinics = clinics
         self.collectionView.reloadData()
     }
+    func showClinics(_ clinics:[Clinic], selectedIndex:Int) {
+        guard selectedIndex < clinics.count else {return}
+        self.showClinics(clinics)
+        self.collectionView.scrollToItem(at: IndexPath.init(row: selectedIndex, section: 0), at: .centeredHorizontally, animated: true)
+    }
     
-    @objc func detectLocationButtonTapped() {
+    public func showUnknownLocationState() {
+        self.onboardingContainerView.isHidden = false
+        self.collectionView.isHidden = true
+        self.stickyButton.isHidden = true
+        self.hideButton.isHidden = true
+        setupUnkownLocationView()
+    }
+
+    
+    //MARK: Button Callbacks
+    @objc fileprivate func detectLocationButtonTapped() {
         self.delegate?.didTapDetectLocation()
     }
     
-    @objc func manuallySelectLocationButtonTapped() {
+    @objc fileprivate func manuallySelectLocationButtonTapped() {
         self.delegate?.didTapManuallySelectLocation()
     }
     
@@ -149,34 +211,64 @@ extension DrawerView:UICollectionViewDelegate,UICollectionViewDelegateFlowLayout
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return self.nearbyClinics?.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: self.clinicCellReuseIdentifier, for: indexPath) as! ClinicCollectionViewCell
-        cell.setNearestClinic(self.nearestClinic)
+        cell.setClinic(self.nearbyClinics?[indexPath.row])
         cell.delegate = self
         return cell
     }
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        print(self.collectionView.indexPathsForVisibleItems)
+        if self.flowLayout.scrollDirection == .horizontal, let visibleIndexPath = self.collectionView.indexPathsForVisibleItems.first {
+            self.delegate?.didSwipeToClinicAt(index: visibleIndexPath.row)
+        }
+    }
+    
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         // TODO implement self sizing cells
         return CGSize(width: self.collectionView.frame.size.width, height: 250)
     }
+    
     func didTapGoogleMapsButton(sender: UICollectionViewCell) {
         if let indexPath = self.collectionView.indexPath(for: sender) {
-            print("Tapped cell number \(indexPath.row)")
-            if self.flowLayout.scrollDirection == .vertical {
-                self.flowLayout.scrollDirection = .horizontal
-                self.collectionView.isPagingEnabled = true
-            }
-            else {
-                self.collectionView.setContentOffset(CGPoint(x: 0, y: 0), animated: false)
-                self.flowLayout.scrollDirection = .vertical
-                self.collectionView.isPagingEnabled = false
-            }
-            self.collectionView.setCollectionViewLayout(self.flowLayout, animated: false)
-            self.delegate?.expandDrawer()
+            self.delegate?.didTapOpenInGoogleMaps(forIndex: indexPath)
         }
+    }
+    
+    @objc func didTapSeeAllClinics() {
+        var seeMore = false
+        if self.flowLayout.scrollDirection == .vertical {
+            self.flowLayout.scrollDirection = .horizontal
+            self.collectionView.isPagingEnabled = true
+            UIView.transition(with: self.stickyButton, duration: 0.3, options: .transitionCrossDissolve, animations: {
+                self.stickyButton.setTitleColor(CustomColorMainTheme, for: .normal)
+                self.stickyButton.backgroundColor = UIColor.white
+            }, completion: nil)
+            self.hideButton.isHidden = false
+        }
+        else {
+            self.collectionView.setContentOffset(CGPoint(x: 0, y: 0), animated: false)
+            self.flowLayout.scrollDirection = .vertical
+            self.collectionView.isPagingEnabled = false
+            UIView.transition(with: self.stickyButton, duration: 0.3, options: .transitionCrossDissolve, animations: {
+                self.stickyButton.setTitleColor(UIColor.white, for: .normal)
+                self.stickyButton.backgroundColor = CustomColorMainTheme
+            }, completion: nil)
+            seeMore = true
+            self.hideButton.isHidden = true
+        }
+        self.collectionView.setCollectionViewLayout(self.flowLayout, animated: false)
+        // TODO - Transition to maximized drawer
+        self.delegate?.didTapStickyButton(seeMore: seeMore)
+    }
+    
+    @objc func didTapHideDrawer() {
+        self.delegate?.didTapHideDrawerButton()
     }
     
 }
