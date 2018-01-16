@@ -90,7 +90,7 @@ class HomeViewModel:NSObject {
     }
     
     func getNearbyClinics() {
-        // TODO - Pass in City here
+        // TODO - Pass in City ID here
         if let location = self.detectedLocation {
             APIService.request(.clinics(lat: "\(location.coordinate.latitude)", lon: "\(location.coordinate.longitude)"), completion: { (result) in
                 switch result {
@@ -214,9 +214,6 @@ extension HomeViewModel: CLLocationManagerDelegate {
                         
                     })
                 }
-                
-                
-                
             }
         }
         

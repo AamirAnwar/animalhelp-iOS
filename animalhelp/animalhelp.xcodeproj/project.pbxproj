@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		4313A85E1FFE9A3F0043C927 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 4313A85D1FFE9A3F0043C927 /* UIImage+ImageEffects.m */; };
 		43367EED2008A771004D6B2C /* ClinicCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43367EEC2008A771004D6B2C /* ClinicCollectionViewCell.swift */; };
+		43378CCF200DF6CB00F088C4 /* MissingPet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43378CCE200DF6CB00F088C4 /* MissingPet.swift */; };
+		43378CD1200DF99200F088C4 /* PetSearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43378CD0200DF99200F088C4 /* PetSearchViewModel.swift */; };
 		433B09CA1FFE587C00EA0906 /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433B09C91FFE587C00EA0906 /* AccountViewController.swift */; };
 		438216842009D5980077FA5E /* animalhelpTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 438216832009D5980077FA5E /* animalhelpTests.swift */; };
 		438A0D431FCDCB25005A8CA4 /* GoogleMapsCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 438A0D411FCDCB25005A8CA4 /* GoogleMapsCore.framework */; };
@@ -32,6 +34,7 @@
 		43AC0A031FFE7BD0009F8D70 /* CustomFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AC0A021FFE7BD0009F8D70 /* CustomFonts.swift */; };
 		43AC0A051FFE7D25009F8D70 /* DrawerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AC0A041FFE7D25009F8D70 /* DrawerView.swift */; };
 		43AC0A071FFE7E25009F8D70 /* CustomColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AC0A061FFE7E25009F8D70 /* CustomColors.swift */; };
+		43BC0485200E6CC400EF64FD /* MissingPetDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BC0484200E6CC400EF64FD /* MissingPetDetailViewController.swift */; };
 		43BE2F181FFE59BC0005EDD0 /* PetSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BE2F171FFE59BC0005EDD0 /* PetSearchViewController.swift */; };
 		43E86ABF1FBC320500B7130B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E86ABE1FBC320500B7130B /* AppDelegate.swift */; };
 		43E86AC11FBC320500B7130B /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E86AC01FBC320500B7130B /* HomeViewController.swift */; };
@@ -55,6 +58,8 @@
 		4313A85C1FFE9A3F0043C927 /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageEffects.h"; sourceTree = "<group>"; };
 		4313A85D1FFE9A3F0043C927 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
 		43367EEC2008A771004D6B2C /* ClinicCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClinicCollectionViewCell.swift; sourceTree = "<group>"; };
+		43378CCE200DF6CB00F088C4 /* MissingPet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissingPet.swift; sourceTree = "<group>"; };
+		43378CD0200DF99200F088C4 /* PetSearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetSearchViewModel.swift; sourceTree = "<group>"; };
 		433B09C91FFE587C00EA0906 /* AccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
 		438216812009D5980077FA5E /* animalhelpTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = animalhelpTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		438216832009D5980077FA5E /* animalhelpTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = animalhelpTests.swift; sourceTree = "<group>"; };
@@ -90,6 +95,7 @@
 		43AC0A021FFE7BD0009F8D70 /* CustomFonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFonts.swift; sourceTree = "<group>"; };
 		43AC0A041FFE7D25009F8D70 /* DrawerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawerView.swift; sourceTree = "<group>"; };
 		43AC0A061FFE7E25009F8D70 /* CustomColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomColors.swift; sourceTree = "<group>"; };
+		43BC0484200E6CC400EF64FD /* MissingPetDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissingPetDetailViewController.swift; sourceTree = "<group>"; };
 		43BE2F171FFE59BC0005EDD0 /* PetSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetSearchViewController.swift; sourceTree = "<group>"; };
 		43E86ABB1FBC320500B7130B /* animalhelp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = animalhelp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		43E86ABE1FBC320500B7130B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -159,6 +165,7 @@
 			isa = PBXGroup;
 			children = (
 				439D2FBC1FC9E8EA00E6EB91 /* Clinic.swift */,
+				43378CCE200DF6CB00F088C4 /* MissingPet.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -184,6 +191,8 @@
 			isa = PBXGroup;
 			children = (
 				43BE2F171FFE59BC0005EDD0 /* PetSearchViewController.swift */,
+				43378CD0200DF99200F088C4 /* PetSearchViewModel.swift */,
+				43BC0484200E6CC400EF64FD /* MissingPetDetailViewController.swift */,
 			);
 			path = "Pet Search page";
 			sourceTree = "<group>";
@@ -388,8 +397,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				438A0D621FCDEF70005A8CA4 /* Constants.swift in Sources */,
+				43378CCF200DF6CB00F088C4 /* MissingPet.swift in Sources */,
 				43AC0A071FFE7E25009F8D70 /* CustomColors.swift in Sources */,
 				43367EED2008A771004D6B2C /* ClinicCollectionViewCell.swift in Sources */,
+				43378CD1200DF99200F088C4 /* PetSearchViewModel.swift in Sources */,
 				4313A85E1FFE9A3F0043C927 /* UIImage+ImageEffects.m in Sources */,
 				4399372A200D3C00002D46BC /* CustomNavigationBar.swift in Sources */,
 				439D2FBD1FC9E8EA00E6EB91 /* Clinic.swift in Sources */,
@@ -397,6 +408,7 @@
 				43AC0A051FFE7D25009F8D70 /* DrawerView.swift in Sources */,
 				438A0D641FCDF2DA005A8CA4 /* Private.swift in Sources */,
 				43E86AC11FBC320500B7130B /* HomeViewController.swift in Sources */,
+				43BC0485200E6CC400EF64FD /* MissingPetDetailViewController.swift in Sources */,
 				43AC0A011FFE5BAD009F8D70 /* BaseViewController.swift in Sources */,
 				439E489C1FCEBB2000FAFB67 /* APIService.swift in Sources */,
 				43E86ABF1FBC320500B7130B /* AppDelegate.swift in Sources */,

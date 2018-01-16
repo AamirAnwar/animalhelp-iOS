@@ -44,6 +44,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Pet Search Page
         let petSearchVC = PetSearchViewController()
+        petSearchVC.viewModel = PetSearchViewModel()
         let petNav = UINavigationController(rootViewController: petSearchVC)
         petNav.tabBarItem.title = "Pet Search"
         

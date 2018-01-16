@@ -8,7 +8,7 @@
 
 import Foundation
 import UIKit
-class BaseViewController:UIViewController, CustomNavigationBarDelegate {
+class BaseViewController:UIViewController, CustomNavigationBarDelegate,UIGestureRecognizerDelegate {
 
     let customNavBar = CustomNavigationBar()
     
@@ -39,6 +39,7 @@ class BaseViewController:UIViewController, CustomNavigationBarDelegate {
         self.view.backgroundColor = UIColor.white
         self.view.addSubview(customNavBar)
         self.navigationController?.isNavigationBarHidden = true
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
         customNavBar.delegate = self
         customNavBar.snp.makeConstraints { (make) in
             make.top.equalToSuperview()
