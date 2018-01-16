@@ -8,9 +8,13 @@
 
 import UIKit
 import GoogleMaps
+import GoogleSignIn
+import FacebookCore
+var kClientID:String!
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     var window: UIWindow?
+
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
@@ -22,9 +26,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Create window and primary view controller
         setupWindow()
+        
+        GIDSignIn.sharedInstance().clientID = kClientID
+        GIDSignIn.sharedInstance().delegate = self
+        SDKApplicationDelegate.shared.application(application, didFinishLaunchingWithOptions: launchOptions)
         return true
     }
-    
+
     func setupWindow() {
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
@@ -44,13 +52,51 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Pet Search Page
         let petSearchVC = PetSearchViewController()
+        petSearchVC.viewModel = PetSearchViewModel()
         let petNav = UINavigationController(rootViewController: petSearchVC)
         petNav.tabBarItem.title = "Pet Search"
         
         tabBarController.viewControllers = [homeNav, petNav, accountNav]
         window?.rootViewController = tabBarController
     }
-
+    
+    
+    func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
+        let didHandleGoogleURL =  GIDSignIn.sharedInstance().handle(url, sourceApplication: options[UIApplicationOpenURLOptionsKey.sourceApplication] as! String, annotation: options[UIApplicationOpenURLOptionsKey.annotation])
+        
+        let didHandleFBURL = SDKApplicationDelegate.shared.application(app, open: url, options: options)
+        return didHandleFBURL || didHandleGoogleURL
+    }
+    
+    
+//    BOOL handled = [[FBSDKApplicationDelegate sharedInstance] application:application
+//    openURL:url
+//    sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]
+//    annotation:options[UIApplicationOpenURLOptionsAnnotationKey]
+//    ];
+    
+    func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
+        if (error == nil) {
+            // Perform any operations on signed in user here.
+            //            let userId = user.userID                  // For client-side use only!
+            //            let idToken = user.authentication.idToken // Safe to send to the server
+            //            let fullName = user.profile.name
+            //            let givenName = user.profile.givenName
+            //            let familyName = user.profile.familyName
+            //            let email = user.profile.email
+            // ...
+        } else {
+            print("\(error.localizedDescription)")
+        }
+        
+    }
+    
+    func signIn(signIn: GIDSignIn!, didDisconnectWithUser user:GIDGoogleUser!,
+                withError error: NSError!) {
+        // Perform any operations when the user disconnects from app here.
+        // ...
+    }
+    
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
