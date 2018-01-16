@@ -35,6 +35,20 @@
 		43AC0A051FFE7D25009F8D70 /* DrawerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AC0A041FFE7D25009F8D70 /* DrawerView.swift */; };
 		43AC0A071FFE7E25009F8D70 /* CustomColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AC0A061FFE7E25009F8D70 /* CustomColors.swift */; };
 		43BC0485200E6CC400EF64FD /* MissingPetDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BC0484200E6CC400EF64FD /* MissingPetDetailViewController.swift */; };
+		43BC0487200E755B00EF64FD /* LoginManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BC0486200E755B00EF64FD /* LoginManager.swift */; };
+		43BC0491200E811F00EF64FD /* GoogleSignIn.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 43BC048E200E811D00EF64FD /* GoogleSignIn.bundle */; };
+		43BC0492200E811F00EF64FD /* GoogleSignIn.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BC048F200E811E00EF64FD /* GoogleSignIn.framework */; };
+		43BC0493200E811F00EF64FD /* GoogleSignInDependencies.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BC0490200E811E00EF64FD /* GoogleSignInDependencies.framework */; };
+		43BC0496200E816F00EF64FD /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BC0495200E816F00EF64FD /* SafariServices.framework */; };
+		43BC0497200E817800EF64FD /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 438A0D541FCDCBAD005A8CA4 /* SystemConfiguration.framework */; };
+		43BC0499200E81C900EF64FD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 43BC0498200E81C900EF64FD /* GoogleService-Info.plist */; };
+		43BC049B200E8A9900EF64FD /* FacebookCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BC049A200E8A9900EF64FD /* FacebookCore.framework */; };
+		43BC049D200E8A9B00EF64FD /* FacebookLogin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BC049C200E8A9B00EF64FD /* FacebookLogin.framework */; };
+		43BC049F200E8A9E00EF64FD /* FacebookShare.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BC049E200E8A9E00EF64FD /* FacebookShare.framework */; };
+		43BC04A3200E8AB800EF64FD /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BC04A0200E8AB800EF64FD /* FBSDKCoreKit.framework */; };
+		43BC04A4200E8AB800EF64FD /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BC04A1200E8AB800EF64FD /* FBSDKShareKit.framework */; };
+		43BC04A5200E8AB800EF64FD /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BC04A2200E8AB800EF64FD /* FBSDKLoginKit.framework */; };
+		43BC04A7200E8C5E00EF64FD /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BC04A6200E8C5E00EF64FD /* Bolts.framework */; };
 		43BE2F181FFE59BC0005EDD0 /* PetSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BE2F171FFE59BC0005EDD0 /* PetSearchViewController.swift */; };
 		43E86ABF1FBC320500B7130B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E86ABE1FBC320500B7130B /* AppDelegate.swift */; };
 		43E86AC11FBC320500B7130B /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E86AC01FBC320500B7130B /* HomeViewController.swift */; };
@@ -96,6 +110,19 @@
 		43AC0A041FFE7D25009F8D70 /* DrawerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawerView.swift; sourceTree = "<group>"; };
 		43AC0A061FFE7E25009F8D70 /* CustomColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomColors.swift; sourceTree = "<group>"; };
 		43BC0484200E6CC400EF64FD /* MissingPetDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissingPetDetailViewController.swift; sourceTree = "<group>"; };
+		43BC0486200E755B00EF64FD /* LoginManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginManager.swift; sourceTree = "<group>"; };
+		43BC048E200E811D00EF64FD /* GoogleSignIn.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = GoogleSignIn.bundle; sourceTree = "<group>"; };
+		43BC048F200E811E00EF64FD /* GoogleSignIn.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleSignIn.framework; sourceTree = "<group>"; };
+		43BC0490200E811E00EF64FD /* GoogleSignInDependencies.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleSignInDependencies.framework; sourceTree = "<group>"; };
+		43BC0495200E816F00EF64FD /* SafariServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SafariServices.framework; path = System/Library/Frameworks/SafariServices.framework; sourceTree = SDKROOT; };
+		43BC0498200E81C900EF64FD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		43BC049A200E8A9900EF64FD /* FacebookCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookCore.framework; path = Carthage/Build/iOS/FacebookCore.framework; sourceTree = "<group>"; };
+		43BC049C200E8A9B00EF64FD /* FacebookLogin.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookLogin.framework; path = Carthage/Build/iOS/FacebookLogin.framework; sourceTree = "<group>"; };
+		43BC049E200E8A9E00EF64FD /* FacebookShare.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookShare.framework; path = Carthage/Build/iOS/FacebookShare.framework; sourceTree = "<group>"; };
+		43BC04A0200E8AB800EF64FD /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = Carthage/Build/iOS/FBSDKCoreKit.framework; sourceTree = "<group>"; };
+		43BC04A1200E8AB800EF64FD /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKShareKit.framework; path = Carthage/Build/iOS/FBSDKShareKit.framework; sourceTree = "<group>"; };
+		43BC04A2200E8AB800EF64FD /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = Carthage/Build/iOS/FBSDKLoginKit.framework; sourceTree = "<group>"; };
+		43BC04A6200E8C5E00EF64FD /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Bolts.framework; path = Carthage/Build/iOS/Bolts.framework; sourceTree = "<group>"; };
 		43BE2F171FFE59BC0005EDD0 /* PetSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetSearchViewController.swift; sourceTree = "<group>"; };
 		43E86ABB1FBC320500B7130B /* animalhelp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = animalhelp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		43E86ABE1FBC320500B7130B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -118,15 +145,26 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43BC0497200E817800EF64FD /* SystemConfiguration.framework in Frameworks */,
+				43BC0496200E816F00EF64FD /* SafariServices.framework in Frameworks */,
+				43BC04A3200E8AB800EF64FD /* FBSDKCoreKit.framework in Frameworks */,
+				43BC04A4200E8AB800EF64FD /* FBSDKShareKit.framework in Frameworks */,
+				43BC04A5200E8AB800EF64FD /* FBSDKLoginKit.framework in Frameworks */,
 				43F6870D1FC5887300F4CED0 /* SnapKit.framework in Frameworks */,
+				43BC049F200E8A9E00EF64FD /* FacebookShare.framework in Frameworks */,
+				43BC049D200E8A9B00EF64FD /* FacebookLogin.framework in Frameworks */,
+				43BC04A7200E8C5E00EF64FD /* Bolts.framework in Frameworks */,
 				439D2FC91FCA00AF00E6EB91 /* Result.framework in Frameworks */,
+				43BC049B200E8A9900EF64FD /* FacebookCore.framework in Frameworks */,
 				438A0D4F1FCDCB90005A8CA4 /* libc++.tbd in Frameworks */,
 				438A0D451FCDCB27005A8CA4 /* GoogleMapsBase.framework in Frameworks */,
+				43BC0493200E811F00EF64FD /* GoogleSignInDependencies.framework in Frameworks */,
 				438A0D431FCDCB25005A8CA4 /* GoogleMapsCore.framework in Frameworks */,
 				438A0D5C1FCDD703005A8CA4 /* GoogleMaps.framework in Frameworks */,
 				439D2FD01FCA00AF00E6EB91 /* Alamofire.framework in Frameworks */,
 				438A0D511FCDCB9A005A8CA4 /* libz.tbd in Frameworks */,
 				439D2FBF1FCA006400E6EB91 /* Moya.framework in Frameworks */,
+				43BC0492200E811F00EF64FD /* GoogleSignIn.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -183,6 +221,7 @@
 				43AC0A021FFE7BD0009F8D70 /* CustomFonts.swift */,
 				43AC0A061FFE7E25009F8D70 /* CustomColors.swift */,
 				43993729200D3C00002D46BC /* CustomNavigationBar.swift */,
+				43BC0486200E755B00EF64FD /* LoginManager.swift */,
 			);
 			path = Commons;
 			sourceTree = "<group>";
@@ -219,6 +258,7 @@
 		43E86ABD1FBC320500B7130B /* animalhelp */ = {
 			isa = PBXGroup;
 			children = (
+				43BC0498200E81C900EF64FD /* GoogleService-Info.plist */,
 				43AC09FF1FFE5A6E009F8D70 /* Pet Search page */,
 				433B09CB1FFE588000EA0906 /* Account Page */,
 				4387C4491FFA212800810698 /* Home Page */,
@@ -235,6 +275,17 @@
 		43F687081FC5863C00F4CED0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				43BC04A6200E8C5E00EF64FD /* Bolts.framework */,
+				43BC04A0200E8AB800EF64FD /* FBSDKCoreKit.framework */,
+				43BC04A2200E8AB800EF64FD /* FBSDKLoginKit.framework */,
+				43BC04A1200E8AB800EF64FD /* FBSDKShareKit.framework */,
+				43BC049E200E8A9E00EF64FD /* FacebookShare.framework */,
+				43BC049C200E8A9B00EF64FD /* FacebookLogin.framework */,
+				43BC049A200E8A9900EF64FD /* FacebookCore.framework */,
+				43BC0495200E816F00EF64FD /* SafariServices.framework */,
+				43BC048E200E811D00EF64FD /* GoogleSignIn.bundle */,
+				43BC048F200E811E00EF64FD /* GoogleSignIn.framework */,
+				43BC0490200E811E00EF64FD /* GoogleSignInDependencies.framework */,
 				438A0D5D1FCDD709005A8CA4 /* GoogleMaps.bundle */,
 				438A0D5B1FCDD703005A8CA4 /* GoogleMaps.framework */,
 				438A0D551FCDCBB2005A8CA4 /* UIKit.framework */,
@@ -357,7 +408,9 @@
 				438A0D571FCDCD9F005A8CA4 /* GoogleMapsCore.framework in Resources */,
 				43E86AC91FBC320500B7130B /* LaunchScreen.storyboard in Resources */,
 				43E86AC61FBC320500B7130B /* Assets.xcassets in Resources */,
+				43BC0491200E811F00EF64FD /* GoogleSignIn.bundle in Resources */,
 				438A0D5E1FCDD709005A8CA4 /* GoogleMaps.bundle in Resources */,
+				43BC0499200E81C900EF64FD /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -374,6 +427,13 @@
 				"$(SRCROOT)/Carthage/Build/iOS/Alamofire.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Moya.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Result.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/FacebookLogin.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/FBSDKLoginKit.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/FacebookCore.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/FacebookShare.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/FBSDKCoreKit.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/FBSDKShareKit.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Bolts.framework",
 			);
 			outputPaths = (
 			);
@@ -401,6 +461,7 @@
 				43AC0A071FFE7E25009F8D70 /* CustomColors.swift in Sources */,
 				43367EED2008A771004D6B2C /* ClinicCollectionViewCell.swift in Sources */,
 				43378CD1200DF99200F088C4 /* PetSearchViewModel.swift in Sources */,
+				43BC0487200E755B00EF64FD /* LoginManager.swift in Sources */,
 				4313A85E1FFE9A3F0043C927 /* UIImage+ImageEffects.m in Sources */,
 				4399372A200D3C00002D46BC /* CustomNavigationBar.swift in Sources */,
 				439D2FBD1FC9E8EA00E6EB91 /* Clinic.swift in Sources */,
@@ -592,9 +653,14 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = animalhelp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				"OTHER_LDFLAGS[arch=*]" = (
+					"$(OTHER_LDFLAGS)",
+					"-ObjC",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.aamiranwar.animalhelp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "animalhelp/Commons/animalhelp-Bridging-Header.h";
@@ -614,6 +680,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = animalhelp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
