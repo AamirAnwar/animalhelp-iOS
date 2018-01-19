@@ -13,3 +13,7 @@ var GoogleMapsAPIKey:String?
 let kCornerRadius:CGFloat = 4
 let kStandardButtonHeight = 50
 let kCollectionViewHeight:CGFloat = 277
+let kSocialLoginButtonHeight:CGFloat = 48
+let kSidePadding:CGFloat = 18
+let kSeparatorHeight:CGFloat = 1
+

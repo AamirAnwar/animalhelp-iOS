@@ -30,6 +30,11 @@
 		439D2FD01FCA00AF00E6EB91 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 439D2FC71FCA00AF00E6EB91 /* Alamofire.framework */; };
 		439E489C1FCEBB2000FAFB67 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439E489B1FCEBB2000FAFB67 /* APIService.swift */; };
 		439E489E1FCF060400FAFB67 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439E489D1FCF060400FAFB67 /* HomeViewModel.swift */; };
+		43A2A5662011D33C000A7D76 /* SocialLoginTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A2A5652011D33C000A7D76 /* SocialLoginTableViewCell.swift */; };
+		43A2A5682011D965000A7D76 /* UtilityFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A2A5672011D965000A7D76 /* UtilityFunctions.swift */; };
+		43A2A56A2011DB97000A7D76 /* StandardListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A2A5692011DB97000A7D76 /* StandardListTableViewCell.swift */; };
+		43A2A56C2011E15D000A7D76 /* CustomSeparator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A2A56B2011E15D000A7D76 /* CustomSeparator.swift */; };
+		43A2A56E2011E358000A7D76 /* CustomUIKitExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A2A56D2011E358000A7D76 /* CustomUIKitExtensions.swift */; };
 		43AC0A011FFE5BAD009F8D70 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AC0A001FFE5BAD009F8D70 /* BaseViewController.swift */; };
 		43AC0A031FFE7BD0009F8D70 /* CustomFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AC0A021FFE7BD0009F8D70 /* CustomFonts.swift */; };
 		43AC0A051FFE7D25009F8D70 /* DrawerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AC0A041FFE7D25009F8D70 /* DrawerView.swift */; };
@@ -105,6 +110,11 @@
 		439D2FC71FCA00AF00E6EB91 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
 		439E489B1FCEBB2000FAFB67 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 		439E489D1FCF060400FAFB67 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
+		43A2A5652011D33C000A7D76 /* SocialLoginTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialLoginTableViewCell.swift; sourceTree = "<group>"; };
+		43A2A5672011D965000A7D76 /* UtilityFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UtilityFunctions.swift; sourceTree = "<group>"; };
+		43A2A5692011DB97000A7D76 /* StandardListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StandardListTableViewCell.swift; sourceTree = "<group>"; };
+		43A2A56B2011E15D000A7D76 /* CustomSeparator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSeparator.swift; sourceTree = "<group>"; };
+		43A2A56D2011E358000A7D76 /* CustomUIKitExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomUIKitExtensions.swift; sourceTree = "<group>"; };
 		43AC0A001FFE5BAD009F8D70 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		43AC0A021FFE7BD0009F8D70 /* CustomFonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFonts.swift; sourceTree = "<group>"; };
 		43AC0A041FFE7D25009F8D70 /* DrawerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawerView.swift; sourceTree = "<group>"; };
@@ -175,6 +185,7 @@
 			isa = PBXGroup;
 			children = (
 				433B09C91FFE587C00EA0906 /* AccountViewController.swift */,
+				43A2A5652011D33C000A7D76 /* SocialLoginTableViewCell.swift */,
 			);
 			path = "Account Page";
 			sourceTree = "<group>";
@@ -222,6 +233,10 @@
 				43AC0A061FFE7E25009F8D70 /* CustomColors.swift */,
 				43993729200D3C00002D46BC /* CustomNavigationBar.swift */,
 				43BC0486200E755B00EF64FD /* LoginManager.swift */,
+				43A2A5672011D965000A7D76 /* UtilityFunctions.swift */,
+				43A2A5692011DB97000A7D76 /* StandardListTableViewCell.swift */,
+				43A2A56B2011E15D000A7D76 /* CustomSeparator.swift */,
+				43A2A56D2011E358000A7D76 /* CustomUIKitExtensions.swift */,
 			);
 			path = Commons;
 			sourceTree = "<group>";
@@ -456,9 +471,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43A2A56A2011DB97000A7D76 /* StandardListTableViewCell.swift in Sources */,
 				438A0D621FCDEF70005A8CA4 /* Constants.swift in Sources */,
 				43378CCF200DF6CB00F088C4 /* MissingPet.swift in Sources */,
 				43AC0A071FFE7E25009F8D70 /* CustomColors.swift in Sources */,
+				43A2A56C2011E15D000A7D76 /* CustomSeparator.swift in Sources */,
 				43367EED2008A771004D6B2C /* ClinicCollectionViewCell.swift in Sources */,
 				43378CD1200DF99200F088C4 /* PetSearchViewModel.swift in Sources */,
 				43BC0487200E755B00EF64FD /* LoginManager.swift in Sources */,
@@ -468,10 +485,13 @@
 				439E489E1FCF060400FAFB67 /* HomeViewModel.swift in Sources */,
 				43AC0A051FFE7D25009F8D70 /* DrawerView.swift in Sources */,
 				438A0D641FCDF2DA005A8CA4 /* Private.swift in Sources */,
+				43A2A5682011D965000A7D76 /* UtilityFunctions.swift in Sources */,
+				43A2A56E2011E358000A7D76 /* CustomUIKitExtensions.swift in Sources */,
 				43E86AC11FBC320500B7130B /* HomeViewController.swift in Sources */,
 				43BC0485200E6CC400EF64FD /* MissingPetDetailViewController.swift in Sources */,
 				43AC0A011FFE5BAD009F8D70 /* BaseViewController.swift in Sources */,
 				439E489C1FCEBB2000FAFB67 /* APIService.swift in Sources */,
+				43A2A5662011D33C000A7D76 /* SocialLoginTableViewCell.swift in Sources */,
 				43E86ABF1FBC320500B7130B /* AppDelegate.swift in Sources */,
 				43AC0A031FFE7BD0009F8D70 /* CustomFonts.swift in Sources */,
 				433B09CA1FFE587C00EA0906 /* AccountViewController.swift in Sources */,
