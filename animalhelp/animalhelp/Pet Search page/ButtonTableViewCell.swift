@@ -28,6 +28,7 @@ class ButtonTableViewCell:UITableViewCell {
             make.trailing.equalToSuperview().inset(kSidePadding)
             make.top.equalToSuperview().offset(8)
             make.bottom.equalToSuperview().inset(8)
+            make.height.equalTo(kStandardButtonHeight)
         }
     }
     
