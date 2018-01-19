@@ -16,6 +16,7 @@ let CustomColorTextBlack = UIColor.init(hex:0x494949)
 let CustomColorFacebookBlue = UIColor.init(hex:0x385591)
 let CustomColorGoogleOrange = UIColor.init(hex:0xD34836)
 let CustomColorSeparatorGrey = UIColor.init(hex:0xE8E8E8)
+let CustomColorGreen = UIColor.init(hex:0x16AC16)
 
 
 
