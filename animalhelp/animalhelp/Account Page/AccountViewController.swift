@@ -26,13 +26,13 @@ class AccountViewController:BaseViewController,GIDSignInUIDelegate {
     let kStandardListCellReuseIdentifier = "StandardListTableViewCell"
     let kUsernameCellReuseIdentifier = "UserNameCell"
     let kProfileImageBounceFactor:CGFloat = 1.5
-    let standardAccountItems = ["Push Notifications", "Terms and Conditions", "Feedback", "How to help"]
+    let standardAccountItems = ["Terms and Conditions", "Feedback", "How to help"]
     let tableView = UITableView(frame: CGRect.zero, style: .plain)
     let profileImageView = UIImageView()
     var accountItems:[String] {
         get {
             if loginManager.isLoggedIn {
-                return  ["Pet Lookout"] + standardAccountItems + ["Logout"]
+                return  ["Pet Lookout","Push Notifications"] + standardAccountItems + ["Logout"]
             }
             return standardAccountItems
         }
@@ -134,9 +134,8 @@ extension AccountViewController: UITableViewDelegate, UITableViewDataSource {
                 switch accountSection {
                 case .TransparentProfile:
                     if self.loginManager.isLoggedIn {
-                        return self.getTransparentCell(tableView: tableView)
+                        return UtilityFunctions.getTransparentCell(tableView: tableView, height:kProfileImageHeight,reuseIdentifier:kEmptyCellReuseIdentifier)
                     }
-                    
                 case .Settings: return self.getStandardSettingsCell(tableView: tableView, indexPath: indexPath)
                 case .Username:
                     if self.loginManager.isLoggedIn {
@@ -166,33 +165,7 @@ extension AccountViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let y = scrollView.contentOffset.y
-        if y < 0 {
-            if let _ = self.heightConstraint {
-                if self.currentHeight < kProfileImageHeight {
-                    self.currentHeight = kProfileImageHeight
-                }
-                else {
-                    self.currentHeight = kProfileImageHeight - kProfileImageBounceFactor*y
-                }
-                self.profileImageView.snp.updateConstraints({ (make) in
-                    self.heightConstraint = make.height.equalTo(self.currentHeight).constraint
-                })
-            }
-        }
-    }
-    
-    func getTransparentCell(tableView:UITableView) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: kEmptyCellReuseIdentifier)!
-        let view = UIView()
-        cell.backgroundColor = UIColor.clear
-        cell.contentView.addSubview(view)
-        cell.selectionStyle = .none
-        view.snp.makeConstraints { (make) in
-            make.edges.equalToSuperview()
-            make.height.equalTo(kProfileImageHeight)
-        }
-        return cell
+        UtilityFunctions.expandImageWith(scrollView: scrollView, view: self.profileImageView, currentHeight: &self.currentHeight, minRequiredHeight: kProfileImageHeight)
     }
     
     func getStandardSettingsCell(tableView:UITableView, indexPath:IndexPath) -> StandardListTableViewCell {
