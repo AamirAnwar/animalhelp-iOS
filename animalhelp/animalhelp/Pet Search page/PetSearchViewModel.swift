@@ -61,9 +61,6 @@ class PetSearchViewModel {
             }
             
             self.missingPets = missingPets
-            if let urlString = self.missingPets.first?.imageURL, let petImageURL = URL(string:urlString) {
-                
-            }
             self.delegate?.didUpdateMissingPets()
         }
         

@@ -68,13 +68,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         return didHandleFBURL || didHandleGoogleURL
     }
     
-    
-//    BOOL handled = [[FBSDKApplicationDelegate sharedInstance] application:application
-//    openURL:url
-//    sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]
-//    annotation:options[UIApplicationOpenURLOptionsAnnotationKey]
-//    ];
-    
     func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
         if (error == nil) {
             // Perform any operations on signed in user here.
@@ -92,7 +85,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     }
     
     func signIn(signIn: GIDSignIn!, didDisconnectWithUser user:GIDGoogleUser!,
-                withError error: NSError!) {
+                withError error: Error!) {
         // Perform any operations when the user disconnects from app here.
         // ...
     }
