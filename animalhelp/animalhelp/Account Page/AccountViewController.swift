@@ -156,12 +156,37 @@ extension AccountViewController: UITableViewDelegate, UITableViewDataSource {
         if let section = AccountSection(rawValue: indexPath.section) {
             if section == .Settings {
                 guard indexPath.row < self.accountItems.count else {return}
+                // TODO, Fix these comparisons ftlog
                 if self.accountItems[indexPath.row] == "Logout" {
                     self.loginManager.logout()
+                }
+                else if self.accountItems[indexPath.row] == "How to help" {
+                    self.showHowToContributePage()
+                }
+                else if self.accountItems[indexPath.row] == "Feedback" {
+                    self.showFeedbackPage()
+                }
+                else if self.accountItems[indexPath.row] == "Terms and Conditions" {
+                    self.showTCPage()
                 }
             }
         }
         
+    }
+    
+    func showTCPage() {
+        let vc = TermsAndConditionsViewController()
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func showHowToContributePage() {
+        let vc = ContributeViewController()
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func showFeedbackPage() {
+        let vc = FeedbackViewController()
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
