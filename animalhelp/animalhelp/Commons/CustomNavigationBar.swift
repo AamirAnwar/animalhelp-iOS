@@ -95,14 +95,9 @@ class CustomNavigationBar:UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        let shadowPath = UIBezierPath(rect: self.bounds)
-        self.layer.masksToBounds = false
-        self.layer.shadowColor = UIColor.black.cgColor
-        self.layer.shadowOffset = CGSize(width: 0, height: 1)
-        self.layer.shadowOpacity = 0.3
-        self.layer.shadowRadius = 10
-        self.layer.shadowPath = shadowPath.cgPath
+        
     }
+    
     
     @objc func locationButtonTapped() {
         self.delegate?.didTapLocationButton()
