@@ -9,7 +9,13 @@
 import Foundation
 import UIKit
 
+protocol SocialLoginTableViewCellDelegate {
+    func didTapFacebookLogin()
+    func didTapGoogleLogin()
+}
+
 class SocialLoginTableViewCell:UITableViewCell {
+    var delegate:SocialLoginTableViewCellDelegate? = nil
     
     let headingLabel:UILabel = {
         let label = UILabel()
@@ -88,6 +94,17 @@ class SocialLoginTableViewCell:UITableViewCell {
             make.bottom.equalToSuperview().inset(18)
             make.height.equalTo(self.facebookButton.snp.height)
         }
+        
+        self.googleButton.addTarget(self, action: #selector(googleButtonTapped), for: .touchUpInside)
+        self.facebookButton.addTarget(self, action: #selector(facebookButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc func googleButtonTapped() {
+        self.delegate?.didTapGoogleLogin()
+    }
+    
+    @objc func facebookButtonTapped() {
+        self.delegate?.didTapFacebookLogin()
     }
     
     override func layoutSubviews() {
