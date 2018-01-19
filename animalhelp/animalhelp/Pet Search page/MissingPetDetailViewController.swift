@@ -81,7 +81,7 @@ class MissingPetDetailViewController:BaseViewController {
             make.trailing.equalToSuperview()
             make.bottom.equalToSuperview()
         }
-        tableView.register(MissingPetDetailTableViewCell.self, forCellReuseIdentifier: self.kPetDetailCellReuseIdentifier)
+        tableView.register(ListItemDetailTableViewCell.self, forCellReuseIdentifier: self.kPetDetailCellReuseIdentifier)
         tableView.register(ButtonTableViewCell.self, forCellReuseIdentifier: self.kCallOwnerCellReuseIdentifier)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: self.kEmptyCellReuseIdentifier)
     }
@@ -141,8 +141,8 @@ extension MissingPetDetailViewController:UITableViewDelegate, UITableViewDataSou
         return cell
     }
     
-    func getMissingPetDetailCell(_ tableView:UITableView, indexPath:IndexPath) -> MissingPetDetailTableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: self.kPetDetailCellReuseIdentifier) as! MissingPetDetailTableViewCell
+    func getMissingPetDetailCell(_ tableView:UITableView, indexPath:IndexPath) -> ListItemDetailTableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: self.kPetDetailCellReuseIdentifier) as! ListItemDetailTableViewCell
         guard indexPath.row < self.petDetailSections.count else {return cell}
         let (title, subtitle) = self.petDetailSections[indexPath.row]
         cell.setTitle(title, subtitle: subtitle)
