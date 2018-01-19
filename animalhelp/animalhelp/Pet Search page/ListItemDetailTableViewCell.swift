@@ -8,7 +8,7 @@
 
 import Foundation
 import UIKit
-class MissingPetDetailTableViewCell:UITableViewCell {
+class ListItemDetailTableViewCell:UITableViewCell {
     let titleLabel:UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
