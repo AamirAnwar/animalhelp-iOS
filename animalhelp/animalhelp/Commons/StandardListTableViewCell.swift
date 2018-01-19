@@ -31,11 +31,27 @@ class StandardListTableViewCell:UITableViewCell {
             make.top.equalToSuperview().offset(13)
             make.bottom.equalToSuperview().inset(13)
         }
-        self.accessoryType = .disclosureIndicator
+        
+        // Default setting
+        self.showsDisclosure(true)
     }
     
-    func setTitle(_ title:String) {
+    public func setTitle(_ title:String) {
         self.titleLabel.text = title
+    }
+    
+    public func setTitleFont(_ font:UIFont) {
+        self.titleLabel.font = font
+    }
+    
+    public func showsDisclosure(_ show:Bool) {
+        if show {
+            self.accessoryType = .disclosureIndicator
+        }
+        else {
+            self.accessoryType = .none
+        }
+        
     }
 }
 
