@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 class ListItemDetailTableViewCell:UITableViewCell {
-    let titleLabel:UILabel = {
+    fileprivate let titleLabel:UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
         label.font = CustomFontHeadingSmall
@@ -17,7 +17,7 @@ class ListItemDetailTableViewCell:UITableViewCell {
         return label
     }()
 
-    let subtitleLabel:UILabel = {
+    fileprivate let subtitleLabel:UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
         label.font = CustomFontSmallBodyMedium
@@ -48,12 +48,15 @@ class ListItemDetailTableViewCell:UITableViewCell {
         }
     }
     
-    func setTitle(_ title:String, subtitle:String) {
+    public func setTitle(_ title:String, subtitle:String) {
         self.titleLabel.text = title
         self.subtitleLabel.text = subtitle
     }
+    public func setTitleFont(_ font:UIFont) {
+        self.titleLabel.font = font
+    }
     
-    func setSubtitleTextColor(_ color:UIColor) {
+    public func setSubtitleTextColor(_ color:UIColor) {
         self.subtitleLabel.textColor = color
     }
 }
