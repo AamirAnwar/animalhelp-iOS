@@ -36,7 +36,7 @@ class CustomNavigationBar:UIView {
             self.addSubview(rightBarButton)
             rightBarButton.snp.makeConstraints { (make) in
                 make.centerY.equalTo(self.locationButton.snp.centerY)
-                make.trailing.equalToSuperview().inset(8)
+                make.trailing.equalToSuperview().inset(kSidePadding)
                 make.leading.greaterThanOrEqualTo(self.locationButton.snp.trailing).offset(8)
             }
             rightBarButton.addTarget(self, action: #selector(rightBarButtonTapped), for: .touchUpInside)
