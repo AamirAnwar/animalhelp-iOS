@@ -7,3 +7,18 @@
 //
 
 import Foundation
+import UIKit
+
+class CustomSeparator:UIView {
+    static var paddedSeparator:CustomSeparator {
+        get {
+            let sep = CustomSeparator()
+            sep.backgroundColor = CustomColorSeparatorGrey
+            sep.snp.makeConstraints { (make) in
+                make.height.equalTo(kSeparatorHeight)
+            }
+            return sep
+        }
+    }
+}
+
