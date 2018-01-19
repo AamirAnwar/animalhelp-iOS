@@ -8,28 +8,22 @@
 
 import UIKit
 
-class TermsAndConditionsViewController: UIViewController {
+class TermsAndConditionsViewController: BaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        self.customNavBar.setTitle("Terms and Conditions")
+        let imageView = UIImageView(image: #imageLiteral(resourceName: "defaultProfileImage"))
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        view.addSubview(imageView)
+        imageView.snp.makeConstraints { (make) in
+            make.leading.equalToSuperview().offset(kSidePadding)
+            make.trailing.equalToSuperview().inset(kSidePadding)
+            make.top.equalTo(self.customNavBar.snp.bottom).offset(kSidePadding)
+        }
+        
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+ 
 }
