@@ -17,7 +17,7 @@ protocol PetSearchViewModelDelegate {
 
 
 class PetSearchViewModel {
-    let APIService = MoyaProvider<APIService>()
+    let APIService = animalhelp.APIService.sharedService
     var delegate:PetSearchViewModelDelegate? = nil
     var missingPets:[MissingPet] = []
     func searchForMissingPets() {
