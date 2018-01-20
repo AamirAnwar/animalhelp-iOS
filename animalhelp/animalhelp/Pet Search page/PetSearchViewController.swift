@@ -38,9 +38,7 @@ class PetSearchViewController:BaseViewController, PetSearchViewModelDelegate {
         self.searchBar.placeholder = "Search"
         self.searchBar.backgroundColor = UIColor.white
         self.searchBar.searchBarStyle = .minimal
-//        self.searchBar.barTintColor = CustomColorMainTheme
         self.searchBar.tintColor = CustomColorMainTheme
-//        self.searchBar.backgroundImage = UIImage()
         self.searchBar.snp.makeConstraints { (make) in
             make.top.equalTo(self.customNavBar.snp.bottom)
             make.leading.equalToSuperview().offset(kSidePadding)
