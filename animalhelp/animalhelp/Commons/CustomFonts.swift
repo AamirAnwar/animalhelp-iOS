@@ -12,5 +12,6 @@ import UIKit
 let CustomFontBodyMedium = UIFont(name: "AvenirNext-Medium", size: 18)!
 let CustomFontSmallBodyMedium = UIFont(name: "AvenirNext-Medium", size: 14)!
 let CustomFontButtonTitle = UIFont(name: "AvenirNext-DemiBold", size: 19)!
+let CustomFontUsername = UIFont(name: "AvenirNext-DemiBold", size: 21)!
 let CustomFontHeadingSmall = UIFont(name: "AvenirNext-DemiBold", size: 14)!
 let CustomFontTitleBold = UIFont(name: "AvenirNext-Bold", size: 26)!

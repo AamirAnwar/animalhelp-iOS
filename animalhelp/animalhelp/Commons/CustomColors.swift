@@ -10,8 +10,14 @@ import Foundation
 import UIKit
 
 let CustomColorMainTheme = UIColor.init(hex:0xEB4545)
-let CustomColorLightGray = UIColor.init(hex:0x8F8F8F)
+let CustomColorDarkGray = UIColor.init(hex:0x8F8F8F)
+let CustomColorLightGray = UIColor.init(hex:0x9B9B9B)
 let CustomColorTextBlack = UIColor.init(hex:0x494949)
+let CustomColorFacebookBlue = UIColor.init(hex:0x385591)
+let CustomColorGoogleOrange = UIColor.init(hex:0xD34836)
+let CustomColorSeparatorGrey = UIColor.init(hex:0xE8E8E8)
+let CustomColorGreen = UIColor.init(hex:0x16AC16)
+
 
 
 extension UIColor {

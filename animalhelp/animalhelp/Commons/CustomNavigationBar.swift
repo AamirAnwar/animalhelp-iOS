@@ -36,7 +36,7 @@ class CustomNavigationBar:UIView {
             self.addSubview(rightBarButton)
             rightBarButton.snp.makeConstraints { (make) in
                 make.centerY.equalTo(self.locationButton.snp.centerY)
-                make.trailing.equalToSuperview().inset(8)
+                make.trailing.equalToSuperview().inset(kSidePadding)
                 make.leading.greaterThanOrEqualTo(self.locationButton.snp.trailing).offset(8)
             }
             rightBarButton.addTarget(self, action: #selector(rightBarButtonTapped), for: .touchUpInside)
@@ -95,14 +95,9 @@ class CustomNavigationBar:UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        let shadowPath = UIBezierPath(rect: self.bounds)
-        self.layer.masksToBounds = false
-        self.layer.shadowColor = UIColor.black.cgColor
-        self.layer.shadowOffset = CGSize(width: 0, height: 1)
-        self.layer.shadowOpacity = 0.3
-        self.layer.shadowRadius = 10
-        self.layer.shadowPath = shadowPath.cgPath
+        
     }
+    
     
     @objc func locationButtonTapped() {
         self.delegate?.didTapLocationButton()

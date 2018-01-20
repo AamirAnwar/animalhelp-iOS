@@ -12,7 +12,7 @@ import GoogleSignIn
 import FacebookCore
 var kClientID:String!
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
@@ -27,9 +27,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         // Create window and primary view controller
         setupWindow()
         
-        GIDSignIn.sharedInstance().clientID = kClientID
-        GIDSignIn.sharedInstance().delegate = self
-        SDKApplicationDelegate.shared.application(application, didFinishLaunchingWithOptions: launchOptions)
+        // Initialize login methods
+        LoginManager.sharedInstance.initializeGoogleLogin()
+        LoginManager.sharedInstance.initializeFacebookLogin(application: application, launchOptions: launchOptions)
         return true
     }
 
@@ -66,35 +66,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         
         let didHandleFBURL = SDKApplicationDelegate.shared.application(app, open: url, options: options)
         return didHandleFBURL || didHandleGoogleURL
-    }
-    
-    
-//    BOOL handled = [[FBSDKApplicationDelegate sharedInstance] application:application
-//    openURL:url
-//    sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]
-//    annotation:options[UIApplicationOpenURLOptionsAnnotationKey]
-//    ];
-    
-    func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
-        if (error == nil) {
-            // Perform any operations on signed in user here.
-            //            let userId = user.userID                  // For client-side use only!
-            //            let idToken = user.authentication.idToken // Safe to send to the server
-            //            let fullName = user.profile.name
-            //            let givenName = user.profile.givenName
-            //            let familyName = user.profile.familyName
-            //            let email = user.profile.email
-            // ...
-        } else {
-            print("\(error.localizedDescription)")
-        }
-        
-    }
-    
-    func signIn(signIn: GIDSignIn!, didDisconnectWithUser user:GIDGoogleUser!,
-                withError error: NSError!) {
-        // Perform any operations when the user disconnects from app here.
-        // ...
     }
     
     func applicationWillResignActive(_ application: UIApplication) {
