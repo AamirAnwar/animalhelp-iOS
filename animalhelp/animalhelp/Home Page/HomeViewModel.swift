@@ -8,7 +8,6 @@
 
 import Foundation
 import Moya
-import CoreLocation
 import GoogleMaps
 
 
@@ -25,11 +24,8 @@ protocol HomeViewModelDelegate {
 }
 
 class HomeViewModel:NSObject {
+    let locationManager = animalhelp.LocationManager.sharedManager
     let APIService = animalhelp.APIService.sharedService
-    let locationManager = CLLocationManager()
-    var detectedLocation:CLLocation?
-    var timer:Timer?
-    var timeoutDuration:CFTimeInterval = 10.0
     var delegate:HomeViewModelDelegate?
     var nearestClinic:Clinic? {
         get {
@@ -43,184 +39,64 @@ class HomeViewModel:NSObject {
             return self.nearbyClinicsMarkers?.first
         }
     }
-    var isLocationPermissionGranted:Bool {
-        get {
-            return CLLocationManager.authorizationStatus() == .authorizedWhenInUse || CLLocationManager.authorizationStatus() == .authorizedAlways
+    override init() {
+        super.init()
+        NotificationCenter.default.addObserver(self, selector: #selector(self.didChangeUserLocation), name: kNotificationUserLocationChanged.name, object: nil)
+           NotificationCenter.default.addObserver(self, selector: #selector(self.locationPermissionDenied), name: kNotificationLocationPerimissionDenied.name, object: nil)
+    }
+    
+    @objc func didChangeUserLocation() {
+        if let location = self.locationManager.userLocation {
+            self.delegate?.transitionTo(state: .HiddenDrawer)
+            self.delegate?.showUserLocation(location: location)
+        }
+        else {
+            self.delegate?.transitionTo(state: .UserLocationUnknown)
         }
     }
-    let geocoder = CLGeocoder()
-    var placeMark:CLPlacemark? = nil
-    var performingReverseGeocoding = false
+    
+    @objc func locationPermissionDenied() {
+        self.delegate?.locationServicesDenied()
+    }
     
     func updateViewState() {
-        if self.isLocationPermissionGranted == false {
+        if self.locationManager.isLocationPermissionGranted == false {
             self.delegate?.transitionTo(state: .UserLocationUnknown)
         }
         else {
-            if self.detectedLocation != nil {
+            if self.locationManager.userLocation != nil {
 //                self.updateNearestClinic()
             }
             else {
-                self.startDetectingLocation()
+                self.locationManager.startDetectingLocation()
             }
         }
-    }
-    
-    func startDetectingLocation() {
-        let authStatus = CLLocationManager.authorizationStatus()
-        guard authStatus != .denied && authStatus != .restricted else {
-            self.delegate?.locationServicesDenied()
-            return
-        }
-        
-        locationManager.delegate = self
-        if authStatus == .notDetermined {
-            locationManager.requestWhenInUseAuthorization()
-        }
-        else {
-            
-            locationManager.desiredAccuracy = kCLLocationAccuracyBest
-            self.startLocationDetectionTimer()
-            locationManager.startUpdatingLocation()
-        }
-    }
-    
-    func stopDetectingLocation() {
-        locationManager.stopUpdatingLocation()
     }
     
     func getNearbyClinics() {
-        // TODO - Pass in City ID here
-        if let location = self.detectedLocation {
-            APIService.request(.clinics(lat: "\(location.coordinate.latitude)", lon: "\(location.coordinate.longitude)"), completion: { (result) in
-                switch result {
-                case .success(let response):
-                    do {
-                        _ = try response.filterSuccessfulStatusCodes()
-                        let data = try response.mapJSON()
-                        print(data)
-                        if let jsonDictionary = data as? NSDictionary {
-                            self.parseClinics(json: jsonDictionary)
-                        }
-                        
-                    } catch let error {
-                        // Error occured
-                        print(error)
-                    }
-                case .failure(let error):
-                    print(error)
-                }
-            })
-        }
-        
-    }
-    
-    func parseClinics(json:NSDictionary) {
-        print(json)
-        let decoder = JSONDecoder()
-        if let clinicDict = json.value(forKey: "clinics") as? Array<NSDictionary> {
-            guard clinicDict.count > 0 else {return}
-            
-            var parsedClinics = [Clinic]()
-
-            for dict in clinicDict {
-                do {
-                    let clinic = try decoder.decode(Clinic.self, from: JSONSerialization.data(withJSONObject: dict, options: .init(rawValue: 0)))
-
-                    parsedClinics += [clinic]
-                } catch let error {
-                    print(error)
-                    return
-                }
-            }
-            self.nearbyClinics = parsedClinics
-            
+        Clinic.getNearbyClinics { (clinics) in
+            self.nearbyClinics = clinics
             // Remove any previous markers from the map
             if let clinicMarkers = self.nearbyClinicsMarkers {
                 clinicMarkers.forEach({ (marker) in
                     marker.map = nil
                 })
             }
-            
-            self.nearbyClinicsMarkers = parsedClinics.map({ (clinic) -> GMSMarker in
+            self.nearbyClinicsMarkers = clinics.map({ (clinic) -> GMSMarker in
                 return self.createMarkerWithClinic(clinic: clinic)
             })
             self.delegate?.showMarkers(markers:self.nearbyClinicsMarkers!)
             self.delegate?.transitionTo(state: .SingleClinicDrawer)
             self.delegate?.zoomIntoNearestClinic()
-
         }
     }
-    
+
     func createMarkerWithClinic(clinic:Clinic)->GMSMarker {
         let marker = GMSMarker()
         marker.position = CLLocationCoordinate2D(latitude: clinic.lat, longitude: clinic.lon)
         marker.title = clinic.name
         marker.snippet = clinic.address
         return marker
-    }
-    
-    fileprivate func startLocationDetectionTimer() {
-        self.timer = Timer.scheduledTimer(withTimeInterval: timeoutDuration, repeats: false, block: { (timer) in
-            print("Stopping location services!")
-            if let _ = self.detectedLocation {
-//                self.delegate?.transitionTo(state: .MinimizedDrawer)
-//                self.delegate?.showUserLocation(location: location)
-                self.stopDetectingLocation()
-            }
-            else {
-                // TODO Unable to get your location. Send a callback to the viewcontroller/view
-            }
-            timer.invalidate()
-        })
-    }
-    
-}
-extension HomeViewModel: CLLocationManagerDelegate {
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print("Failed to update location")
-        
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        
-        if let location = locations.last {
-            print("Updated location with accuracy \(location)")
-            
-            if location.timestamp.timeIntervalSinceNow < -5 {
-                return
-            }
-            if location.horizontalAccuracy < 0 {
-                return
-            }
-            
-            if self.detectedLocation == nil || self.detectedLocation!.horizontalAccuracy > location.horizontalAccuracy {
-                
-                if self.performingReverseGeocoding == false {
-                    performingReverseGeocoding = true
-                    geocoder.reverseGeocodeLocation(location, completionHandler: { (placemarks, error) in
-                        self.performingReverseGeocoding = false
-                        if let error = error {
-                            print("Reverse geocode failed! \(error.localizedDescription)")
-                            return
-                        }
-                        if let place = placemarks?.first {
-                            self.placeMark = place
-                            self.detectedLocation = location
-                            self.delegate?.transitionTo(state: .HiddenDrawer)
-                            self.delegate?.showUserLocation(location: location)
-                            self.stopDetectingLocation()
-                        }
-                        
-                    })
-                }
-            }
-        }
-        
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        self.startDetectingLocation()
     }
 }
 
@@ -229,7 +105,6 @@ extension HomeViewModel:DrawerViewDelegate {
         if let markers = self.nearbyClinicsMarkers, markers.count > index {
             self.delegate?.zoomToMarker(markers[index])
         }
-        
     }
     
     func didTapHideDrawerButton() {
@@ -266,8 +141,8 @@ extension HomeViewModel:DrawerViewDelegate {
     
     func didTapDetectLocation() {
         //Start detecting location if there is no location
-        if self.detectedLocation == nil {
-            self.startDetectingLocation()
+        if self.locationManager.userLocation == nil {
+            self.locationManager.startDetectingLocation()
         }
     }
 }
@@ -279,7 +154,6 @@ extension HomeViewModel:GMSMapViewDelegate {
                 self.delegate?.transitionTo(state: .SingleClinicDrawer)
                 self.delegate?.showDrawerWith(selectedIndex: index, clinics: clinics)
             }
-            
         }
         return true
     }

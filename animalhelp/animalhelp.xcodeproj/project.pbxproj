@@ -30,6 +30,7 @@
 		438A0D621FCDEF70005A8CA4 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 438A0D611FCDEF70005A8CA4 /* Constants.swift */; };
 		438A0D641FCDF2DA005A8CA4 /* Private.swift in Sources */ = {isa = PBXBuildFile; fileRef = 438A0D631FCDF2DA005A8CA4 /* Private.swift */; };
 		4397D4622013C4D900A1C238 /* SelectLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4397D4612013C4D900A1C238 /* SelectLocationViewController.swift */; };
+		4397D4642013CB4C00A1C238 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4397D4632013CB4C00A1C238 /* LocationManager.swift */; };
 		4399372A200D3C00002D46BC /* CustomNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43993729200D3C00002D46BC /* CustomNavigationBar.swift */; };
 		439D2FBD1FC9E8EA00E6EB91 /* Clinic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439D2FBC1FC9E8EA00E6EB91 /* Clinic.swift */; };
 		439D2FBF1FCA006400E6EB91 /* Moya.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 439D2FBE1FCA006400E6EB91 /* Moya.framework */; };
@@ -117,6 +118,7 @@
 		438A0D611FCDEF70005A8CA4 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		438A0D631FCDF2DA005A8CA4 /* Private.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Private.swift; sourceTree = "<group>"; };
 		4397D4612013C4D900A1C238 /* SelectLocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectLocationViewController.swift; sourceTree = "<group>"; };
+		4397D4632013CB4C00A1C238 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		43993729200D3C00002D46BC /* CustomNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationBar.swift; sourceTree = "<group>"; };
 		439D2FBC1FC9E8EA00E6EB91 /* Clinic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Clinic.swift; sourceTree = "<group>"; };
 		439D2FBE1FCA006400E6EB91 /* Moya.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Moya.framework; path = Carthage/Build/iOS/Moya.framework; sourceTree = "<group>"; };
@@ -255,6 +257,7 @@
 				43A2A56B2011E15D000A7D76 /* CustomSeparator.swift */,
 				43A2A56D2011E358000A7D76 /* CustomUIKitExtensions.swift */,
 				4397D4612013C4D900A1C238 /* SelectLocationViewController.swift */,
+				4397D4632013CB4C00A1C238 /* LocationManager.swift */,
 			);
 			path = Commons;
 			sourceTree = "<group>";
@@ -506,6 +509,7 @@
 				4399372A200D3C00002D46BC /* CustomNavigationBar.swift in Sources */,
 				439D2FBD1FC9E8EA00E6EB91 /* Clinic.swift in Sources */,
 				439E489E1FCF060400FAFB67 /* HomeViewModel.swift in Sources */,
+				4397D4642013CB4C00A1C238 /* LocationManager.swift in Sources */,
 				437312D420128FBB000EC23E /* TermsAndConditionsViewController.swift in Sources */,
 				437312D220128D2D000EC23E /* FeedbackViewController.swift in Sources */,
 				43AC0A051FFE7D25009F8D70 /* DrawerView.swift in Sources */,
