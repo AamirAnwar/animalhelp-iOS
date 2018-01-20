@@ -227,6 +227,9 @@ extension AccountViewController: UITableViewDelegate, UITableViewDataSource {
 
 extension AccountViewController:LoginManagerDelegate {
     func didUpdateUserInfo() {
+        if let url = self.loginManager.currentUser?.profilePictureURL?.absoluteString {
+            self.profileImageView.setImage(WithURL: url)
+        }
         self.tableView.reloadData()
     }
 }

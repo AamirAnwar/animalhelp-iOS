@@ -43,7 +43,6 @@ struct Clinic:Codable {
     }
     
     fileprivate static func parseClinics(json:NSDictionary) -> [Clinic] {
-        print(json)
         let decoder = JSONDecoder()
         if let clinicDict = json.value(forKey: "clinics") as? Array<NSDictionary> {
             guard clinicDict.count > 0 else {return []}

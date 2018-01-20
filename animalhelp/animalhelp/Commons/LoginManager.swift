@@ -11,8 +11,20 @@ import FacebookLogin
 import FacebookCore
 import GoogleSignIn
 
-struct User {
-    var name:String
+class User:NSObject {
+    var name:String!
+    var profilePictureURL:URL?
+    
+    override init() {
+        super.init()
+    }
+    
+    static func initWith(name:String) -> User {
+        let user = User.init()
+        user.name = name
+        return user
+    
+    }
 }
 
 protocol LoginManagerDelegate {
@@ -65,7 +77,9 @@ class LoginManager:NSObject {
                         case .success(let profile):
                             print("Found a profile \(profile)")
                             if let fullName = profile.fullName {
-                                self.currentUser = User(name: fullName)
+                                let user = User.initWith(name: fullName)
+                                self.currentUser = user
+                                
                             }
                         default: print("Dont care")
                         }
@@ -125,7 +139,11 @@ extension LoginManager:GIDSignInDelegate {
         self.postLoginNotification(success: error == nil)
         if (error == nil) {
             print("Login Sucessful!")
-            self.currentUser = User(name: user.profile.name)
+            let updatedUser = User.initWith(name: user.profile.name)
+            self.currentUser = updatedUser
+            
+            
+            
             // Perform any operations on signed in user here.
             //            let userId = user.userID                  // For client-side use only!
             //            let idToken = user.authentication.idToken // Safe to send to the server
