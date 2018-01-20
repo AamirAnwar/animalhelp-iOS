@@ -25,7 +25,7 @@ protocol HomeViewModelDelegate {
 }
 
 class HomeViewModel:NSObject {
-    let APIService = MoyaProvider<APIService>()
+    let APIService = animalhelp.APIService.sharedService
     let locationManager = CLLocationManager()
     var detectedLocation:CLLocation?
     var timer:Timer?

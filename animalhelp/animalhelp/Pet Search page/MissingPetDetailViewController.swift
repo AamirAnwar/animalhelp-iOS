@@ -11,6 +11,7 @@ import UIKit
 
 class MissingPetDetailViewController:BaseViewController {
     var pet:MissingPet!
+    let APIService = animalhelp.APIService.sharedService
     let kPetDetailCellReuseIdentifier = "MissingPetDetailTableViewCell"
     let kCallOwnerCellReuseIdentifier = "CallOwnerCellReuseIdentifier"
     let kEmptyCellReuseIdentifier = "EmptyCellReuseIdentifier"
@@ -87,22 +88,9 @@ class MissingPetDetailViewController:BaseViewController {
     }
     
     func setPetImage() {
-        if let urlString = self.pet.imageURL, let url = URL(string:urlString) {
-            self.getDataFromUrl(url: url) { data, response, error in
-                guard let data = data, error == nil else { return }
-                print(response?.suggestedFilename ?? url.lastPathComponent)
-                print("Download Finished")
-                DispatchQueue.main.async() {
-                    self.petImageView.image = UIImage(data: data)
-                }
-            }
+        if let urlString = self.pet.imageURL {
+            self.petImageView.setImage(WithURL: urlString)
         }
-    }
-    
-    func getDataFromUrl(url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> ()) {
-        URLSession.shared.dataTask(with: url) { data, response, error in
-            completion(data, response, error)
-            }.resume()
     }
 }
 
