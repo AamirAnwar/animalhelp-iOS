@@ -74,7 +74,6 @@ class MissingPetTableViewCell:UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.selectionStyle = .none
         
-        self.petImageView.image = #imageLiteral(resourceName: "defaultProfileImage")
         self.petImageView.contentMode = .scaleAspectFill
         self.petImageView.clipsToBounds = true
         self.petImageView.layer.cornerRadius = kCornerRadius
@@ -156,7 +155,7 @@ class MissingPetTableViewCell:UITableViewCell {
         self.petTypeLabel.text = pet.type
         self.markLabel.text = " \(pet.distFeatures ?? "") "
         self.missingSinceLabel.text = pet.missingSince
-        
+        self.petImageView.setImage(WithURL: pet.imageURL ?? "")
         
     }
     
