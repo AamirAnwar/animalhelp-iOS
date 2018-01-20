@@ -67,6 +67,11 @@ class PetSearchViewController:BaseViewController, PetSearchViewModelDelegate {
         self.tableView.reloadData()
     }
     
+    override func didTapLocationButton() {
+        // Open location selection flow
+        let vc = SelectLocationViewController()
+        present(vc,animated:true)
+    }
 }
 
 extension PetSearchViewController:UISearchBarDelegate {

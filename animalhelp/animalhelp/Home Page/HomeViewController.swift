@@ -88,6 +88,8 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
     
     override func didTapLocationButton() {
         // Open location selection flow
+        let vc = SelectLocationViewController()
+        present(vc,animated:true)
     }
     
     fileprivate func setupViews() {
