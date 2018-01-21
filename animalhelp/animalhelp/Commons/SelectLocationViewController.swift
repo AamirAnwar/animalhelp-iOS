@@ -75,6 +75,12 @@ extension SelectLocationViewController:UISearchBarDelegate {
         searchBar.setShowsCancelButton(true, animated: false)
     }
     
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText.isEmpty {
+            self.tableView.reloadData()
+        }
+    }
+    
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         CustomLocation.performLocationSearchWith(UserQuery: searchBar.text) { (locations) in
             self.customLocations = locations
@@ -107,7 +113,6 @@ extension SelectLocationViewController:UITableViewDelegate,UITableViewDataSource
         else {
             return self.getCityCell(tableView, indexPath:indexPath)
         }
-        
     }
     
     func getCityCell(_ tableView:UITableView, indexPath:IndexPath) -> StandardListTableViewCell {
