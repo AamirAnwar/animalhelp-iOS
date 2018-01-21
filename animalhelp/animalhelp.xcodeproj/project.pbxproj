@@ -15,6 +15,7 @@
 		43617C4220124B3D0025FEA5 /* MissingPetTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43617C4120124B3D0025FEA5 /* MissingPetTableViewCell.swift */; };
 		43705BF02014C9F200D7296B /* EmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43705BEF2014C9F200D7296B /* EmptyStateView.swift */; };
 		43705BF22014DD3C00D7296B /* CustomLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43705BF12014DD3C00D7296B /* CustomLocation.swift */; };
+		43705BF42014EED600D7296B /* InfoPopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43705BF32014EED600D7296B /* InfoPopView.swift */; };
 		437312CC20126EE9000EC23E /* ListItemDetailTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437312CB20126EE9000EC23E /* ListItemDetailTableViewCell.swift */; };
 		437312CE201276CF000EC23E /* ButtonTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437312CD201276CF000EC23E /* ButtonTableViewCell.swift */; };
 		437312D0201289F7000EC23E /* ContributeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437312CF201289F7000EC23E /* ContributeViewController.swift */; };
@@ -93,6 +94,7 @@
 		43617C4120124B3D0025FEA5 /* MissingPetTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissingPetTableViewCell.swift; sourceTree = "<group>"; };
 		43705BEF2014C9F200D7296B /* EmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateView.swift; sourceTree = "<group>"; };
 		43705BF12014DD3C00D7296B /* CustomLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomLocation.swift; sourceTree = "<group>"; };
+		43705BF32014EED600D7296B /* InfoPopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoPopView.swift; sourceTree = "<group>"; };
 		437312CB20126EE9000EC23E /* ListItemDetailTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListItemDetailTableViewCell.swift; sourceTree = "<group>"; };
 		437312CD201276CF000EC23E /* ButtonTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonTableViewCell.swift; sourceTree = "<group>"; };
 		437312CF201289F7000EC23E /* ContributeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContributeViewController.swift; sourceTree = "<group>"; };
@@ -264,6 +266,7 @@
 				4397D4612013C4D900A1C238 /* SelectLocationViewController.swift */,
 				4397D4632013CB4C00A1C238 /* LocationManager.swift */,
 				43705BEF2014C9F200D7296B /* EmptyStateView.swift */,
+				43705BF32014EED600D7296B /* InfoPopView.swift */,
 			);
 			path = Commons;
 			sourceTree = "<group>";
@@ -535,6 +538,7 @@
 				43E86ABF1FBC320500B7130B /* AppDelegate.swift in Sources */,
 				43AC0A031FFE7BD0009F8D70 /* CustomFonts.swift in Sources */,
 				433B09CA1FFE587C00EA0906 /* AccountViewController.swift in Sources */,
+				43705BF42014EED600D7296B /* InfoPopView.swift in Sources */,
 				43BE2F181FFE59BC0005EDD0 /* PetSearchViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
