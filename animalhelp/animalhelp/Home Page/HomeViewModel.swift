@@ -23,6 +23,7 @@ protocol HomeViewModelDelegate {
     func zoomToMarker(_ marker:GMSMarker)
     func showEmptyStateView()
     func hideEmptyStateView()
+    func didTapLocationButton()
 }
 
 class HomeViewModel:NSObject {
@@ -144,7 +145,7 @@ extension HomeViewModel:DrawerViewDelegate {
    }
     
     func didTapManuallySelectLocation() {
-        //TODO Start manual selection flow
+        self.delegate?.didTapLocationButton()
     }
     
     func didTapDetectLocation() {
