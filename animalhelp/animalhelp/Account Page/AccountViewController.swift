@@ -159,7 +159,8 @@ extension AccountViewController: UITableViewDelegate, UITableViewDataSource {
                 guard indexPath.row < self.accountItems.count else {return}
                 // TODO, Fix these comparisons ftlog
                 if self.accountItems[indexPath.row] == "Logout" {
-                    self.loginManager.logout()
+                    self.showLogoutAlert()
+                    
                 }
                 else if self.accountItems[indexPath.row] == "How to help" {
                     self.showHowToContributePage()
@@ -223,6 +224,19 @@ extension AccountViewController: UITableViewDelegate, UITableViewDataSource {
         usernameCell.showsDisclosure(false)
         usernameCell.selectionStyle = .none
         return usernameCell
+    }
+    
+    func showLogoutAlert() {
+        let alertController = UIAlertController(title: "Logout", message: "Are you sure you want to logout", preferredStyle: .alert)
+        let logOutAction = UIAlertAction.init(title: "Logout", style: .destructive) { (action) in
+            self.loginManager.logout()
+        }
+        let cancel = UIAlertAction.init(title: "Cancel", style: .cancel) { (action) in
+            
+        }
+        alertController.addAction(logOutAction)
+        alertController.addAction(cancel)
+        present(alertController, animated:true)
     }
 }
 
