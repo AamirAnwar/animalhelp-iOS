@@ -64,4 +64,34 @@ enum UtilityFunctions {
             
         }
     }
+    
+    static func getBlurredImageFrom(view:UIView) -> UIImage {
+        UIGraphicsBeginImageContextWithOptions(view.bounds.size, true, 1)
+        view.drawHierarchy(in: view.bounds, afterScreenUpdates: true)
+        let screenshot = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+        
+        if let blurredImage = screenshot.applyBlur(withRadius: 7, tintColor: UIColor.white.withAlphaComponent(0.3), saturationDeltaFactor: 1.8, maskImage: nil) {
+            return blurredImage
+        }
+        else {
+            return UIImage()
+        }
+        
+        
+    }
+    
+    static func showPopUpWith(title:String, subtitle:String, buttonTitle:String) {
+        if let appDelegate = UIApplication.shared.delegate,let currentWindow = appDelegate.window {
+            let popUpView = InfoPopView()
+            popUpView.setTitle(title: title, subtitle: subtitle, buttonTitle:buttonTitle)
+            if let window = currentWindow {
+                popUpView.backgroundImageView.image = UtilityFunctions.getBlurredImageFrom(view: window)
+                window.addSubview(popUpView)
+                popUpView.snp.makeConstraints({ (make) in
+                    make.edges.equalToSuperview()
+                })
+            }
+        }
+    }
 }
