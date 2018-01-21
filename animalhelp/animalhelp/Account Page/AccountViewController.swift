@@ -32,7 +32,8 @@ class AccountViewController:BaseViewController,GIDSignInUIDelegate {
     var accountItems:[String] {
         get {
             if loginManager.isLoggedIn {
-                return  ["Pet Lookout","Push Notifications"] + standardAccountItems + ["Logout"]
+//                ["Pet Lookout","Push Notifications"]
+                return  standardAccountItems + ["Logout"]
             }
             return standardAccountItems
         }
