@@ -48,8 +48,10 @@ struct CustomLocation:Codable {
     
     
     public static func performLocationSearchWith(UserQuery query:String?, completion: @escaping ([CustomLocation])->Void) {
-        if let query = query?.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) {
-            APIService.sharedService.request(.locationSearch(query: query), completion: { (result) in
+        if let query = query {
+            var queryString = query.lowercased() as NSString
+            queryString = queryString.replacingOccurrences(of: " ", with: "+") as NSString
+            APIService.sharedService.request(.locationSearch(query: queryString as String), completion: { (result) in
                 switch result {
                 case .failure(let error):print("\(error.localizedDescription)")
                 case.success(let response):
