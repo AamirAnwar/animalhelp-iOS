@@ -273,6 +273,7 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
             self.mapViewBottomConstraint?.constraint.update(inset: 0)
             
         case .HiddenDrawer:
+            self.updateVisibleMapElements(self,false)
             UIView.animate(withDuration: 0.3, animations: {
                 self.drawerView.transform.translatedBy(x: 0, y: self.view.frame.size.height)
             }, completion: { (_) in
