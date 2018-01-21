@@ -21,6 +21,8 @@ protocol HomeViewModelDelegate {
     func showMarkers(markers:[GMSMarker])
     func zoomIntoNearestClinic()
     func zoomToMarker(_ marker:GMSMarker)
+    func showEmptyStateView()
+    func hideEmptyStateView()
 }
 
 class HomeViewModel:NSObject {
@@ -47,6 +49,7 @@ class HomeViewModel:NSObject {
     
     @objc func didChangeUserLocation() {
         if let location = self.locationManager.userLocation {
+            self.delegate?.hideEmptyStateView()
             self.delegate?.transitionTo(state: .HiddenDrawer)
             self.delegate?.showUserLocation(location: location)
         }
@@ -75,6 +78,10 @@ class HomeViewModel:NSObject {
     
     func getNearbyClinics() {
         Clinic.getNearbyClinics { (clinics) in
+            guard clinics.isEmpty == false else {
+                self.delegate?.showEmptyStateView()
+                return
+            }
             self.nearbyClinics = clinics
             // Remove any previous markers from the map
             if let clinicMarkers = self.nearbyClinicsMarkers {
@@ -85,6 +92,7 @@ class HomeViewModel:NSObject {
             self.nearbyClinicsMarkers = clinics.map({ (clinic) -> GMSMarker in
                 return self.createMarkerWithClinic(clinic: clinic)
             })
+            self.delegate?.hideEmptyStateView()
             self.delegate?.showMarkers(markers:self.nearbyClinicsMarkers!)
             self.delegate?.transitionTo(state: .SingleClinicDrawer)
             self.delegate?.zoomIntoNearestClinic()

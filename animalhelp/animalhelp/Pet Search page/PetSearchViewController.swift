@@ -30,6 +30,8 @@ class PetSearchViewController:BaseViewController, PetSearchViewModelDelegate {
         self.createSearchBar()
         createTableView()
         self.viewModel.searchForMissingPets()
+        self.emptyStateView.setMessage("No missing pets here :)", buttonTitle: "Change location")
+        
     }
     
     func createSearchBar() {
@@ -64,13 +66,24 @@ class PetSearchViewController:BaseViewController, PetSearchViewModelDelegate {
     }
     
     func didUpdateMissingPets() {
+        if self.viewModel.missingPets.isEmpty {
+            self.showEmptyStateView()
+        }
+        else {
+            self.hideEmptyStateView()
+        }
         self.tableView.reloadData()
+        
     }
     
     override func didTapLocationButton() {
         // Open location selection flow
         let vc = SelectLocationViewController()
         present(vc,animated:true)
+    }
+    
+    override func didTapEmptyStateButton() {
+        self.didTapLocationButton()
     }
 }
 

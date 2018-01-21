@@ -141,6 +141,11 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
         }
     }
     
+    override func didTapEmptyStateButton() {
+        self.didTapLocationButton()
+    }
+    
+
     func showLocationServicesDeniedAlert() {
         let alert = UIAlertController(
             title: "Location Services Disabled",
@@ -310,3 +315,4 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
     }
         
 }
+
