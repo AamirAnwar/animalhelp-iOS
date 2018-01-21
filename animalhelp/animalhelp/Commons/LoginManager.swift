@@ -72,6 +72,7 @@ class LoginManager:NSObject {
                 self.postLoginNotification(success: true)
                 
                 if let userID = token.userId {
+                    
                     FacebookCore.UserProfile.fetch(userId: userID, completion: { (result) in
                         switch result {
                         case .success(let profile):
@@ -80,6 +81,18 @@ class LoginManager:NSObject {
                                 let user = User.initWith(name: fullName)
                                 self.currentUser = user
                                 
+                                
+                                let req = GraphRequest.init(graphPath: "\(userID)/picture", parameters: ["height":kProfileImageHeight*UIScreen.main.scale, "width":UIScreen.main.bounds.size.width * UIScreen.main.scale], accessToken: token, httpMethod: .GET, apiVersion: GraphAPIVersion.defaultVersion)
+                                req.start({ (response, result) in
+                                    
+                                    if let response = response, let url = response.url {
+                                        self.currentUser?.profilePictureURL = url
+                                        self.delegate?.didUpdateUserInfo()
+                                    }
+                                    
+                                })
+
+
                             }
                         default: print("Dont care")
                         }
