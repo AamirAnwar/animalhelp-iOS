@@ -8,10 +8,10 @@
 
 import Foundation
 import UIKit
-class BaseViewController:UIViewController, CustomNavigationBarDelegate,UIGestureRecognizerDelegate {
+class BaseViewController:UIViewController, CustomNavigationBarDelegate,UIGestureRecognizerDelegate,EmptyStateViewDelegate {
 
     let customNavBar = CustomNavigationBar()
-    
+    let emptyStateView = EmptyStateView()
     var navBarHeight:CGFloat {
         get {
             if let navBarHeight = self.navigationController?.navigationBar.frame.size.height {
@@ -40,6 +40,7 @@ class BaseViewController:UIViewController, CustomNavigationBarDelegate,UIGesture
         self.view.addSubview(customNavBar)
         self.navigationController?.isNavigationBarHidden = true
         self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+        self.createEmptyStateView()
         customNavBar.delegate = self
         customNavBar.snp.makeConstraints { (make) in
             make.top.equalToSuperview()
@@ -48,6 +49,32 @@ class BaseViewController:UIViewController, CustomNavigationBarDelegate,UIGesture
         }        
     }
     
+    
+    fileprivate func createEmptyStateView() {
+        view.addSubview(self.emptyStateView)
+        self.emptyStateView.snp.makeConstraints { (make) in
+            make.top.equalTo(self.customNavBar.snp.bottom)
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.bottom.equalToSuperview()
+        }
+        self.emptyStateView.messageLabel.text = "Sorry!\n No clinics around you :("
+        self.emptyStateView.button.setTitle("Try a different location", for: .normal)
+        self.emptyStateView.isHidden = true
+        self.emptyStateView.delegate = self
+    }
+    
+    func showEmptyStateView() {
+        self.view.bringSubview(toFront: self.emptyStateView)
+        self.emptyStateView.isHidden = false
+    }
+    
+    func hideEmptyStateView() {
+        self.emptyStateView.isHidden = true
+    }
+    
+
+    
     func didTapRightBarButton() {
         
     }
@@ -55,4 +82,8 @@ class BaseViewController:UIViewController, CustomNavigationBarDelegate,UIGesture
     func didTapLocationButton() {
         
     }
+    open func didTapEmptyStateButton() {
+        
+    }
 }
+
