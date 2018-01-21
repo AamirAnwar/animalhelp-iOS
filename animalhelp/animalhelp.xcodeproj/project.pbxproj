@@ -13,6 +13,7 @@
 		43378CD1200DF99200F088C4 /* PetSearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43378CD0200DF99200F088C4 /* PetSearchViewModel.swift */; };
 		433B09CA1FFE587C00EA0906 /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433B09C91FFE587C00EA0906 /* AccountViewController.swift */; };
 		43617C4220124B3D0025FEA5 /* MissingPetTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43617C4120124B3D0025FEA5 /* MissingPetTableViewCell.swift */; };
+		43705BF02014C9F200D7296B /* EmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43705BEF2014C9F200D7296B /* EmptyStateView.swift */; };
 		437312CC20126EE9000EC23E /* ListItemDetailTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437312CB20126EE9000EC23E /* ListItemDetailTableViewCell.swift */; };
 		437312CE201276CF000EC23E /* ButtonTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437312CD201276CF000EC23E /* ButtonTableViewCell.swift */; };
 		437312D0201289F7000EC23E /* ContributeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437312CF201289F7000EC23E /* ContributeViewController.swift */; };
@@ -89,6 +90,7 @@
 		43378CD0200DF99200F088C4 /* PetSearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetSearchViewModel.swift; sourceTree = "<group>"; };
 		433B09C91FFE587C00EA0906 /* AccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
 		43617C4120124B3D0025FEA5 /* MissingPetTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissingPetTableViewCell.swift; sourceTree = "<group>"; };
+		43705BEF2014C9F200D7296B /* EmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateView.swift; sourceTree = "<group>"; };
 		437312CB20126EE9000EC23E /* ListItemDetailTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListItemDetailTableViewCell.swift; sourceTree = "<group>"; };
 		437312CD201276CF000EC23E /* ButtonTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonTableViewCell.swift; sourceTree = "<group>"; };
 		437312CF201289F7000EC23E /* ContributeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContributeViewController.swift; sourceTree = "<group>"; };
@@ -258,6 +260,7 @@
 				43A2A56D2011E358000A7D76 /* CustomUIKitExtensions.swift */,
 				4397D4612013C4D900A1C238 /* SelectLocationViewController.swift */,
 				4397D4632013CB4C00A1C238 /* LocationManager.swift */,
+				43705BEF2014C9F200D7296B /* EmptyStateView.swift */,
 			);
 			path = Commons;
 			sourceTree = "<group>";
@@ -517,6 +520,7 @@
 				43A2A5682011D965000A7D76 /* UtilityFunctions.swift in Sources */,
 				43A2A56E2011E358000A7D76 /* CustomUIKitExtensions.swift in Sources */,
 				43617C4220124B3D0025FEA5 /* MissingPetTableViewCell.swift in Sources */,
+				43705BF02014C9F200D7296B /* EmptyStateView.swift in Sources */,
 				437312D0201289F7000EC23E /* ContributeViewController.swift in Sources */,
 				43E86AC11FBC320500B7130B /* HomeViewController.swift in Sources */,
 				437312CE201276CF000EC23E /* ButtonTableViewCell.swift in Sources */,
