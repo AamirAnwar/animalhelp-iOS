@@ -34,5 +34,16 @@ extension UITableViewCell {
             make.trailing.equalToSuperview().inset(kSidePadding)
         }
     }
-    
+}
+
+extension UIButton {
+    static func getRoundedRectButon(withTitle title:String = "") -> UIButton {
+        let button = UIButton(type: .system)
+        button.setTitle(title, for: .normal)
+        button.setTitleColor(UIColor.white, for: .normal)
+        button.backgroundColor = CustomColorMainTheme
+        button.layer.cornerRadius = kCornerRadius
+        button.titleLabel?.font = CustomFontButtonTitle
+        return button
+    }
 }
