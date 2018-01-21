@@ -14,6 +14,7 @@
 		433B09CA1FFE587C00EA0906 /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433B09C91FFE587C00EA0906 /* AccountViewController.swift */; };
 		43617C4220124B3D0025FEA5 /* MissingPetTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43617C4120124B3D0025FEA5 /* MissingPetTableViewCell.swift */; };
 		43705BF02014C9F200D7296B /* EmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43705BEF2014C9F200D7296B /* EmptyStateView.swift */; };
+		43705BF22014DD3C00D7296B /* CustomLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43705BF12014DD3C00D7296B /* CustomLocation.swift */; };
 		437312CC20126EE9000EC23E /* ListItemDetailTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437312CB20126EE9000EC23E /* ListItemDetailTableViewCell.swift */; };
 		437312CE201276CF000EC23E /* ButtonTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437312CD201276CF000EC23E /* ButtonTableViewCell.swift */; };
 		437312D0201289F7000EC23E /* ContributeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437312CF201289F7000EC23E /* ContributeViewController.swift */; };
@@ -91,6 +92,7 @@
 		433B09C91FFE587C00EA0906 /* AccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
 		43617C4120124B3D0025FEA5 /* MissingPetTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissingPetTableViewCell.swift; sourceTree = "<group>"; };
 		43705BEF2014C9F200D7296B /* EmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateView.swift; sourceTree = "<group>"; };
+		43705BF12014DD3C00D7296B /* CustomLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomLocation.swift; sourceTree = "<group>"; };
 		437312CB20126EE9000EC23E /* ListItemDetailTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListItemDetailTableViewCell.swift; sourceTree = "<group>"; };
 		437312CD201276CF000EC23E /* ButtonTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonTableViewCell.swift; sourceTree = "<group>"; };
 		437312CF201289F7000EC23E /* ContributeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContributeViewController.swift; sourceTree = "<group>"; };
@@ -236,6 +238,7 @@
 			children = (
 				439D2FBC1FC9E8EA00E6EB91 /* Clinic.swift */,
 				43378CCE200DF6CB00F088C4 /* MissingPet.swift */,
+				43705BF12014DD3C00D7296B /* CustomLocation.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -516,6 +519,7 @@
 				437312D420128FBB000EC23E /* TermsAndConditionsViewController.swift in Sources */,
 				437312D220128D2D000EC23E /* FeedbackViewController.swift in Sources */,
 				43AC0A051FFE7D25009F8D70 /* DrawerView.swift in Sources */,
+				43705BF22014DD3C00D7296B /* CustomLocation.swift in Sources */,
 				438A0D641FCDF2DA005A8CA4 /* Private.swift in Sources */,
 				43A2A5682011D965000A7D76 /* UtilityFunctions.swift in Sources */,
 				43A2A56E2011E358000A7D76 /* CustomUIKitExtensions.swift in Sources */,
