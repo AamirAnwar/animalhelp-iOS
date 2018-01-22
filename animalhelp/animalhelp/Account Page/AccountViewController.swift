@@ -32,7 +32,8 @@ class AccountViewController:BaseViewController,GIDSignInUIDelegate {
     var accountItems:[String] {
         get {
             if loginManager.isLoggedIn {
-                return  ["Pet Lookout","Push Notifications"] + standardAccountItems + ["Logout"]
+//                ["Pet Lookout","Push Notifications"]
+                return  standardAccountItems + ["Logout"]
             }
             return standardAccountItems
         }
@@ -158,7 +159,8 @@ extension AccountViewController: UITableViewDelegate, UITableViewDataSource {
                 guard indexPath.row < self.accountItems.count else {return}
                 // TODO, Fix these comparisons ftlog
                 if self.accountItems[indexPath.row] == "Logout" {
-                    self.loginManager.logout()
+                    self.showLogoutAlert()
+                    
                 }
                 else if self.accountItems[indexPath.row] == "How to help" {
                     self.showHowToContributePage()
@@ -223,10 +225,26 @@ extension AccountViewController: UITableViewDelegate, UITableViewDataSource {
         usernameCell.selectionStyle = .none
         return usernameCell
     }
+    
+    func showLogoutAlert() {
+        let alertController = UIAlertController(title: "Logout", message: "Are you sure you want to logout", preferredStyle: .alert)
+        let logOutAction = UIAlertAction.init(title: "Logout", style: .destructive) { (action) in
+            self.loginManager.logout()
+        }
+        let cancel = UIAlertAction.init(title: "Cancel", style: .cancel) { (action) in
+            
+        }
+        alertController.addAction(logOutAction)
+        alertController.addAction(cancel)
+        present(alertController, animated:true)
+    }
 }
 
 extension AccountViewController:LoginManagerDelegate {
     func didUpdateUserInfo() {
+        if let url = self.loginManager.currentUser?.profilePictureURL?.absoluteString {
+            self.profileImageView.setImage(WithURL: url)
+        }
         self.tableView.reloadData()
     }
 }

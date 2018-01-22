@@ -128,7 +128,6 @@ class ClinicCollectionViewCell:UICollectionViewCell {
     
     func setNearestClinic(_ clinic:Clinic?) {
         if let clinic = clinic {
-            // TODO fix this clinic.clinic with a better model
             nameLabel.text = clinic.name
             addressLabel.text = "Address - \(clinic.address)"
             phoneLabel.text = "Phone - \(clinic.mobile)"

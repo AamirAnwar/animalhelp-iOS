@@ -22,3 +22,8 @@ let kNotificationLoginFailed = Notification(name: Notification.Name.init("kLogin
 let kNotificationLoggedOutSuccessfully = Notification(name: Notification.Name.init("kLoggedOutSuccessfully"))
 let kNotificationLogOutFailed = Notification(name: Notification.Name.init("kLogoutFailed"))
 
+let kNotificationUserLocationChanged = Notification(name: Notification.Name.init("userLocationChanged"))
+let kNotificationLocationPerimissionGiven = Notification(name: Notification.Name.init("LocationPerimissionGiven"))
+let kNotificationLocationPerimissionDenied = Notification(name: Notification.Name.init("LocationPerimissionDenied"))
+
+

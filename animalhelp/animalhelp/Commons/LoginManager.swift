@@ -11,8 +11,20 @@ import FacebookLogin
 import FacebookCore
 import GoogleSignIn
 
-struct User {
-    var name:String
+class User:NSObject {
+    var name:String!
+    var profilePictureURL:URL?
+    
+    override init() {
+        super.init()
+    }
+    
+    static func initWith(name:String) -> User {
+        let user = User.init()
+        user.name = name
+        return user
+    
+    }
 }
 
 protocol LoginManagerDelegate {
@@ -60,12 +72,27 @@ class LoginManager:NSObject {
                 self.postLoginNotification(success: true)
                 
                 if let userID = token.userId {
+                    
                     FacebookCore.UserProfile.fetch(userId: userID, completion: { (result) in
                         switch result {
                         case .success(let profile):
                             print("Found a profile \(profile)")
                             if let fullName = profile.fullName {
-                                self.currentUser = User(name: fullName)
+                                let user = User.initWith(name: fullName)
+                                self.currentUser = user
+                                
+                                
+                                let req = GraphRequest.init(graphPath: "\(userID)/picture", parameters: ["height":kProfileImageHeight*UIScreen.main.scale, "width":UIScreen.main.bounds.size.width * UIScreen.main.scale], accessToken: token, httpMethod: .GET, apiVersion: GraphAPIVersion.defaultVersion)
+                                req.start({ (response, result) in
+                                    
+                                    if let response = response, let url = response.url {
+                                        self.currentUser?.profilePictureURL = url
+                                        self.delegate?.didUpdateUserInfo()
+                                    }
+                                    
+                                })
+
+
                             }
                         default: print("Dont care")
                         }
@@ -125,15 +152,12 @@ extension LoginManager:GIDSignInDelegate {
         self.postLoginNotification(success: error == nil)
         if (error == nil) {
             print("Login Sucessful!")
-            self.currentUser = User(name: user.profile.name)
-            // Perform any operations on signed in user here.
-            //            let userId = user.userID                  // For client-side use only!
-            //            let idToken = user.authentication.idToken // Safe to send to the server
-            //            let fullName = user.profile.name
-            //            let givenName = user.profile.givenName
-            //            let familyName = user.profile.familyName
-            //            let email = user.profile.email
-            // ...
+            let updatedUser = User.initWith(name: user.profile.name)
+            if user.profile.hasImage {
+                let dimension = round(kProfileImageHeight * UIScreen.main.scale);
+                updatedUser.profilePictureURL = user.profile.imageURL(withDimension: UInt(dimension))
+            }
+            self.currentUser = updatedUser
         } else {
             print("\(error.localizedDescription)")
         }

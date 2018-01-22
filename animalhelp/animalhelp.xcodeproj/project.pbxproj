@@ -13,6 +13,9 @@
 		43378CD1200DF99200F088C4 /* PetSearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43378CD0200DF99200F088C4 /* PetSearchViewModel.swift */; };
 		433B09CA1FFE587C00EA0906 /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433B09C91FFE587C00EA0906 /* AccountViewController.swift */; };
 		43617C4220124B3D0025FEA5 /* MissingPetTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43617C4120124B3D0025FEA5 /* MissingPetTableViewCell.swift */; };
+		43705BF02014C9F200D7296B /* EmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43705BEF2014C9F200D7296B /* EmptyStateView.swift */; };
+		43705BF22014DD3C00D7296B /* CustomLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43705BF12014DD3C00D7296B /* CustomLocation.swift */; };
+		43705BF42014EED600D7296B /* InfoPopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43705BF32014EED600D7296B /* InfoPopView.swift */; };
 		437312CC20126EE9000EC23E /* ListItemDetailTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437312CB20126EE9000EC23E /* ListItemDetailTableViewCell.swift */; };
 		437312CE201276CF000EC23E /* ButtonTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437312CD201276CF000EC23E /* ButtonTableViewCell.swift */; };
 		437312D0201289F7000EC23E /* ContributeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437312CF201289F7000EC23E /* ContributeViewController.swift */; };
@@ -29,6 +32,8 @@
 		438A0D5E1FCDD709005A8CA4 /* GoogleMaps.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 438A0D5D1FCDD709005A8CA4 /* GoogleMaps.bundle */; };
 		438A0D621FCDEF70005A8CA4 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 438A0D611FCDEF70005A8CA4 /* Constants.swift */; };
 		438A0D641FCDF2DA005A8CA4 /* Private.swift in Sources */ = {isa = PBXBuildFile; fileRef = 438A0D631FCDF2DA005A8CA4 /* Private.swift */; };
+		4397D4622013C4D900A1C238 /* SelectLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4397D4612013C4D900A1C238 /* SelectLocationViewController.swift */; };
+		4397D4642013CB4C00A1C238 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4397D4632013CB4C00A1C238 /* LocationManager.swift */; };
 		4399372A200D3C00002D46BC /* CustomNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43993729200D3C00002D46BC /* CustomNavigationBar.swift */; };
 		439D2FBD1FC9E8EA00E6EB91 /* Clinic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439D2FBC1FC9E8EA00E6EB91 /* Clinic.swift */; };
 		439D2FBF1FCA006400E6EB91 /* Moya.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 439D2FBE1FCA006400E6EB91 /* Moya.framework */; };
@@ -87,6 +92,9 @@
 		43378CD0200DF99200F088C4 /* PetSearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetSearchViewModel.swift; sourceTree = "<group>"; };
 		433B09C91FFE587C00EA0906 /* AccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
 		43617C4120124B3D0025FEA5 /* MissingPetTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissingPetTableViewCell.swift; sourceTree = "<group>"; };
+		43705BEF2014C9F200D7296B /* EmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateView.swift; sourceTree = "<group>"; };
+		43705BF12014DD3C00D7296B /* CustomLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomLocation.swift; sourceTree = "<group>"; };
+		43705BF32014EED600D7296B /* InfoPopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoPopView.swift; sourceTree = "<group>"; };
 		437312CB20126EE9000EC23E /* ListItemDetailTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListItemDetailTableViewCell.swift; sourceTree = "<group>"; };
 		437312CD201276CF000EC23E /* ButtonTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonTableViewCell.swift; sourceTree = "<group>"; };
 		437312CF201289F7000EC23E /* ContributeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContributeViewController.swift; sourceTree = "<group>"; };
@@ -115,6 +123,8 @@
 		438A0D5D1FCDD709005A8CA4 /* GoogleMaps.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = GoogleMaps.bundle; path = Carthage/Build/iOS/GoogleMaps.framework/Resources/GoogleMaps.bundle; sourceTree = "<group>"; };
 		438A0D611FCDEF70005A8CA4 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		438A0D631FCDF2DA005A8CA4 /* Private.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Private.swift; sourceTree = "<group>"; };
+		4397D4612013C4D900A1C238 /* SelectLocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectLocationViewController.swift; sourceTree = "<group>"; };
+		4397D4632013CB4C00A1C238 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		43993729200D3C00002D46BC /* CustomNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationBar.swift; sourceTree = "<group>"; };
 		439D2FBC1FC9E8EA00E6EB91 /* Clinic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Clinic.swift; sourceTree = "<group>"; };
 		439D2FBE1FCA006400E6EB91 /* Moya.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Moya.framework; path = Carthage/Build/iOS/Moya.framework; sourceTree = "<group>"; };
@@ -230,6 +240,7 @@
 			children = (
 				439D2FBC1FC9E8EA00E6EB91 /* Clinic.swift */,
 				43378CCE200DF6CB00F088C4 /* MissingPet.swift */,
+				43705BF12014DD3C00D7296B /* CustomLocation.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -252,6 +263,10 @@
 				43A2A5692011DB97000A7D76 /* StandardListTableViewCell.swift */,
 				43A2A56B2011E15D000A7D76 /* CustomSeparator.swift */,
 				43A2A56D2011E358000A7D76 /* CustomUIKitExtensions.swift */,
+				4397D4612013C4D900A1C238 /* SelectLocationViewController.swift */,
+				4397D4632013CB4C00A1C238 /* LocationManager.swift */,
+				43705BEF2014C9F200D7296B /* EmptyStateView.swift */,
+				43705BF32014EED600D7296B /* InfoPopView.swift */,
 			);
 			path = Commons;
 			sourceTree = "<group>";
@@ -498,17 +513,21 @@
 				43367EED2008A771004D6B2C /* ClinicCollectionViewCell.swift in Sources */,
 				43378CD1200DF99200F088C4 /* PetSearchViewModel.swift in Sources */,
 				43BC0487200E755B00EF64FD /* LoginManager.swift in Sources */,
+				4397D4622013C4D900A1C238 /* SelectLocationViewController.swift in Sources */,
 				4313A85E1FFE9A3F0043C927 /* UIImage+ImageEffects.m in Sources */,
 				4399372A200D3C00002D46BC /* CustomNavigationBar.swift in Sources */,
 				439D2FBD1FC9E8EA00E6EB91 /* Clinic.swift in Sources */,
 				439E489E1FCF060400FAFB67 /* HomeViewModel.swift in Sources */,
+				4397D4642013CB4C00A1C238 /* LocationManager.swift in Sources */,
 				437312D420128FBB000EC23E /* TermsAndConditionsViewController.swift in Sources */,
 				437312D220128D2D000EC23E /* FeedbackViewController.swift in Sources */,
 				43AC0A051FFE7D25009F8D70 /* DrawerView.swift in Sources */,
+				43705BF22014DD3C00D7296B /* CustomLocation.swift in Sources */,
 				438A0D641FCDF2DA005A8CA4 /* Private.swift in Sources */,
 				43A2A5682011D965000A7D76 /* UtilityFunctions.swift in Sources */,
 				43A2A56E2011E358000A7D76 /* CustomUIKitExtensions.swift in Sources */,
 				43617C4220124B3D0025FEA5 /* MissingPetTableViewCell.swift in Sources */,
+				43705BF02014C9F200D7296B /* EmptyStateView.swift in Sources */,
 				437312D0201289F7000EC23E /* ContributeViewController.swift in Sources */,
 				43E86AC11FBC320500B7130B /* HomeViewController.swift in Sources */,
 				437312CE201276CF000EC23E /* ButtonTableViewCell.swift in Sources */,
@@ -519,6 +538,7 @@
 				43E86ABF1FBC320500B7130B /* AppDelegate.swift in Sources */,
 				43AC0A031FFE7BD0009F8D70 /* CustomFonts.swift in Sources */,
 				433B09CA1FFE587C00EA0906 /* AccountViewController.swift in Sources */,
+				43705BF42014EED600D7296B /* InfoPopView.swift in Sources */,
 				43BE2F181FFE59BC0005EDD0 /* PetSearchViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -88,6 +88,8 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
     
     override func didTapLocationButton() {
         // Open location selection flow
+        let vc = SelectLocationViewController()
+        present(vc,animated:true)
     }
     
     fileprivate func setupViews() {
@@ -139,6 +141,11 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
         }
     }
     
+    override func didTapEmptyStateButton() {
+        self.didTapLocationButton()
+    }
+    
+
     func showLocationServicesDeniedAlert() {
         let alert = UIAlertController(
             title: "Location Services Disabled",
@@ -211,7 +218,7 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
 
     func showUserLocation(location:CLLocation) {
         // update current location
-        if let locality = self.viewModel.placeMark?.locality {
+        if let locality = LocationManager.sharedManager.userLocality {
             self.customNavBar.setTitle(locality)
         }
         let camera = GMSCameraPosition.camera(withLatitude: location.coordinate.latitude,
@@ -233,7 +240,7 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
     }
     
     func showLastKnownUserLocation() {
-        if let location = self.viewModel.detectedLocation {
+        if let location = LocationManager.sharedManager.userLocation {
             self.showUserLocation(location: location)
         }
     }
@@ -266,6 +273,7 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
             self.mapViewBottomConstraint?.constraint.update(inset: 0)
             
         case .HiddenDrawer:
+            self.updateVisibleMapElements(self,false)
             UIView.animate(withDuration: 0.3, animations: {
                 self.drawerView.transform.translatedBy(x: 0, y: self.view.frame.size.height)
             }, completion: { (_) in
@@ -308,3 +316,4 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
     }
         
 }
+

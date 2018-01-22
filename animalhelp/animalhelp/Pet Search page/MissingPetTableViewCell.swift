@@ -101,15 +101,15 @@ class MissingPetTableViewCell:UITableViewCell {
         
         self.petImageView.snp.makeConstraints { (make) in
             make.top.equalToSuperview()
-            make.leading.equalToSuperview().offset(8)
-            make.trailing.equalToSuperview().inset(8)
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
             make.height.equalTo(kMissingPetImageHeight)
         }
         
         self.petBreedLabel.snp.makeConstraints { (make) in
             make.top.equalTo(self.petImageView.snp.bottom).offset(8)
-            make.leading.equalTo(self.petImageView.snp.leading)
-            make.trailing.equalTo(self.petImageView.snp.trailing)
+            make.leading.equalTo(self.petImageView.snp.leading).offset(8)
+            make.trailing.equalTo(self.petImageView.snp.trailing).inset(8)
         }
         
         self.petDescLabel.snp.makeConstraints { (make) in

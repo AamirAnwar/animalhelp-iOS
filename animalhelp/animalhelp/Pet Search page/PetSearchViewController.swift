@@ -17,6 +17,11 @@ class PetSearchViewController:BaseViewController, PetSearchViewModelDelegate {
     let tableView = UITableView(frame: CGRect.zero, style: UITableViewStyle.plain)
     let searchBar = UISearchBar(frame: CGRect.zero)
     var viewModel:PetSearchViewModel!
+    let refreshControl:UIRefreshControl = {
+       let control = UIRefreshControl()
+        control.tintColor = CustomColorMainTheme
+        return control
+    }()
     override func viewDidLoad() {
         super.viewDidLoad()
         self.viewModel.delegate = self
@@ -30,6 +35,8 @@ class PetSearchViewController:BaseViewController, PetSearchViewModelDelegate {
         self.createSearchBar()
         createTableView()
         self.viewModel.searchForMissingPets()
+        self.emptyStateView.setMessage("No missing pets here :)", buttonTitle: "Change location")
+        self.refreshControl.addTarget(self, action: #selector(didPromptRefresh), for: UIControlEvents.valueChanged)
     }
     
     func createSearchBar() {
@@ -53,6 +60,7 @@ class PetSearchViewController:BaseViewController, PetSearchViewModelDelegate {
         self.tableView.separatorStyle = .none
         self.tableView.delegate = self
         self.tableView.dataSource = self
+        self.tableView.refreshControl = self.refreshControl
         self.tableView.contentInset = UIEdgeInsets(top: 8, left: 0, bottom: 20, right: 0)
         self.tableView.register(MissingPetTableViewCell.self, forCellReuseIdentifier: self.kMissingPetCellReuseIdentifier)
         self.tableView.snp.makeConstraints { (make) in
@@ -64,9 +72,35 @@ class PetSearchViewController:BaseViewController, PetSearchViewModelDelegate {
     }
     
     func didUpdateMissingPets() {
+        self.refreshControl.endRefreshing()
+        
+        if self.viewModel.missingPets.isEmpty {
+            self.showEmptyStateView()
+        }
+        else {
+            self.hideEmptyStateView()
+        }
         self.tableView.reloadData()
+        
     }
     
+    override func didTapLocationButton() {
+        // Open location selection flow
+        let vc = SelectLocationViewController()
+        present(vc,animated:true)
+    }
+    
+    override func didTapRightBarButton() {
+        UtilityFunctions.showPopUpWith(title: "Add a missing pet", subtitle: "If you wish to add a pet please tap the button below to be redirected to a form where you can fill details. \nWe hope we can help you find your pet.", buttonTitle: "Proceed")
+    }
+    
+    override func didTapEmptyStateButton() {
+        self.didTapLocationButton()
+    }
+    
+    @objc func didPromptRefresh() {
+        self.viewModel.searchForMissingPets()
+    }
 }
 
 extension PetSearchViewController:UISearchBarDelegate {
