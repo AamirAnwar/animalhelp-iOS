@@ -109,6 +109,8 @@ class SocialLoginTableViewCell:UITableViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        self.facebookButton.layoutIfNeeded()
+        self.googleButton.layoutIfNeeded()
         UtilityFunctions.addShadowTo(view: self.facebookButton)
         UtilityFunctions.addShadowTo(view: self.googleButton)
     }

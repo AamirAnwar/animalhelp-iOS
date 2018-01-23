@@ -77,6 +77,9 @@ class MissingPetTableViewCell:UITableViewCell {
         self.petImageView.contentMode = .scaleAspectFill
         self.petImageView.clipsToBounds = true
         self.petImageView.layer.cornerRadius = kCornerRadius
+        if #available(iOS 11, *) {
+            self.petImageView.layer.maskedCorners = [.layerMinXMinYCorner,.layerMaxXMinYCorner]
+        }
         
         self.contentView.backgroundColor = UIColor.clear
         self.contentView.addSubview(self.containerView)
@@ -161,10 +164,11 @@ class MissingPetTableViewCell:UITableViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        if self.containerView.frame.height > 0 &&  self.containerView.layer.shadowPath == nil {
-            UtilityFunctions.addShadowTo(view: self.containerView)
+        if self.contentView.frame.height > 0 &&  self.containerView.layer.shadowPath == nil {
+            self.containerView.layoutIfNeeded()
             self.markLabel.layer.cornerRadius = 2*kCornerRadius
-            self.layoutIfNeeded()
+            UtilityFunctions.addShadowTo(view: self.containerView)
+            
         }
     }
 }
