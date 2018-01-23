@@ -11,6 +11,7 @@ import UIKit
 import GoogleSignIn
 import FacebookLogin
 import SnapKit
+import MessageUI
 
 enum AccountSection:Int {
     case TransparentProfile
@@ -187,8 +188,15 @@ extension AccountViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func showFeedbackPage() {
-        let vc = FeedbackViewController()
-        self.navigationController?.pushViewController(vc, animated: true)
+//        let vc = FeedbackViewController()
+//        self.navigationController?.pushViewController(vc, animated: true)
+        let mailVC = MFMailComposeViewController()
+        mailVC.setSubject("Feedback")
+        mailVC.mailComposeDelegate = self
+        mailVC.setToRecipients(["feedback@animalhelp.in"])
+        self.present(mailVC, animated: true)
+            
+        
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -246,6 +254,13 @@ extension AccountViewController:LoginManagerDelegate {
             self.profileImageView.setImage(WithURL: url)
         }
         self.tableView.reloadData()
+    }
+}
+
+extension AccountViewController:MFMailComposeViewControllerDelegate {
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        controller.dismiss(animated: true)
+           
     }
 }
 

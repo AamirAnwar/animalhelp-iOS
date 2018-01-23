@@ -8,6 +8,23 @@
 
 import Foundation
 
+extension UIView {
+    func originX() -> CGFloat {
+        return self.frame.origin.x
+    }
+    func originY() -> CGFloat {
+        return self.frame.origin.y
+    }
+    
+    func width() -> CGFloat {
+        return self.frame.size.width
+    }
+    
+    func height() -> CGFloat {
+        return self.frame.size.height
+    }
+}
+
 extension UIImageView {
     func setImage(WithURL url:String) {
         guard let _ = URL(string:url) else {return}

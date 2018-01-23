@@ -128,7 +128,7 @@ extension SelectLocationViewController:UITableViewDelegate,UITableViewDataSource
         let cell = tableView.dequeueReusableCell(withIdentifier: kCustomLocationCellReuseIdentifier) as! ListItemDetailTableViewCell
         guard indexPath.row < self.customLocations.count else { return cell}
         let customLocation = self.customLocations[indexPath.row]
-        cell.setTitle(customLocation.name, subtitle: customLocation.name)
+        cell.setTitle(customLocation.name, subtitle: customLocation.formattedAddress)
         cell.showBottomPaddedSeparator()
         return cell
     }
