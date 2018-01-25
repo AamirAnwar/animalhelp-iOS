@@ -85,5 +85,13 @@ class BaseViewController:UIViewController, CustomNavigationBarDelegate,UIGesture
     open func didTapEmptyStateButton() {
         
     }
+    
+    func showLoader() {
+        self.customNavBar.showLoader()
+    }
+    
+    func hideLoader() {
+        self.customNavBar.hideLoader()
+    }
 }
 

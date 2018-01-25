@@ -10,6 +10,8 @@ import Foundation
 import UIKit
 import SnapKit
 
+let kLoaderAnimationKey = "loader_animation"
+
 protocol CustomNavigationBarDelegate {
     func didTapLocationButton()
     func didTapRightBarButton()
@@ -24,8 +26,6 @@ class CustomNavigationBar:UIView {
         button.titleLabel?.font = CustomFontTitleBold
         button.titleLabel?.numberOfLines = 0
         button.titleLabel?.textAlignment = .center
-        // TODO
-        button.setTitle("Delhi", for: .normal)
         return button
     }()
     fileprivate var locationButtonCenterY:ConstraintMakerEditable?
@@ -33,16 +33,39 @@ class CustomNavigationBar:UIView {
     var rightBarButton:UIButton? {
         didSet {
             if let rightBarButton = self.rightBarButton {
-            self.addSubview(rightBarButton)
-            rightBarButton.snp.makeConstraints { (make) in
-                make.centerY.equalTo(self.locationButton.snp.centerY)
-                make.trailing.equalToSuperview().inset(kSidePadding)
-                make.leading.greaterThanOrEqualTo(self.locationButton.snp.trailing).offset(8)
-            }
-            rightBarButton.addTarget(self, action: #selector(rightBarButtonTapped), for: .touchUpInside)
+                self.addSubview(rightBarButton)
+                rightBarButton.snp.makeConstraints { (make) in
+                    make.centerY.equalTo(self.locationButton.snp.centerY)
+                    make.trailing.equalToSuperview().inset(kSidePadding)
+                    make.leading.greaterThanOrEqualTo(self.locationButton.snp.trailing).offset(8)
+                }
+                rightBarButton.addTarget(self, action: #selector(rightBarButtonTapped), for: .touchUpInside)
             }
         }
     }
+    
+    let gradientLayer: CAGradientLayer = {
+        let gradientLayer = CAGradientLayer()
+        
+        // Configure the gradient here
+        gradientLayer.startPoint = CGPoint(x: 0.0, y: 0.5)
+        gradientLayer.endPoint = CGPoint(x: 1.0, y: 0.5)
+        let colors = [
+            CustomColorMainTheme.withAlphaComponent(0.0).cgColor,
+            CustomColorMainTheme.cgColor,
+            CustomColorMainTheme.withAlphaComponent(0.0).cgColor
+        ]
+        gradientLayer.colors = colors
+        let locations: [NSNumber] = [
+            0.25,
+            0.5,
+            0.75
+        ]
+        gradientLayer.locations = locations
+        
+        return gradientLayer
+    }()
+    var loaderIsActive = false
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init with coder not implemented")
@@ -59,10 +82,7 @@ class CustomNavigationBar:UIView {
             self.locationButtonCenterY = make.centerY.equalToSuperview().offset(10)
             make.centerX.equalToSuperview()
         }
-       
-        
         self.locationButton.addTarget(self, action: #selector(locationButtonTapped), for: .touchUpInside)
-        
    }
     
     public func setTitle(_ title:String) {
@@ -76,6 +96,7 @@ class CustomNavigationBar:UIView {
     }
     
     public func enableRightButtonWithTitle(_ title:String) {
+        guard self.rightBarButton == nil else {return}
         let button = UIButton(type:.system)
         button.setTitleColor(CustomColorMainTheme, for: .normal)
         button.titleLabel?.font = CustomFontBodyMedium
@@ -91,11 +112,14 @@ class CustomNavigationBar:UIView {
         self.locationButton.isEnabled = true
     }
     
-    
-    
     override func layoutSubviews() {
         super.layoutSubviews()
         
+        gradientLayer.frame = CGRect(
+            x: -bounds.size.width,
+            y: bounds.size.height - 5,
+            width: 3 * bounds.size.width,
+            height: 5)
     }
     
     
@@ -107,5 +131,28 @@ class CustomNavigationBar:UIView {
         self.delegate?.didTapRightBarButton()
     }
     
+    func showLoader() {
+        self.loaderIsActive = true
+        layer.addSublayer(gradientLayer)
+        let gradientAnimation = CABasicAnimation(keyPath: "locations")
+        gradientAnimation.fromValue = [0.0, 0.0, 0.25]
+        gradientAnimation.toValue = [0.75, 1.0, 1.0]
+        gradientAnimation.duration = 1
+        gradientAnimation.repeatCount = Float.infinity
+        gradientLayer.add(gradientAnimation, forKey: kLoaderAnimationKey)
+    }
+    
+    func hideLoader() {
+        gradientLayer.removeAnimation(forKey: kLoaderAnimationKey)
+        gradientLayer.removeFromSuperlayer()
+        self.loaderIsActive = false
+    }
+    
+    override func didMoveToWindow() {
+        if let _ = self.window, self.loaderIsActive {
+            self.showLoader()
+        }
+        
+    }
     
 }
