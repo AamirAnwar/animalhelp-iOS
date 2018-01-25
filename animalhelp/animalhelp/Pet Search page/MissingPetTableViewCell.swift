@@ -8,7 +8,6 @@
 
 import Foundation
 import UIKit
-let kMissingPetImageHeight:CGFloat = 265
 
 class MissingPetTableViewCell:UITableViewCell {
     

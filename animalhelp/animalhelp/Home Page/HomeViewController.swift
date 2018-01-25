@@ -72,7 +72,6 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
         self.setupViews()
         self.viewModel.delegate = self
         self.viewModel.updateViewState()
-        self.customNavBar.enableRightButtonWithTitle("List")
     }
     
     override func didTapRightBarButton() {
@@ -136,7 +135,7 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
             // Adding some space for the navigation bar shadow
-            make.top.equalTo(self.customNavBar.snp.bottom).offset(4)
+            make.top.equalTo(self.customNavBar.snp.bottom)
          self.mapViewBottomConstraint =  make.bottom.equalToSuperview()
         }
     }
@@ -157,25 +156,29 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
     }
     
     fileprivate func refreshDrawerWithState(_ state:HomeViewState) {
-        if let topConstraint = self.drawerViewTopConstraint?.constraint {
-            if state == .MaximizedDrawer {
-                topConstraint.activate()
-            }
-            else if state == .SingleClinicDrawer || state == .UserLocationUnknown {
-                topConstraint.deactivate()
-            }
-        }
-        else {
-            drawerView.snp.makeConstraints { (make) in
-                self.drawerViewTopConstraint = make.top.equalToSuperview().offset(CustomNavigationBar.kCustomNavBarHeight + 4)
-            }
-            self.refreshDrawerWithState(state)
-            return
+        
+        switch self.state {
+        case .InitialSetup:break;
+        case .UserLocationUnknown:
+            self.drawerViewTopConstraint?.constraint.deactivate()
+        case .HiddenDrawer:break;
+        case .MinimizedDrawer:
+            self.drawerViewTopConstraint?.constraint.deactivate()
+            drawerView.snp.makeConstraints({ (make) in
+                self.drawerViewTopConstraint =  make.top.equalTo(self.drawerView.superview!.snp.bottom).offset(-(self.tabBarHeight + kStandardButtonHeight))
+            })
+        case .SingleClinicDrawer:
+            self.drawerViewTopConstraint?.constraint.deactivate()
+        case .MaximizedDrawer:
+            self.drawerViewTopConstraint?.constraint.deactivate()
+            drawerView.snp.makeConstraints({ (make) in
+              self.drawerViewTopConstraint =  make.top.equalToSuperview().offset(CustomNavigationBar.kCustomNavBarHeight)
+            })
         }
         
-        UIView.animate(withDuration: 0.2) {
+//        UIView.animate(withDuration: 0.2) {
             self.view.layoutIfNeeded()
-        }
+//        }
     }
     
     func didUpdate(_ updatedMarker:GMSMarker) -> Void {
@@ -184,6 +187,7 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
     }
     
     func zoomIntoNearestClinic() {
+        self.customNavBar.enableRightButtonWithTitle("List")
         self.showNearestClinic(withMarker: self.viewModel.nearestClinicMarker)
     }
     
@@ -226,6 +230,13 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
                                               zoom: zoomLevel)
         googleMapView.isMyLocationEnabled = true
         googleMapView.animate(to: camera)
+        if let clinics = self.viewModel.nearbyClinics, clinics.isEmpty == false {
+//            self.customNavBar.enableRightButtonWithTitle("List")
+        }
+        else {
+            self.transitionTo(state: .MinimizedDrawer)
+        }
+        
     }
     
     func zoomToMarker(_ marker:GMSMarker) {
@@ -284,8 +295,13 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
             
             
         case .MinimizedDrawer:
-            self.updateVisibleMapElements(self,false)
             //Tell drawer to minimize itself with a message
+            self.updateVisibleMapElements(self,false)
+            self.drawerView.isHidden = false
+            let updatedInset = kStandardButtonHeight + self.tabBarHeight
+            self.mapViewBottomConstraint?.constraint.update(inset: updatedInset)
+            self.drawerView.switchToMinimizedDrawer(title: "Tap to find clinics")
+            
             
         case .SingleClinicDrawer:
             //Tell drawer to show nearest clinic only with left to right swipeable inteface
@@ -308,6 +324,7 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
             
             
         case .InitialSetup:
+            self.drawerView.isHidden = true
             print("Drawer view still in initial setup")
 //            Do Nothing
         }

@@ -24,6 +24,8 @@ protocol HomeViewModelDelegate {
     func showEmptyStateView()
     func hideEmptyStateView()
     func didTapLocationButton()
+    func showLoader()
+    func hideLoader()
 }
 
 class HomeViewModel:NSObject {
@@ -51,7 +53,13 @@ class HomeViewModel:NSObject {
     @objc func didChangeUserLocation() {
         if let location = self.locationManager.userLocation {
             self.delegate?.hideEmptyStateView()
-            self.delegate?.transitionTo(state: .HiddenDrawer)
+            if let clinics = self.nearbyClinics, clinics.isEmpty == false {
+                self.delegate?.transitionTo(state: .HiddenDrawer)
+            }
+            else {
+                self.delegate?.transitionTo(state: .MinimizedDrawer)
+            }
+            
             self.delegate?.showUserLocation(location: location)
         }
         else {
@@ -78,6 +86,7 @@ class HomeViewModel:NSObject {
     }
     
     func getNearbyClinics() {
+        self.delegate?.showLoader()
         Clinic.getNearbyClinics { (clinics) in
             guard clinics.isEmpty == false else {
                 self.delegate?.showEmptyStateView()
@@ -93,6 +102,7 @@ class HomeViewModel:NSObject {
             self.nearbyClinicsMarkers = clinics.map({ (clinic) -> GMSMarker in
                 return self.createMarkerWithClinic(clinic: clinic)
             })
+            self.delegate?.hideLoader()
             self.delegate?.hideEmptyStateView()
             self.delegate?.showMarkers(markers:self.nearbyClinicsMarkers!)
             self.delegate?.transitionTo(state: .SingleClinicDrawer)
@@ -110,6 +120,11 @@ class HomeViewModel:NSObject {
 }
 
 extension HomeViewModel:DrawerViewDelegate {
+    
+    func didTapFindNearbyClinics() {
+        self.getNearbyClinics()
+    }
+    
     func didSwipeToClinicAt(index:Int) {
         if let markers = self.nearbyClinicsMarkers, markers.count > index {
             self.delegate?.zoomToMarker(markers[index])

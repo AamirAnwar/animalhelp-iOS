@@ -17,6 +17,7 @@ protocol DrawerViewDelegate {
     func didTapStickyButton(seeMore:Bool)
     func didTapHideDrawerButton()
     func didSwipeToClinicAt(index:Int)
+    func didTapFindNearbyClinics()
 }
 
 class DrawerView:UIView {
@@ -49,6 +50,10 @@ class DrawerView:UIView {
     let clinicCellReuseIdentifier = "ClinicCellReuseIdentifier"
     var nearestClinic:Clinic? = nil
     var nearbyClinics:[Clinic]?
+    let showNearbyClinicsButton = UIButton.getRoundedRectButon()
+        
+        
+    
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init with coder not implemented")
@@ -91,6 +96,15 @@ class DrawerView:UIView {
             make.trailing.equalToSuperview().inset(10)
             make.top.equalToSuperview().offset(8)
         }
+        
+        self.addSubview(showNearbyClinicsButton)
+        self.showNearbyClinicsButton.isHidden = true
+        self.showNearbyClinicsButton.addTarget(self, action: #selector(didTapFindNearbyClinics), for: .touchUpInside)
+        self.showNearbyClinicsButton.snp.makeConstraints { (make) in
+            make.edges.equalToSuperview()
+        }
+        self.showNearbyClinicsButton.layer.cornerRadius = 0
+        
         
     }
     
@@ -217,12 +231,17 @@ extension DrawerView:UICollectionViewDelegate,UICollectionViewDelegateFlowLayout
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: self.clinicCellReuseIdentifier, for: indexPath) as! ClinicCollectionViewCell
         cell.setClinic(self.nearbyClinics?[indexPath.row])
+        if indexPath.row != 0 {
+            cell.bannerLabel.isHidden = true
+        }
+        else {
+            cell.bannerLabel.isHidden = false
+        }
         cell.delegate = self
         return cell
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        print(self.collectionView.indexPathsForVisibleItems)
         if self.flowLayout.scrollDirection == .horizontal, let visibleIndexPath = self.collectionView.indexPathsForVisibleItems.first {
             self.delegate?.didSwipeToClinicAt(index: visibleIndexPath.row)
         }
@@ -250,11 +269,20 @@ extension DrawerView:UICollectionViewDelegate,UICollectionViewDelegateFlowLayout
             self.switchToMaximizedDrawer()
         }
         self.collectionView.setCollectionViewLayout(self.flowLayout, animated: false)
-        // TODO - Transition to maximized drawer
         self.delegate?.didTapStickyButton(seeMore: seeMore)
     }
     
+    func switchToMinimizedDrawer(title:String) {
+        self.showNearbyClinicsButton.isHidden = false
+        self.onboardingContainerView.isHidden = true
+        self.collectionView.isHidden = true
+        self.showNearbyClinicsButton.setTitle(title, for: .normal)
+    }
+    
     func switchToMaximizedDrawer() {
+        self.showNearbyClinicsButton.isHidden = true
+        self.collectionView.isHidden = false
+        self.onboardingContainerView.isHidden = true
         self.collectionView.setContentOffset(CGPoint(x: 0, y: 0), animated: false)
         self.flowLayout.scrollDirection = .vertical
         self.collectionView.isPagingEnabled = false
@@ -267,6 +295,8 @@ extension DrawerView:UICollectionViewDelegate,UICollectionViewDelegateFlowLayout
     }
     
     func switchToSingleDrawer() {
+        self.showNearbyClinicsButton.isHidden = true
+        self.onboardingContainerView.isHidden = true
         self.flowLayout.scrollDirection = .horizontal
         self.collectionView.isPagingEnabled = true
         UIView.transition(with: self.stickyButton, duration: 0.3, options: .transitionCrossDissolve, animations: {
@@ -278,6 +308,10 @@ extension DrawerView:UICollectionViewDelegate,UICollectionViewDelegateFlowLayout
     
     @objc func didTapHideDrawer() {
         self.delegate?.didTapHideDrawerButton()
+    }
+    
+    @objc func didTapFindNearbyClinics() {
+        self.delegate?.didTapFindNearbyClinics()
     }
     
 }
