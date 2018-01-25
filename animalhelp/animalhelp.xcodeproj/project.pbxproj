@@ -26,8 +26,6 @@
 		438A0D451FCDCB27005A8CA4 /* GoogleMapsBase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 438A0D441FCDCB27005A8CA4 /* GoogleMapsBase.framework */; };
 		438A0D4F1FCDCB90005A8CA4 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 438A0D4E1FCDCB90005A8CA4 /* libc++.tbd */; };
 		438A0D511FCDCB9A005A8CA4 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 438A0D501FCDCB99005A8CA4 /* libz.tbd */; };
-		438A0D571FCDCD9F005A8CA4 /* GoogleMapsCore.framework in Resources */ = {isa = PBXBuildFile; fileRef = 438A0D411FCDCB25005A8CA4 /* GoogleMapsCore.framework */; };
-		438A0D581FCDCDA3005A8CA4 /* GoogleMapsBase.framework in Resources */ = {isa = PBXBuildFile; fileRef = 438A0D441FCDCB27005A8CA4 /* GoogleMapsBase.framework */; };
 		438A0D5C1FCDD703005A8CA4 /* GoogleMaps.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 438A0D5B1FCDD703005A8CA4 /* GoogleMaps.framework */; };
 		438A0D5E1FCDD709005A8CA4 /* GoogleMaps.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 438A0D5D1FCDD709005A8CA4 /* GoogleMaps.bundle */; };
 		438A0D621FCDEF70005A8CA4 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 438A0D611FCDEF70005A8CA4 /* Constants.swift */; };
@@ -452,8 +450,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				438A0D581FCDCDA3005A8CA4 /* GoogleMapsBase.framework in Resources */,
-				438A0D571FCDCD9F005A8CA4 /* GoogleMapsCore.framework in Resources */,
 				43E86AC91FBC320500B7130B /* LaunchScreen.storyboard in Resources */,
 				43E86AC61FBC320500B7130B /* Assets.xcassets in Resources */,
 				43BC0491200E811F00EF64FD /* GoogleSignIn.bundle in Resources */,
@@ -748,6 +744,7 @@
 				);
 				INFOPLIST_FILE = animalhelp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				"OTHER_LDFLAGS[arch=*]" = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.aamiranwar.animalhelp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "animalhelp/Commons/animalhelp-Bridging-Header.h";
