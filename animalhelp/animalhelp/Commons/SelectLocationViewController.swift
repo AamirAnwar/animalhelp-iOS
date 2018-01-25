@@ -33,7 +33,7 @@ class SelectLocationViewController: BaseViewController {
             self.tableView.reloadData()
         }
     }
-    var activeCities = ["Delhi","Delhi"] {
+    var activeCities = ["Delhi"] {
         didSet {
             self.tableView.reloadData()
         }
@@ -82,7 +82,9 @@ extension SelectLocationViewController:UISearchBarDelegate {
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        self.showLoader()
         CustomLocation.performLocationSearchWith(UserQuery: searchBar.text) { (locations) in
+            self.hideLoader()
             self.customLocations = locations
         }
     }
