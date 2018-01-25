@@ -10,8 +10,10 @@ import Foundation
 import UIKit
 
 var GoogleMapsAPIKey:String?
+let kMissingPetImageHeight:CGFloat = 265
+let kMinPopUpHeight:CGFloat = 200
 let kCornerRadius:CGFloat = 4
-let kStandardButtonHeight = 50
+let kStandardButtonHeight:CGFloat = 50
 let kCollectionViewHeight:CGFloat = 277
 let kSocialLoginButtonHeight:CGFloat = 48
 let kSidePadding:CGFloat = 18
