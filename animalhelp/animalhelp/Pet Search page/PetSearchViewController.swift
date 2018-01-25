@@ -91,7 +91,7 @@ class PetSearchViewController:BaseViewController, PetSearchViewModelDelegate {
     }
     
     override func didTapRightBarButton() {
-        UtilityFunctions.showPopUpWith(title: "Add a missing pet", subtitle: "If you wish to add a pet please tap the button below to be redirected to a form where you can fill details. \nWe hope we can help you find your pet.", buttonTitle: "Proceed")
+        UtilityFunctions.showPopUpWith(title: "Add a missing pet", subtitle: "If you wish to add a pet please tap the button below to be redirected to a form where you can fill details", buttonTitle: "Proceed")
     }
     
     override func didTapEmptyStateButton() {
