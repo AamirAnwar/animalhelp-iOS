@@ -18,6 +18,7 @@ protocol CustomNavigationBarDelegate {
     func didTapLocationButton()
     func didTapRightBarButton()
     func didTapBackButton()
+    func didTapCrossButton()
 }
 
 class CustomNavigationBar:UIView {
@@ -37,6 +38,16 @@ class CustomNavigationBar:UIView {
         button.setTitleColor(CustomColorTextBlack, for: .normal)
         button.titleLabel?.font = UIFont.init(name: kFontAwesomeFamilyName, size: kFontSize)
         button.contentEdgeInsets = UIEdgeInsetsMake(0, -(kBackButtonSize/2), 0, 0)
+        button.setTitle(NSString.fontAwesomeIconString(forEnum: FAIcon.FAChevronLeft), for: .normal)
+        return button
+    }()
+    
+    let crossButton:UIButton = {
+        let button = UIButton(type:.system)
+        button.setTitleColor(CustomColorTextBlack, for: .normal)
+        button.titleLabel?.font = UIFont.init(name: kFontAwesomeFamilyName, size: kFontSize)
+        button.contentEdgeInsets = UIEdgeInsetsMake(0, -(kBackButtonSize/2), 0, 0)
+        button.setTitle(NSString.fontAwesomeIconString(forEnum: FAIcon.FATimes), for: .normal)
         return button
     }()
     
@@ -91,6 +102,7 @@ class CustomNavigationBar:UIView {
         }
         self.addSubview(self.locationButton)
         self.addSubview(self.backButton)
+        self.addSubview(self.crossButton)
         
         self.locationButton.snp.makeConstraints { (make) in
             self.locationButtonCenterY = make.centerY.equalToSuperview().offset(10)
@@ -105,8 +117,13 @@ class CustomNavigationBar:UIView {
             make.height.equalTo(kBackButtonSize)
             make.trailing.lessThanOrEqualTo(self.locationButton)
         }
-        self.backButton.setTitle(NSString.fontAwesomeIconString(forEnum: FAIcon.FAChevronLeft), for: .normal)
+        
+        self.crossButton.snp.makeConstraints { (make) in
+            make.edges.equalTo(self.backButton)
+        }
         self.backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+        self.crossButton.addTarget(self, action: #selector(crossButtonTapped), for: .touchUpInside)
+        self.crossButton.isHidden = true
         
    }
     
@@ -188,6 +205,17 @@ class CustomNavigationBar:UIView {
     
     func shouldShowBackButton(_ shouldShow:Bool) {
         self.backButton.isHidden = !shouldShow
+        if self.crossButton.isHidden == false && shouldShow == true {
+            self.crossButton.isHidden = true
+        }
+        
+    }
+    
+    func shouldShowCrossButton(_ shouldShow:Bool) {
+        self.crossButton.isHidden = !shouldShow
+        if self.backButton.isHidden == false && shouldShow == true {
+            self.crossButton.isHidden = true
+        }
     }
     
     override func didMoveToWindow() {
@@ -198,6 +226,10 @@ class CustomNavigationBar:UIView {
     
     @objc func backButtonTapped() {
         self.delegate?.didTapBackButton()
+    }
+    
+    @objc func crossButtonTapped() {
+        self.delegate?.didTapCrossButton()
     }
     
 }

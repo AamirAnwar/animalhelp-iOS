@@ -104,5 +104,9 @@ class BaseViewController:UIViewController, CustomNavigationBarDelegate,UIGesture
     open func didTapBackButton() {
         self.navigationController?.popViewController(animated: true)
     }
+    
+    open func didTapCrossButton() {
+        self.dismiss(animated: true)
+    }
 }
 

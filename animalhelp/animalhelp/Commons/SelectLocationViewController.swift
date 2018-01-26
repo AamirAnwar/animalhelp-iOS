@@ -47,6 +47,7 @@ class SelectLocationViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.customNavBar.setTitle("Select Location")
+        self.customNavBar.shouldShowCrossButton(true)
         self.view.addSubview(self.tableView)
         self.view.addSubview(self.searchBar)
         self.tableView.delegate = self
