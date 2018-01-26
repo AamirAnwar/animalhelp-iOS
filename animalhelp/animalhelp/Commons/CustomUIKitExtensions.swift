@@ -23,6 +23,22 @@ extension UIView {
     func height() -> CGFloat {
         return self.frame.size.height
     }
+    
+    func setX(_ x:CGFloat) {
+        self.frame = CGRect.init(x: x, y: self.originY(), width: self.width(), height: self.height())
+    }
+    
+    func setY(_ y:CGFloat) {
+        self.frame = CGRect.init(x: self.originX(), y: y, width: self.width(), height: self.height())
+    }
+    
+    func setWidth(_ width:CGFloat) {
+        self.frame = CGRect.init(x: self.originX(), y: self.originY(), width: width, height: self.height())
+    }
+    
+    func setHeight(_ height:CGFloat) {
+        self.frame = CGRect.init(x: self.originX(), y: self.originY(), width: self.width(), height: height)
+    }
 }
 
 extension UIImageView {
