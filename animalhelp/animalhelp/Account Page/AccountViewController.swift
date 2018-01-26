@@ -190,6 +190,7 @@ extension AccountViewController: UITableViewDelegate, UITableViewDataSource {
     func showFeedbackPage() {
 //        let vc = FeedbackViewController()
 //        self.navigationController?.pushViewController(vc, animated: true)
+        guard MFMailComposeViewController.canSendMail() else {return}
         let mailVC = MFMailComposeViewController()
         mailVC.setSubject("Feedback")
         mailVC.mailComposeDelegate = self
