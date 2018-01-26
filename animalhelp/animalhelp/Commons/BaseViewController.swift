@@ -46,7 +46,14 @@ class BaseViewController:UIViewController, CustomNavigationBarDelegate,UIGesture
             make.top.equalToSuperview()
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
-        }        
+        }
+        
+        self.customNavBar.shouldShowBackButton(false)
+        if let nav = self.navigationController {
+            if nav.viewControllers.count > 1 && nav.viewControllers.first! != self {
+                self.customNavBar.shouldShowBackButton(true)
+            }
+        }
     }
     
     
@@ -92,6 +99,10 @@ class BaseViewController:UIViewController, CustomNavigationBarDelegate,UIGesture
     
     func hideLoader() {
         self.customNavBar.hideLoader()
+    }
+    
+    open func didTapBackButton() {
+        self.navigationController?.popViewController(animated: true)
     }
 }
 
