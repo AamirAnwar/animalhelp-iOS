@@ -187,7 +187,7 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
     }
     
     func zoomIntoNearestClinic() {
-        self.customNavBar.enableRightButtonWithIcon(icon: FAIcon.FAmap)
+        self.customNavBar.enableRightButtonWithIcon(icon: FAIcon.FAList)
         self.showNearestClinic(withMarker: self.viewModel.nearestClinicMarker)
     }
     
