@@ -104,6 +104,19 @@ class CustomNavigationBar:UIView {
         self.rightBarButton = button
     }
     
+    public func enableRightButtonWithIcon(icon:FAIcon) {
+        guard self.rightBarButton == nil else {return}
+        let button = UIButton(type:.system)
+        button.setTitleColor(CustomColorMainTheme, for: .normal)
+        button.titleLabel?.font = UIFont(name: kFontAwesomeFamilyName, size: 20)
+        button.setTitle(NSString.fontAwesomeIconString(forEnum: icon), for: .normal)
+        self.rightBarButton = button
+    }
+    
+    public func setRightButtonIcon(icon:FAIcon) {
+        self.rightBarButton?.setTitle(NSString.fontAwesomeIconString(forEnum: icon), for: .normal)
+    }
+    
     public func disableLocationButton() {
         self.locationButton.isEnabled = false
     }

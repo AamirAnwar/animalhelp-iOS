@@ -76,11 +76,11 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
     
     override func didTapRightBarButton() {
         if self.state == .MaximizedDrawer {
-            self.customNavBar.rightBarButton?.setTitle("List", for: .normal)
+            self.customNavBar.setRightButtonIcon(icon:FAIcon.FAList)
             self.transitionTo(state:.HiddenDrawer)
         }
         else {
-            self.customNavBar.rightBarButton?.setTitle("Map", for: .normal)
+            self.customNavBar.setRightButtonIcon(icon:FAIcon.FAmap)
             self.transitionTo(state:.MaximizedDrawer)
         }
     }
@@ -187,7 +187,7 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
     }
     
     func zoomIntoNearestClinic() {
-        self.customNavBar.enableRightButtonWithTitle("List")
+        self.customNavBar.enableRightButtonWithIcon(icon: FAIcon.FAmap)
         self.showNearestClinic(withMarker: self.viewModel.nearestClinicMarker)
     }
     
