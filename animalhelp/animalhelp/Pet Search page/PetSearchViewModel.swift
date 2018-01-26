@@ -12,6 +12,8 @@ import Moya
 
 protocol PetSearchViewModelDelegate {
     func didUpdateMissingPets()
+    func showLoader()
+    func hideLoader()
 }
     
 
@@ -21,6 +23,7 @@ class PetSearchViewModel {
     var delegate:PetSearchViewModelDelegate? = nil
     var missingPets:[MissingPet] = []
     func searchForMissingPets() {
+        self.delegate?.showLoader()
         APIService.request(.missingPets(cityID:1), completion: { (result) in
             switch result {
             case .success(let response):
@@ -59,7 +62,7 @@ class PetSearchViewModel {
                     return
                 }
             }
-            
+            self.delegate?.hideLoader()
             self.missingPets = missingPets
             self.delegate?.didUpdateMissingPets()
         }
