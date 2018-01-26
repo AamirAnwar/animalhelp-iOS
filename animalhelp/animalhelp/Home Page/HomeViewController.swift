@@ -222,9 +222,9 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate {
 
     func showUserLocation(location:CLLocation) {
         // update current location
-        if let locality = LocationManager.sharedManager.userLocality {
-            self.customNavBar.setTitle(locality)
-        }
+//        if let locality = LocationManager.sharedManager.userLocality {
+//            self.customNavBar.setTitle(locality)
+//        }
         let camera = GMSCameraPosition.camera(withLatitude: location.coordinate.latitude,
                                               longitude: location.coordinate.longitude,
                                               zoom: zoomLevel)

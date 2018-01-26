@@ -128,12 +128,12 @@ class CustomNavigationBar:UIView {
    }
     
     public func setTitle(_ title:String) {
+        self.locationButton.setAttributedTitle(nil, for: .normal)
         self.locationButton.setTitle(title, for: .normal)
     }
     
     public func setAttributedTitle(_ title:NSAttributedString) {
         self.locationButton.setTitle(nil, for: .normal)
-        self.locationButtonCenterY?.offset(5)
         self.locationButton.setAttributedTitle(title, for: .normal)
     }
     

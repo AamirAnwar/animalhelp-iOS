@@ -36,11 +36,13 @@ class BaseViewController:UIViewController, CustomNavigationBarDelegate,UIGesture
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        NotificationCenter.default.addObserver(self, selector: #selector(locationChanged), name: kNotificationUserLocationChanged.name, object: nil)
         self.view.backgroundColor = UIColor.white
         self.view.addSubview(customNavBar)
         self.navigationController?.isNavigationBarHidden = true
         self.navigationController?.interactivePopGestureRecognizer?.delegate = self
         self.createEmptyStateView()
+        self.setUserLocationInNavBar()
         customNavBar.delegate = self
         customNavBar.snp.makeConstraints { (make) in
             make.top.equalToSuperview()
@@ -54,6 +56,7 @@ class BaseViewController:UIViewController, CustomNavigationBarDelegate,UIGesture
                 self.customNavBar.shouldShowBackButton(true)
             }
         }
+        
     }
     
     
@@ -108,5 +111,24 @@ class BaseViewController:UIViewController, CustomNavigationBarDelegate,UIGesture
     open func didTapCrossButton() {
         self.dismiss(animated: true)
     }
+    
+    @objc func locationChanged() {
+        self.setUserLocationInNavBar()
+    }
+    
+    fileprivate func setUserLocationInNavBar() {
+        guard let locality = LocationManager.sharedManager.userLocality else {return}
+        self.customNavBar.locationButton.setTitle(nil, for: .normal)
+        let mutableAttrString = NSMutableAttributedString.init(string: "\(locality) ", attributes: [NSAttributedStringKey.font:CustomFontTitleBold, NSAttributedStringKey.foregroundColor:CustomColorTextBlack])
+        let chevronString = NSAttributedString.init(string: NSString.fontAwesomeIconString(forEnum: FAIcon.FAChevronDown), attributes: [
+            NSAttributedStringKey.foregroundColor:CustomColorMainTheme,
+            NSAttributedStringKey.font: UIFont.init(name: kFontAwesomeFamilyName, size: 16)!,
+            NSAttributedStringKey.baselineOffset: 2
+            ])
+        mutableAttrString.append(chevronString)
+        self.customNavBar.setAttributedTitle(mutableAttrString)
+    }
+    
+    
 }
 

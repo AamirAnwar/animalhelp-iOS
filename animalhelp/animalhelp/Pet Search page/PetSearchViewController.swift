@@ -27,11 +27,11 @@ class PetSearchViewController:BaseViewController, PetSearchViewModelDelegate {
         super.viewDidLoad()
         self.viewModel.delegate = self
         
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.alignment = .center
-        let title = NSMutableAttributedString(string: "Pet Search\n", attributes: [NSAttributedStringKey.foregroundColor:CustomColorTextBlack,NSAttributedStringKey.font:CustomFontTitleBold,NSAttributedStringKey.paragraphStyle:paragraphStyle])
-        title.append(NSAttributedString(string: "Delhi", attributes:[NSAttributedStringKey.foregroundColor:CustomColorMainTheme,NSAttributedStringKey.font:CustomFontHeadingSmall,NSAttributedStringKey.paragraphStyle:paragraphStyle]))
-        customNavBar.setAttributedTitle(title)
+//        let paragraphStyle = NSMutableParagraphStyle()
+//        paragraphStyle.alignment = .center
+//        let title = NSMutableAttributedString(string: "Pet Search\n", attributes: [NSAttributedStringKey.foregroundColor:CustomColorTextBlack,NSAttributedStringKey.font:CustomFontTitleBold,NSAttributedStringKey.paragraphStyle:paragraphStyle])
+//        title.append(NSAttributedString(string: "Delhi", attributes:[NSAttributedStringKey.foregroundColor:CustomColorMainTheme,NSAttributedStringKey.font:CustomFontHeadingSmall,NSAttributedStringKey.paragraphStyle:paragraphStyle]))
+//        customNavBar.setAttributedTitle(title)
         self.customNavBar.enableRightButtonWithTitle("Info")
         self.createSearchBar()
         createTableView()
