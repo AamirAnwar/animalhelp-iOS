@@ -212,6 +212,9 @@ extension AccountViewController: UITableViewDelegate, UITableViewDataSource {
         if indexPath.row < self.accountItems.count - 1 {
             standardCell.showBottomPaddedSeparator()
         }
+        else {
+            standardCell.showsDisclosure(false)
+        }
         return standardCell
     }
     
