@@ -26,7 +26,7 @@ struct Clinic:Codable {
                     do {
                         _ = try response.filterSuccessfulStatusCodes()
                         let data = try response.mapJSON()
-                        print(data)
+//                        print(data)
                         if let jsonDictionary = data as? NSDictionary {
                             completion(self.parseClinics(json: jsonDictionary))
                         }
