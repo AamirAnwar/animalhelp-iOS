@@ -19,6 +19,14 @@ class StandardListTableViewCell:UITableViewCell {
         
     }()
     
+    fileprivate let disclosureChevronLabel:UILabel = {
+        let label = UILabel()
+        label.font = UIFont.init(name: kFontAwesomeFamilyName, size: 14)
+        label.textColor = CustomColorMainTheme
+        label.text = NSString.fontAwesomeIconString(forEnum: FAIcon.FAChevronRight)
+        return label
+    }()
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("Init with coder not implemented")
     }
@@ -30,6 +38,12 @@ class StandardListTableViewCell:UITableViewCell {
             make.trailing.equalToSuperview().inset(kSidePadding)
             make.top.equalToSuperview().offset(13)
             make.bottom.equalToSuperview().inset(13)
+        }
+        
+        self.contentView.addSubview(self.disclosureChevronLabel)
+        self.disclosureChevronLabel.snp.makeConstraints { (make) in
+            make.trailing.equalToSuperview().inset(kSidePadding)
+            make.centerY.equalToSuperview()
         }
         
         // Default setting
@@ -44,14 +58,19 @@ class StandardListTableViewCell:UITableViewCell {
         self.titleLabel.font = font
     }
     
+    public func setTitleColor(_ color:UIColor) {
+        self.titleLabel.textColor = color
+    }
+    
     public func showsDisclosure(_ show:Bool) {
-        if show {
-            self.accessoryType = .disclosureIndicator
+        self.disclosureChevronLabel.isHidden = !show
+    }
+    
+    public func updateVerticalPadding(with padding:CGFloat) {
+        self.titleLabel.snp.updateConstraints { (make) in
+            make.top.equalToSuperview().offset(padding)
+            make.bottom.equalToSuperview().inset(padding)
         }
-        else {
-            self.accessoryType = .none
-        }
-        
     }
 }
 
