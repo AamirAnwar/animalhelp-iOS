@@ -16,7 +16,6 @@ protocol HomeViewModelDelegate {
     func didUpdate(_ updatedMarker:GMSMarker) -> Void
     func showUserLocation(location:CLLocation)->Void
     func transitionTo(state:HomeViewState)
-    func showDrawerWith(clinic:Clinic)
     func showDrawerWith(selectedIndex:Int, clinics:[Clinic])
     func showMarkers(markers:[GMSMarker])
     func zoomIntoNearestClinic()
@@ -29,6 +28,7 @@ protocol HomeViewModelDelegate {
 }
 
 class HomeViewModel:NSObject {
+    
     let locationManager = animalhelp.LocationManager.sharedManager
     let APIService = animalhelp.APIService.sharedService
     var delegate:HomeViewModelDelegate?
@@ -58,6 +58,7 @@ class HomeViewModel:NSObject {
             }
             else {
                 self.delegate?.transitionTo(state: .MinimizedDrawer)
+                self.getNearbyClinics()
             }
             
             self.delegate?.showUserLocation(location: location)
@@ -76,10 +77,7 @@ class HomeViewModel:NSObject {
             self.delegate?.transitionTo(state: .UserLocationUnknown)
         }
         else {
-            if self.locationManager.userLocation != nil {
-//                self.updateNearestClinic()
-            }
-            else {
+            if self.locationManager.userLocation == nil {
                 self.locationManager.startDetectingLocation()
             }
         }
@@ -122,17 +120,13 @@ class HomeViewModel:NSObject {
 extension HomeViewModel:DrawerViewDelegate {
     
     func didTapFindNearbyClinics() {
-        self.getNearbyClinics()
+//        self.getNearbyClinics()
     }
     
     func didSwipeToClinicAt(index:Int) {
         if let markers = self.nearbyClinicsMarkers, markers.count > index {
             self.delegate?.zoomToMarker(markers[index])
         }
-    }
-    
-    func didTapHideDrawerButton() {
-        self.delegate?.transitionTo(state: .HiddenDrawer)
     }
     
     func didTapStickyButton(seeMore: Bool) {
