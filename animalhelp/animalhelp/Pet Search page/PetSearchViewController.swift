@@ -13,6 +13,7 @@ import UIKit
 class PetSearchViewController:BaseViewController, PetSearchViewModelDelegate {
     
     let kMissingPetCellReuseIdentifier = "MissingPetTableViewCell"
+    let kPetCountCellReuseIdentifier = "PetCountTableViewCell"
     
     let tableView = UITableView(frame: CGRect.zero, style: UITableViewStyle.plain)
     let searchBar = UISearchBar(frame: CGRect.zero)
@@ -63,6 +64,8 @@ class PetSearchViewController:BaseViewController, PetSearchViewModelDelegate {
         self.tableView.refreshControl = self.refreshControl
         self.tableView.contentInset = UIEdgeInsets(top: 8, left: 0, bottom: 20, right: 0)
         self.tableView.register(MissingPetTableViewCell.self, forCellReuseIdentifier: self.kMissingPetCellReuseIdentifier)
+        self.tableView.register(StandardListTableViewCell.self, forCellReuseIdentifier: self.kPetCountCellReuseIdentifier)
+        
         self.tableView.snp.makeConstraints { (make) in
             make.top.equalTo(self.searchBar.snp.bottom)
             make.left.equalToSuperview()
@@ -119,18 +122,33 @@ extension PetSearchViewController:UISearchBarDelegate {
 
 extension PetSearchViewController:UITableViewDataSource, UITableViewDelegate {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return 2
     }
     
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.section == 0 {
+            return 22
+        }
         return 400
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if section == 0 {
+            if self.viewModel.missingPets.isEmpty == true {
+                return 0
+            }
+            else {
+                return 1
+            }
+        }
         return self.viewModel.missingPets.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if indexPath.section == 0 {
+            return self.getPetCountCell(tableView)
+        }
+        
         let pet = self.viewModel.missingPets[indexPath.row]
         return self.getMissingPetCell(tableView, pet: pet)
     }
@@ -141,8 +159,18 @@ extension PetSearchViewController:UITableViewDataSource, UITableViewDelegate {
         return cell
     }
     
+    func getPetCountCell(_ tableView:UITableView) -> StandardListTableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: kPetCountCellReuseIdentifier) as! StandardListTableViewCell
+        cell.showsDisclosure(false)
+        cell.setTitleColor(CustomColorDarkGray)
+        cell.setTitleFont(CustomFontDemiSmall)
+        cell.updateVerticalPadding(with: 3)
+        cell.setTitle("Showing \(self.viewModel.missingPets.count) missing pets in \(LocationManager.sharedManager.userLocality ?? "current vicinity")")
+        return cell
+    }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard indexPath.row < self.viewModel.missingPets.count else {
+        guard indexPath.section > 0 && indexPath.row < self.viewModel.missingPets.count else {
             return
         }
         let missingPetDetailVC = MissingPetDetailViewController()

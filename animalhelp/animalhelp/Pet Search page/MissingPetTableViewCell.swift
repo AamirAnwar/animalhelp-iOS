@@ -55,14 +55,16 @@ class MissingPetTableViewCell:UITableViewCell {
         return label
     }()
     
-    let markLabel:UILabel = {
-        let label = UILabel()
-        label.textAlignment = .natural
-        label.textColor = UIColor.white
-        label.font = CustomFontSmallBodyMedium
-        label.backgroundColor = CustomColorDarkGray
-        label.clipsToBounds = true
-        return label
+    let markLabelButton:UIButton = {
+        let button = UIButton()
+        button.setTitleColor(CustomColorMainTheme, for: .normal)
+        button.titleLabel?.font = CustomFontSmallBodyMedium
+        button.layer.borderColor = CustomColorMainTheme.cgColor
+        button.layer.borderWidth = 1
+        let inset:CGFloat = 5
+        button.contentEdgeInsets = UIEdgeInsetsMake(inset, inset, inset, inset)
+        button.backgroundColor = UIColor.white
+        return button
     }()
     
     required init?(coder aDecoder: NSCoder) {
@@ -90,7 +92,7 @@ class MissingPetTableViewCell:UITableViewCell {
         self.containerView.addSubview(self.petTypeLabel)
         self.containerView.addSubview(self.locationLabel)
         self.containerView.addSubview(self.missingSinceLabel)
-        self.containerView.addSubview(self.markLabel)
+        self.containerView.addSubview(self.markLabelButton)
         
         self.containerView.backgroundColor = UIColor.white
         
@@ -121,7 +123,7 @@ class MissingPetTableViewCell:UITableViewCell {
         }
         
         self.missingSinceLabel.snp.makeConstraints { (make) in
-            make.leading.equalTo(self.petDescLabel.snp.leading).offset(14)
+            make.leading.equalTo(self.petDescLabel.snp.leading).offset(16)
             make.width.lessThanOrEqualTo(self.containerView.snp.width).multipliedBy(0.5)
             make.top.equalTo(self.petDescLabel.snp.bottom).offset(16)
         }
@@ -138,16 +140,17 @@ class MissingPetTableViewCell:UITableViewCell {
             make.leading.equalTo(self.missingSinceLabel.snp.leading)
         }
         
-        self.markLabel.snp.makeConstraints { (make) in
+        self.markLabelButton.snp.makeConstraints { (make) in
             make.top.equalTo(self.petTypeLabel.snp.top)
             make.trailing.equalTo(self.locationLabel.snp.trailing)
             make.width.lessThanOrEqualTo(self.containerView.snp.width).multipliedBy(0.5)
             make.bottom.equalToSuperview().inset(13)
         }
         
-        UtilityFunctions.assignDotTo(self.petTypeLabel)
-        UtilityFunctions.assignDotTo(missingSinceLabel)
-        UtilityFunctions.assignDotTo(self.locationLabel)
+        
+        UtilityFunctions.assignFontLabelTo(self.petTypeLabel, icon: FAIcon.FAodnoklassniki)
+        UtilityFunctions.assignFontLabelTo(self.missingSinceLabel, icon: FAIcon.FAClockO)
+        UtilityFunctions.assignFontLabelTo(self.locationLabel, icon: FAIcon.FAMapMarker)
     }
     
     func setMissingPet(_ pet:MissingPet) {
@@ -155,7 +158,7 @@ class MissingPetTableViewCell:UITableViewCell {
         self.petDescLabel.text = pet.petDescription ?? ""
         self.locationLabel.text = pet.lastKnownLocation ?? ""
         self.petTypeLabel.text = pet.type
-        self.markLabel.text = " \(pet.distFeatures ?? "") "
+        self.markLabelButton.setTitle("\(pet.distFeatures ?? "")", for: .normal)
         self.missingSinceLabel.text = pet.missingSince
         self.petImageView.setImage(WithURL: pet.imageURL ?? "")
         
@@ -165,7 +168,7 @@ class MissingPetTableViewCell:UITableViewCell {
         super.layoutSubviews()
         if self.contentView.frame.height > 0 &&  self.containerView.layer.shadowPath == nil {
             self.containerView.layoutIfNeeded()
-            self.markLabel.layer.cornerRadius = 2*kCornerRadius
+            self.markLabelButton.layer.cornerRadius = 2*kCornerRadius
             UtilityFunctions.addShadowTo(view: self.containerView)
             
         }
