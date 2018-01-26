@@ -11,6 +11,7 @@
 		43367EED2008A771004D6B2C /* ClinicCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43367EEC2008A771004D6B2C /* ClinicCollectionViewCell.swift */; };
 		43378CCF200DF6CB00F088C4 /* MissingPet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43378CCE200DF6CB00F088C4 /* MissingPet.swift */; };
 		43378CD1200DF99200F088C4 /* PetSearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43378CD0200DF99200F088C4 /* PetSearchViewModel.swift */; };
+		4339A3FC201B3ED50094B310 /* group3.png in Resources */ = {isa = PBXBuildFile; fileRef = 4339A3F9201B3ED50094B310 /* group3.png */; };
 		433B09CA1FFE587C00EA0906 /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433B09C91FFE587C00EA0906 /* AccountViewController.swift */; };
 		43617C4220124B3D0025FEA5 /* MissingPetTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43617C4120124B3D0025FEA5 /* MissingPetTableViewCell.swift */; };
 		43705BF02014C9F200D7296B /* EmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43705BEF2014C9F200D7296B /* EmptyStateView.swift */; };
@@ -91,6 +92,7 @@
 		43367EEC2008A771004D6B2C /* ClinicCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClinicCollectionViewCell.swift; sourceTree = "<group>"; };
 		43378CCE200DF6CB00F088C4 /* MissingPet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissingPet.swift; sourceTree = "<group>"; };
 		43378CD0200DF99200F088C4 /* PetSearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetSearchViewModel.swift; sourceTree = "<group>"; };
+		4339A3F9201B3ED50094B310 /* group3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = group3.png; sourceTree = "<group>"; };
 		433B09C91FFE587C00EA0906 /* AccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
 		43617C4120124B3D0025FEA5 /* MissingPetTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissingPetTableViewCell.swift; sourceTree = "<group>"; };
 		43705BEF2014C9F200D7296B /* EmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateView.swift; sourceTree = "<group>"; };
@@ -297,6 +299,7 @@
 				43BC0498200E81C900EF64FD /* GoogleService-Info.plist */,
 				43E86ABE1FBC320500B7130B /* AppDelegate.swift */,
 				43E86AC51FBC320500B7130B /* Assets.xcassets */,
+				4339A3F9201B3ED50094B310 /* group3.png */,
 				43E86AC71FBC320500B7130B /* LaunchScreen.storyboard */,
 				43E86ACA1FBC320500B7130B /* Info.plist */,
 			);
@@ -472,6 +475,7 @@
 				43BC0491200E811F00EF64FD /* GoogleSignIn.bundle in Resources */,
 				438A0D5E1FCDD709005A8CA4 /* GoogleMaps.bundle in Resources */,
 				43BC0499200E81C900EF64FD /* GoogleService-Info.plist in Resources */,
+				4339A3FC201B3ED50094B310 /* group3.png in Resources */,
 				43AE9B94201B1B9A0011272E /* FontAwesome.ttf in Resources */,
 				43AE9B95201B1E960011272E /* Info.plist in Resources */,
 			);
@@ -726,7 +730,7 @@
 		43E86ACE1FBC320500B7130B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = C3RT9P7X65;
@@ -753,7 +757,7 @@
 		43E86ACF1FBC320500B7130B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = C3RT9P7X65;
