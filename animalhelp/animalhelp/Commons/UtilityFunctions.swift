@@ -12,7 +12,7 @@ enum UtilityFunctions {
     static func addShadowTo(view:UIView) {
         let shadowPath = UIBezierPath(rect: view.bounds)
         view.layer.masksToBounds = false
-        view.layer.shadowColor = UIColor.black.cgColor
+        view.layer.shadowColor = UIColor.black.withAlphaComponent(0.6).cgColor
         view.layer.shadowOffset = CGSize(width: 0, height: 1)
         view.layer.shadowOpacity = 0.5
         view.layer.shadowRadius = 4
@@ -29,6 +29,20 @@ enum UtilityFunctions {
             make.leading.equalTo(view.snp.leading).offset(-14)
             make.size.equalTo(10)
         }
+    }
+    
+    static func assignFontLabelTo(_ view:UIView, icon:FAIcon) {
+        guard let superview = view.superview else {return}
+        let label = UILabel()
+        superview.addSubview(label)
+        label.font = UIFont.init(name: kFontAwesomeFamilyName, size: 14)
+        label.text = NSString.fontAwesomeIconString(forEnum: icon)
+        label.textColor = CustomColorMainTheme
+        label.snp.makeConstraints { (make) in
+            make.top.equalTo(view.snp.top).offset(2)
+            make.leading.equalTo(view.snp.leading).offset(-16)
+        }
+        
     }
     
     static func getTransparentCell(tableView:UITableView, height:CGFloat,reuseIdentifier:String) -> UITableViewCell {
