@@ -14,7 +14,12 @@ let kMissingPetImageHeight:CGFloat = 265
 let kMinPopUpHeight:CGFloat = 200
 let kCornerRadius:CGFloat = 4
 let kStandardButtonHeight:CGFloat = 50
-let kCollectionViewHeight:CGFloat = 277
+
+let kDrawerUnknownLocationHeight:CGFloat = 280
+let kDrawerMinimizedStateHeight:CGFloat = 30
+let kSingleClinicStateHeight:CGFloat = 180
+
+let kCollectionViewHeight:CGFloat = 180
 let kSocialLoginButtonHeight:CGFloat = 48
 let kSidePadding:CGFloat = 18
 let kSeparatorHeight:CGFloat = 1
