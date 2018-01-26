@@ -9,6 +9,8 @@
 import Foundation
 import UIKit
 import SnapKit
+let kRoundRectButtonWidth:CGFloat = 100
+let kCustomButtonHeight:CGFloat = 33
 
 protocol ClinicCollectionViewCellDelegate {
     func didTapGoogleMapsButton(sender:UICollectionViewCell)
@@ -16,13 +18,18 @@ protocol ClinicCollectionViewCellDelegate {
 
 class ClinicCollectionViewCell:UICollectionViewCell {
     var delegate:ClinicCollectionViewCellDelegate? = nil
-    let bannerLabel:UILabel = {
-       let label = UILabel(frame: CGRect.zero)
-        label.text = "Nearest Help Center"
-        label.font = CustomFontHeadingSmall
-        label.textColor = CustomColorMainTheme
-        label.textAlignment = .center
+    var bottomSeparator:CustomSeparator = {
+        let separator = CustomSeparator.paddedSeparator
+        return separator
+        
+    }()
+    let locationIconLabel:UILabel = {
+        let label = UILabel()
+        label.text = NSString.fontAwesomeIconString(forEnum: FAIcon.FAMapMarker)
+        label.font = UIFont.init(name: kFontAwesomeFamilyName, size: 23)
+        label.textColor = CustomColorTextBlack
         return label
+        
     }()
     
     let nameLabel:UILabel = {
@@ -53,18 +60,30 @@ class ClinicCollectionViewCell:UICollectionViewCell {
     
     let distanceLabel:UILabel = {
         let label = UILabel(frame: CGRect.zero)
-        label.font = CustomFontButtonTitle
+        label.font = CustomFontHeadingSmall
         label.textColor = CustomColorMainTheme
         return label
     }()
     
-    let googleMapsButton:UIButton = {
+    let navigateButton:UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Open in Google Maps", for: .normal)
+        button.setTitle("Navigate", for: .normal)
+        button.setTitleColor(CustomColorMainTheme, for: .normal)
+        button.backgroundColor = UIColor.white
+        button.layer.cornerRadius = 3*kCornerRadius
+        button.layer.borderColor = CustomColorMainTheme.cgColor
+        button.layer.borderWidth = 1
+        button.titleLabel?.font = CustomFontSmallBodyMedium
+        return button
+    }()
+    
+    let callButton:UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Call", for: .normal)
         button.setTitleColor(UIColor.white, for: .normal)
         button.backgroundColor = CustomColorMainTheme
-        button.layer.cornerRadius = kCornerRadius
-        button.titleLabel?.font = CustomFontButtonTitle
+        button.layer.cornerRadius = 3*kCornerRadius
+        button.titleLabel?.font = CustomFontSmallBodyMedium
         return button
     }()
     
@@ -76,36 +95,39 @@ class ClinicCollectionViewCell:UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         // Create views here
-        self.contentView.addSubview(bannerLabel)
+        
+//        self.contentView.backgroundColor = UIColor.red.withAlphaComponent(0.3)
+        
         self.contentView.addSubview(nameLabel)
         self.contentView.addSubview(addressLabel)
         self.contentView.addSubview(phoneLabel)
-        self.contentView.addSubview(googleMapsButton)
+        self.contentView.addSubview(navigateButton)
+        self.contentView.addSubview(callButton)
         self.contentView.addSubview(distanceLabel)
+        self.contentView.addSubview(locationIconLabel)
+        self.contentView.addSubview(self.bottomSeparator)
         
-        
-        bannerLabel.snp.makeConstraints { (make) in
-            make.top.equalToSuperview().offset(8)
-            make.leading.equalToSuperview().offset(12)
-            make.trailing.equalToSuperview().offset(-12)
+        locationIconLabel.snp.makeConstraints { (make) in
+            make.leading.equalToSuperview().offset(kSidePadding)
+            make.top.equalToSuperview().offset(13)
         }
         
         nameLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(bannerLabel.snp.bottom).offset(8)
-            make.leading.equalTo(bannerLabel.snp.leading)
+            make.top.equalTo(locationIconLabel.snp.top)
+            make.leading.equalTo(locationIconLabel.snp.trailing).offset(8)
         }
         
         distanceLabel.snp.makeConstraints { (make) in
             make.top.equalTo(nameLabel.snp.top)
-            make.trailing.equalTo(bannerLabel.snp.trailing)
+            make.trailing.equalToSuperview().inset(kSidePadding)
             make.leading.greaterThanOrEqualTo(nameLabel.snp.trailing).offset(10)
             
         }
         
         addressLabel.snp.makeConstraints { (make) in
             make.top.equalTo(nameLabel.snp.bottom).offset(8)
-            make.leading.equalTo(nameLabel.snp.leading)
-            make.trailing.equalTo(nameLabel.snp.trailing)
+            make.leading.equalToSuperview().offset(kSidePadding)
+            make.trailing.equalToSuperview().inset(kSidePadding)
         }
         
         phoneLabel.snp.makeConstraints { (make) in
@@ -114,36 +136,39 @@ class ClinicCollectionViewCell:UICollectionViewCell {
             make.trailing.equalTo(addressLabel.snp.trailing)
         }
         
-        googleMapsButton.snp.makeConstraints { (make) in
+        navigateButton.snp.makeConstraints { (make) in
             make.top.equalTo(phoneLabel.snp.bottom).offset(10)
-            make.leading.equalToSuperview().offset(24)
-            make.trailing.equalToSuperview().offset(-24)
-            make.height.equalTo(kStandardButtonHeight)
+            make.centerX.equalToSuperview().offset(-(kRoundRectButtonWidth/2 + 13))
+            make.width.equalTo(kRoundRectButtonWidth)
+            make.height.equalTo(kCustomButtonHeight)
         }
-        googleMapsButton.addTarget(self, action: #selector(googleMapsButtonTapped), for: .touchUpInside)
+        
+        callButton.snp.makeConstraints { (make) in
+            make.top.equalTo(navigateButton.snp.top)
+            make.centerX.equalToSuperview().offset((kRoundRectButtonWidth/2 + 13))
+            make.width.equalTo(kRoundRectButtonWidth)
+            make.height.equalTo(kCustomButtonHeight)
+            make.bottom.equalToSuperview().inset(13)
+        }
+        
+        self.bottomSeparator.snp.makeConstraints { (make) in
+            make.bottom.equalToSuperview()
+            make.leading.equalToSuperview().offset(kSidePadding)
+            make.trailing.equalToSuperview().inset(kSidePadding)
+        }
+        self.bottomSeparator.isHidden = true
+        
+        navigateButton.addTarget(self, action: #selector(googleMapsButtonTapped), for: .touchUpInside)
         nameLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         distanceLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
         
     }
     
-    func setNearestClinic(_ clinic:Clinic?) {
-        if let clinic = clinic {
-            nameLabel.text = clinic.name
-            addressLabel.text = "Address - \(clinic.address)"
-            phoneLabel.text = "Phone - \(clinic.mobile)"
-            if let distance = clinic.distance {
-                distanceLabel.text = "\(distance) km"
-            }
-            
-        }
-    }
-    
     func setClinic(_ clinic:Clinic?) {
         if let clinic = clinic {
-            // TODO fix this clinic.clinic with a better model
             nameLabel.text = clinic.name
             addressLabel.text = "Address - \(clinic.address)"
-            phoneLabel.text = "Phone - \(clinic.mobile)"
+//            phoneLabel.text = "Phone - \(clinic.mobile)"
             if let distance = clinic.distance {
                 distanceLabel.text = "\(distance) km"
             }
@@ -155,7 +180,8 @@ class ClinicCollectionViewCell:UICollectionViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        distanceLabel.preferredMaxLayoutWidth = self.frame.size.width/2
+//        distanceLabel.preferredMaxLayoutWidth = self.frame.size.width/2
+        self.nameLabel.sizeToFit()
         
     }
 }
