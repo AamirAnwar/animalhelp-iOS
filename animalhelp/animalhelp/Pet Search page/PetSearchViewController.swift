@@ -25,15 +25,20 @@ class PetSearchViewController:BaseViewController, PetSearchViewModelDelegate {
     }()
     override func viewDidLoad() {
         super.viewDidLoad()
+        NotificationCenter.default.addObserver(self, selector: #selector(willShowKeyboard(notification:)), name: kNotificationWillShowKeyboard.name, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(willHideKeyboard), name: kNotificationWillHideKeyboard.name, object: nil)
         self.viewModel.delegate = self
-        
-//        let paragraphStyle = NSMutableParagraphStyle()
-//        paragraphStyle.alignment = .center
-//        let title = NSMutableAttributedString(string: "Pet Search\n", attributes: [NSAttributedStringKey.foregroundColor:CustomColorTextBlack,NSAttributedStringKey.font:CustomFontTitleBold,NSAttributedStringKey.paragraphStyle:paragraphStyle])
-//        title.append(NSAttributedString(string: "Delhi", attributes:[NSAttributedStringKey.foregroundColor:CustomColorMainTheme,NSAttributedStringKey.font:CustomFontHeadingSmall,NSAttributedStringKey.paragraphStyle:paragraphStyle]))
-//        customNavBar.setAttributedTitle(title)
         self.customNavBar.enableRightButtonWithTitle("Info")
         self.createSearchBar()
+        // Create separator
+        let separator = CustomSeparator.separator
+        view.addSubview(separator)
+        separator.snp.makeConstraints { (make) in
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.bottom.equalTo(self.searchBar.snp.bottom)
+        }
+        
         createTableView()
         self.viewModel.searchForMissingPets()
         self.emptyStateView.setMessage("No missing pets here :)", buttonTitle: "Change location")
@@ -104,6 +109,26 @@ class PetSearchViewController:BaseViewController, PetSearchViewModelDelegate {
     @objc func didPromptRefresh() {
         self.viewModel.searchForMissingPets()
     }
+    
+    
+    @objc func willShowKeyboard(notification:NSNotification) {
+        guard self.view.window != nil else {return}
+        
+        if let keyboardFrame = notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue {
+            let keyboardHeight = keyboardFrame.cgRectValue.height
+            
+            UIView.animate(withDuration: 1, animations: {
+                self.tableView.contentInset = UIEdgeInsets.init(top: 0, left: 0, bottom: keyboardHeight, right: 0)
+            })
+            
+        }
+    }
+    
+    @objc func willHideKeyboard() {
+        guard self.view.window != nil else {return}
+        self.tableView.contentInset = UIEdgeInsets.init(top: 0, left: 0, bottom: 0, right: 0)
+    }
+    
 }
 
 extension PetSearchViewController:UISearchBarDelegate {
@@ -178,4 +203,6 @@ extension PetSearchViewController:UITableViewDataSource, UITableViewDelegate {
         self.navigationController?.pushViewController(missingPetDetailVC, animated: true)
         
     }
+    
+    
 }
