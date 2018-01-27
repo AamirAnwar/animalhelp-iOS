@@ -27,6 +27,12 @@ extension APIService: TargetType {
                 return url
             }
         case .locationSearch(let query):
+            
+            if let location = LocationManager.sharedManager.userLocation {
+                let lat = location.coordinate.latitude
+                let lon = location.coordinate.longitude
+                return URL(string:"https://maps.googleapis.com/maps/api/place/textsearch/json?query=\(query))&location=\(lat),\(lon)&radius=3000&key=\(GoogleMapsAPIKey!)")!
+            }
             return URL(string:"https://maps.googleapis.com/maps/api/place/textsearch/json?query=\(query))&key=\(GoogleMapsAPIKey!)")!
         default:break;
         }
