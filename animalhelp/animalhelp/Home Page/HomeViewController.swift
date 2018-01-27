@@ -182,6 +182,7 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
     
     func showNearestClinic(withMarker clinicMarker: GMSMarker?) {
         if let userLocation = self.viewModel.locationManager.userLocation,let marker = clinicMarker {
+            self.refreshUserMarker()
             let userLocationCoordinate = CLLocationCoordinate2D.init(latitude: userLocation.latitude, longitude: userLocation.longitude)
             let bounds = GMSCoordinateBounds(coordinate: marker.position, coordinate: userLocationCoordinate)
             let inset = 50 + self.tabBarHeight
@@ -207,15 +208,19 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
                                               longitude: location.longitude,
                                               zoom: zoomLevel)
         googleMapView.animate(to: camera)
-        if let userMarker = self.viewModel.userLocationMarker, let clinics = self.viewModel.nearbyClinics, clinics.isEmpty == false {
-            if userMarker.map == nil {
-                userMarker.map = googleMapView
-            }
+        if let clinics = self.viewModel.nearbyClinics, clinics.isEmpty == false {
+            self.refreshUserMarker()
         }
         else {
             self.transitionTo(state: .MinimizedDrawer)
         }
         
+    }
+    
+    func refreshUserMarker() {
+        if let userMarker = self.viewModel.userLocationMarker {
+            userMarker.map = googleMapView
+        }
     }
     
     func zoomToMarker(_ marker:GMSMarker) {
