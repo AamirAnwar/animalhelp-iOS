@@ -46,6 +46,8 @@ class SelectLocationViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        NotificationCenter.default.addObserver(self, selector: #selector(willShowKeyboard(notification:)), name: kNotificationWillShowKeyboard.name, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(willHideKeyboard), name: kNotificationWillHideKeyboard.name, object: nil)
         self.customNavBar.setTitle("Select Location")
         self.customNavBar.shouldShowCrossButton(true)
         self.view.addSubview(self.tableView)
@@ -69,6 +71,25 @@ class SelectLocationViewController: BaseViewController {
         }
         self.searchBar.delegate = self
     }
+    
+    @objc func willShowKeyboard(notification:NSNotification) {
+        guard self.view.window != nil else {return}
+        
+        if let keyboardFrame = notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue {
+            let keyboardHeight = keyboardFrame.cgRectValue.height
+            
+            UIView.animate(withDuration: 1, animations: {
+                self.tableView.contentInset = UIEdgeInsets.init(top: 0, left: 0, bottom: keyboardHeight, right: 0)
+            })
+            
+        }
+    }
+    
+    @objc func willHideKeyboard() {
+        guard self.view.window != nil else {return}
+        self.tableView.contentInset = UIEdgeInsets.init(top: 0, left: 0, bottom: 0, right: 0)
+    }
+    
 }
 
 extension SelectLocationViewController:UISearchBarDelegate {
