@@ -15,6 +15,7 @@ class StandardListTableViewCell:UITableViewCell {
         let label = UILabel()
         label.font = CustomFontBodyMedium
         label.textColor = CustomColorTextBlack
+        label.numberOfLines = 0
         return label
         
     }()

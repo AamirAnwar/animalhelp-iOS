@@ -28,8 +28,11 @@ class CustomNavigationBar:UIView {
         let button = UIButton(type:.system)
         button.setTitleColor(CustomColorTextBlack, for: .normal)
         button.titleLabel?.font = CustomFontTitleBold
-        button.titleLabel?.numberOfLines = 0
+        button.titleLabel?.numberOfLines = 1
+        button.titleLabel?.minimumScaleFactor = 0.3
+        button.titleLabel?.adjustsFontSizeToFitWidth = true
         button.titleLabel?.textAlignment = .center
+        button.titleLabel?.lineBreakMode = .byTruncatingTail
         return button
     }()
     
