@@ -48,10 +48,21 @@ class HomeViewModel:NSObject {
         super.init()
         NotificationCenter.default.addObserver(self, selector: #selector(self.didChangeUserLocation), name: kNotificationUserLocationChanged.name, object: nil)
            NotificationCenter.default.addObserver(self, selector: #selector(self.locationPermissionDenied), name: kNotificationLocationPerimissionDenied.name, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.startedDetectingLocation), name: kNotificationDidStartUpdatingLocation.name, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.locationDetectionFailed), name: kNotificationLocationDetectionFailed.name, object: nil)
+    }
+    
+    @objc func startedDetectingLocation() {
+        self.delegate?.showLoader()
+    }
+    
+    @objc func locationDetectionFailed() {
+        self.delegate?.hideLoader()
     }
     
     @objc func didChangeUserLocation() {
         if let location = self.locationManager.userLocation {
+            self.delegate?.hideLoader()
             self.delegate?.hideEmptyStateView()
             if let clinics = self.nearbyClinics, clinics.isEmpty == false {
                 self.delegate?.transitionTo(state: .HiddenDrawer)
