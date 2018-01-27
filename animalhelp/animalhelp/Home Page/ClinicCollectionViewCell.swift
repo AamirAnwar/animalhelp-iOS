@@ -19,7 +19,7 @@ protocol ClinicCollectionViewCellDelegate {
 class ClinicCollectionViewCell:UICollectionViewCell {
     var delegate:ClinicCollectionViewCellDelegate? = nil
     var bottomSeparator:CustomSeparator = {
-        let separator = CustomSeparator.paddedSeparator
+        let separator = CustomSeparator.separator
         return separator
         
     }()

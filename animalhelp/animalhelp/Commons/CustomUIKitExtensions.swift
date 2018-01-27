@@ -39,6 +39,10 @@ extension UIView {
     func setHeight(_ height:CGFloat) {
         self.frame = CGRect.init(x: self.originX(), y: self.originY(), width: self.width(), height: height)
     }
+    
+    func bottom() -> CGFloat {
+        return self.originY() + self.height()
+    }
 }
 
 extension UIImageView {
@@ -59,7 +63,7 @@ extension UIImageView {
 
 extension UITableViewCell {
     func showBottomPaddedSeparator() {
-        let separator = CustomSeparator.paddedSeparator
+        let separator = CustomSeparator.separator
         self.addSubview(separator)
         separator.snp.makeConstraints { (make) in
             make.bottom.equalToSuperview()

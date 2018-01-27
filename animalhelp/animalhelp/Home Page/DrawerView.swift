@@ -113,10 +113,7 @@ class DrawerView:UIView {
         self.showNearbyClinicsButton.isUserInteractionEnabled = false
         self.showNearbyClinicsButton.addTarget(self, action: #selector(didTapFindNearbyClinics), for: .touchUpInside)
         self.showNearbyClinicsButton.snp.makeConstraints { (make) in
-            make.center.equalToSuperview()
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
-            make.top.equalToSuperview()
+            make.edges.equalToSuperview()
         }
         self.showNearbyClinicsButton.layer.cornerRadius = 0
         self.showNearbyClinicsButton.contentEdgeInsets = UIEdgeInsets.init(top: -2, left: 0, bottom: 0, right: 0 )
@@ -308,7 +305,6 @@ extension DrawerView:UICollectionViewDelegate,UICollectionViewDelegateFlowLayout
     }
     
     func switchToMinimizedDrawer(title:String) {
-        
         self.showNearbyClinicsButton.isHidden = false
         self.onboardingContainerView.isHidden = true
         self.collectionView.isHidden = true
