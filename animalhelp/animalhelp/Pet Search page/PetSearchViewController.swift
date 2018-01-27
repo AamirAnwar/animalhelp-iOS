@@ -23,6 +23,13 @@ class PetSearchViewController:BaseViewController, PetSearchViewModelDelegate {
         control.tintColor = CustomColorMainTheme
         return control
     }()
+    
+    var isSearching:Bool {
+        get {
+            return self.searchBar.text?.isEmpty == false
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         NotificationCenter.default.addObserver(self, selector: #selector(self.startedDetectingLocation), name: kNotificationDidStartUpdatingLocation.name, object: nil)
@@ -144,6 +151,9 @@ class PetSearchViewController:BaseViewController, PetSearchViewModelDelegate {
         self.tableView.contentInset = UIEdgeInsets.init(top: 0, left: 0, bottom: 0, right: 0)
     }
     
+    func didGetSearchResults(_ results: [MissingPet]) {
+        self.tableView.reloadData()
+    }
 }
 
 extension PetSearchViewController:UISearchBarDelegate {
@@ -153,6 +163,16 @@ extension PetSearchViewController:UISearchBarDelegate {
     
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         self.searchBar.setShowsCancelButton(false, animated: true)
+        if self.isSearching == false {
+            self.tableView.reloadData()
+        }
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        guard let q = searchBar.text else {
+            return
+        }
+        self.viewModel.searchPetsWithQuery(q)
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
@@ -181,15 +201,27 @@ extension PetSearchViewController:UITableViewDataSource, UITableViewDelegate {
                 return 1
             }
         }
-        return self.viewModel.missingPets.count
+        
+        if self.isSearching {
+            return self.viewModel.searchResults.count
+        }
+        else {
+            return self.viewModel.missingPets.count
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
             return self.getPetCountCell(tableView)
         }
+        var pet:MissingPet! = nil
+        if self.isSearching {
+            pet = self.viewModel.searchResults[indexPath.row]
+        }
+        else {
+            pet = self.viewModel.missingPets[indexPath.row]
+        }
         
-        let pet = self.viewModel.missingPets[indexPath.row]
         return self.getMissingPetCell(tableView, pet: pet)
     }
     
@@ -205,7 +237,8 @@ extension PetSearchViewController:UITableViewDataSource, UITableViewDelegate {
         cell.setTitleColor(CustomColorDarkGray)
         cell.setTitleFont(CustomFontDemiSmall)
         cell.updateVerticalPadding(with: 3)
-        cell.setTitle("Showing \(self.viewModel.missingPets.count) missing pets around \(LocationManager.sharedManager.userLocality ?? "current vicinity")")
+        let count = self.isSearching ? self.viewModel.searchResults.count:self.viewModel.missingPets.count
+        cell.setTitle("Showing \(count) missing pets around \(LocationManager.sharedManager.userLocality ?? "current vicinity")")
         return cell
     }
     
@@ -214,10 +247,14 @@ extension PetSearchViewController:UITableViewDataSource, UITableViewDelegate {
             return
         }
         let missingPetDetailVC = MissingPetDetailViewController()
-        missingPetDetailVC.pet = self.viewModel.missingPets[indexPath.row]
+        var pet:MissingPet! = nil
+        if self.isSearching {
+            pet = self.viewModel.searchResults[indexPath.row]
+        }
+        else {
+            pet = self.viewModel.missingPets[indexPath.row]
+        }
+        missingPetDetailVC.pet = pet
         self.navigationController?.pushViewController(missingPetDetailVC, animated: true)
-        
     }
-    
-    
 }
