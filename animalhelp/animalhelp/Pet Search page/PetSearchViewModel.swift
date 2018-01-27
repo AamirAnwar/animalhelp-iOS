@@ -12,6 +12,7 @@ import Moya
 
 protocol PetSearchViewModelDelegate {
     func didUpdateMissingPets()
+    func didGetSearchResults(_ results:[MissingPet])
     func showLoader()
     func hideLoader()
 }
@@ -22,27 +23,27 @@ class PetSearchViewModel {
     let APIService = animalhelp.APIService.sharedService
     var delegate:PetSearchViewModelDelegate? = nil
     var missingPets:[MissingPet] = []
+    var searchResults:[MissingPet] = []
+    
+    
+    func searchPetsWithQuery(_ query:String) {
+        self.delegate?.showLoader()
+        var q = query.lowercased() as NSString
+        q = q.replacingOccurrences(of: " ", with: "+") as NSString
+        MissingPet.searchWithQuery(query: q as String) { (pets) in
+            self.delegate?.hideLoader()
+            self.searchResults = pets
+            self.delegate?.didGetSearchResults(pets)
+        }
+    }
+    
     func searchForMissingPets() {
         self.delegate?.showLoader()
-        APIService.request(.missingPets(cityID:1), completion: { (result) in
-            switch result {
-            case .success(let response):
-                do {
-                    _ = try response.filterSuccessfulStatusCodes()
-                    let data = try response.mapJSON()
-                    print(data)
-                    if let jsonDictionary = data as? NSDictionary {
-                        self.parse(json: jsonDictionary)
-                    }
-                    
-                } catch let error {
-                    // Error occured
-                    print(error)
-                }
-            case .failure(let error):
-                print(error)
-            }
-        })
+        MissingPet.getMissingPets { (pets) in
+            self.delegate?.hideLoader()
+            self.missingPets = pets
+            self.delegate?.didUpdateMissingPets()
+        }
     }
     fileprivate func parse(json:NSDictionary) {
         print(json)
