@@ -25,6 +25,8 @@ class PetSearchViewController:BaseViewController, PetSearchViewModelDelegate {
     }()
     override func viewDidLoad() {
         super.viewDidLoad()
+        NotificationCenter.default.addObserver(self, selector: #selector(self.startedDetectingLocation), name: kNotificationDidStartUpdatingLocation.name, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.locationDetectionFailed), name: kNotificationLocationDetectionFailed.name, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(willShowKeyboard(notification:)), name: kNotificationWillShowKeyboard.name, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(willHideKeyboard), name: kNotificationWillHideKeyboard.name, object: nil)
         self.viewModel.delegate = self
@@ -110,6 +112,19 @@ class PetSearchViewController:BaseViewController, PetSearchViewModelDelegate {
         self.viewModel.searchForMissingPets()
     }
     
+    override func locationChanged() {
+        self.hideLoader()
+        self.viewModel.searchForMissingPets()
+        UtilityFunctions.setUserLocationInNavBar(customNavBar: self.customNavBar)
+    }
+    
+    @objc func startedDetectingLocation() {
+        self.showLoader()
+    }
+    
+    @objc func locationDetectionFailed() {
+        self.hideLoader()
+    }
     
     @objc func willShowKeyboard(notification:NSNotification) {
         guard self.view.window != nil else {return}
@@ -190,7 +205,7 @@ extension PetSearchViewController:UITableViewDataSource, UITableViewDelegate {
         cell.setTitleColor(CustomColorDarkGray)
         cell.setTitleFont(CustomFontDemiSmall)
         cell.updateVerticalPadding(with: 3)
-        cell.setTitle("Showing \(self.viewModel.missingPets.count) missing pets in \(LocationManager.sharedManager.userLocality ?? "current vicinity")")
+        cell.setTitle("Showing \(self.viewModel.missingPets.count) missing pets around \(LocationManager.sharedManager.userLocality ?? "current vicinity")")
         return cell
     }
     

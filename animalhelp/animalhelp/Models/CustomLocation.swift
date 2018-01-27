@@ -7,6 +7,36 @@
 //
 
 import Foundation
+import CoreLocation
+
+class AppLocation:NSObject {
+    var name:String
+    var latitude:Double
+    var longitude:Double
+    var formattedAddress:String? = nil
+    
+    init(name:String, lat:Double, lon:Double) {
+        self.name = name
+        self.latitude = lat
+        self.longitude = lon
+        super.init()
+    }
+    
+    init?(from placemark:CLPlacemark) {
+        guard let name = placemark.name,let location = placemark.location else {return nil}
+        self.latitude = location.coordinate.latitude
+        self.longitude = location.coordinate.longitude
+        self.name = name
+        super.init()
+    }
+    
+    init(from location:CustomLocation) {
+        self.latitude = Double.init(location.latitude)
+        self.longitude = Double.init(location.longitude)
+        self.name = location.name
+        super.init()
+    }
+}
 
 struct CustomLocation:Codable {
     var formattedAddress:String

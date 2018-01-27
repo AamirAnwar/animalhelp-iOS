@@ -14,7 +14,7 @@ import GoogleMaps
 protocol HomeViewModelDelegate {
     func locationServicesDenied() -> Void
     func didUpdate(_ updatedMarker:GMSMarker) -> Void
-    func showUserLocation(location:CLLocation)->Void
+    func showUserLocation(location:AppLocation)->Void
     func transitionTo(state:HomeViewState)
     func showDrawerWith(selectedIndex:Int, clinics:[Clinic])
     func showMarkers(markers:[GMSMarker])
@@ -39,6 +39,7 @@ class HomeViewModel:NSObject {
     }
     var nearbyClinics:[Clinic]?
     var nearbyClinicsMarkers:[GMSMarker]?
+    var userLocationMarker:GMSMarker?
     var nearestClinicMarker:GMSMarker? {
         get {
             return self.nearbyClinicsMarkers?.first
@@ -64,13 +65,18 @@ class HomeViewModel:NSObject {
         if let location = self.locationManager.userLocation {
             self.delegate?.hideLoader()
             self.delegate?.hideEmptyStateView()
-            if let clinics = self.nearbyClinics, clinics.isEmpty == false {
-                self.delegate?.transitionTo(state: .HiddenDrawer)
-            }
-            else {
-                self.delegate?.transitionTo(state: .MinimizedDrawer)
-                self.getNearbyClinics()
-            }
+            self.delegate?.transitionTo(state: .MinimizedDrawer)
+            self.getNearbyClinics()
+            
+            let marker = GMSMarker()
+            marker.position = CLLocationCoordinate2D(latitude: location.latitude, longitude: location.longitude)
+            marker.title = location.name
+            marker.icon = GMSMarker.markerImage(with: CustomColorGreen)
+            marker.appearAnimation = .pop
+            // Clear the previous marker
+            userLocationMarker?.map = nil
+            userLocationMarker = marker
+            
             
             self.delegate?.showUserLocation(location: location)
         }
@@ -124,6 +130,7 @@ class HomeViewModel:NSObject {
         marker.position = CLLocationCoordinate2D(latitude: clinic.lat, longitude: clinic.lon)
         marker.title = clinic.name
         marker.snippet = clinic.address
+        marker.appearAnimation = .pop
         return marker
     }
 }

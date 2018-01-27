@@ -33,7 +33,7 @@ class SelectLocationViewController: BaseViewController {
             self.tableView.reloadData()
         }
     }
-    var activeCities = ["Delhi"] {
+    var activeCities = [AppLocation.init(name: "Delhi", lat: 23.0, lon: 72.1)] {
         didSet {
             self.tableView.reloadData()
         }
@@ -142,7 +142,7 @@ extension SelectLocationViewController:UITableViewDelegate,UITableViewDataSource
     func getCityCell(_ tableView:UITableView, indexPath:IndexPath) -> StandardListTableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: kCityCellReuseIdentifier) as! StandardListTableViewCell
         guard indexPath.row < self.activeCities.count else { return cell}
-        cell.setTitle(self.activeCities[indexPath.row])
+        cell.setTitle(self.activeCities[indexPath.row].name)
         cell.showsDisclosure(false)
         cell.showBottomPaddedSeparator()
         return cell
@@ -160,13 +160,17 @@ extension SelectLocationViewController:UITableViewDelegate,UITableViewDataSource
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         // Set app-wide location
-        self.dismiss(animated:true)
-    }
-    
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let y = scrollView.contentOffset.y
-        if y < -120 {
-            self.dismiss(animated: true)
+        if isSearching {
+            // Set from search results
+            guard indexPath.row < self.customLocations.count else {return}
+            LocationManager.sharedManager.userLocation = AppLocation.init(from: self.customLocations[indexPath.row])
         }
+        else {
+            guard indexPath.row < self.activeCities.count else {return}
+            // Get app location objects from API
+            LocationManager.sharedManager.userLocation = self.activeCities[indexPath.row]
+        }
+        
+        self.dismiss(animated:true)
     }
 }

@@ -12,6 +12,7 @@ import CoreLocation
 import MapKit
 import GoogleMaps
 import Moya
+
 let kMapButtonSize:CGFloat = 44
 let kMapButtonFontSize:CGFloat = 22
 
@@ -180,10 +181,11 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
     }
     
     func showNearestClinic(withMarker clinicMarker: GMSMarker?) {
-        if let marker = clinicMarker {
-            let bounds = GMSCoordinateBounds(coordinate: marker.position, coordinate: googleMapView.myLocation!.coordinate)
-            
-            let camera = googleMapView.camera(for: bounds , insets: UIEdgeInsetsMake(50 + self.tabBarHeight, 0, 50 + self.tabBarHeight, 0))!
+        if let userLocation = self.viewModel.locationManager.userLocation,let marker = clinicMarker {
+            let userLocationCoordinate = CLLocationCoordinate2D.init(latitude: userLocation.latitude, longitude: userLocation.longitude)
+            let bounds = GMSCoordinateBounds(coordinate: marker.position, coordinate: userLocationCoordinate)
+            let inset = 50 + self.tabBarHeight
+            let camera = googleMapView.camera(for: bounds , insets: UIEdgeInsetsMake(inset, inset, inset, inset))!
             googleMapView.camera = camera
         }
     }
@@ -200,14 +202,15 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
     }
     
 
-    func showUserLocation(location:CLLocation) {
-        let camera = GMSCameraPosition.camera(withLatitude: location.coordinate.latitude,
-                                              longitude: location.coordinate.longitude,
+    func showUserLocation(location:AppLocation) {
+        let camera = GMSCameraPosition.camera(withLatitude: location.latitude,
+                                              longitude: location.longitude,
                                               zoom: zoomLevel)
-        googleMapView.isMyLocationEnabled = true
         googleMapView.animate(to: camera)
-        if let clinics = self.viewModel.nearbyClinics, clinics.isEmpty == false {
-            
+        if let userMarker = self.viewModel.userLocationMarker, let clinics = self.viewModel.nearbyClinics, clinics.isEmpty == false {
+            if userMarker.map == nil {
+                userMarker.map = googleMapView
+            }
         }
         else {
             self.transitionTo(state: .MinimizedDrawer)
@@ -238,6 +241,10 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
     
     @objc func didTapShowNearestClinic() {
         self.showNearestClinic(withMarker: self.viewModel.nearestClinicMarker)
+    }
+    
+    override func locationChanged() {
+        UtilityFunctions.setUserLocationInNavBar(customNavBar: self.customNavBar)
     }
     
     

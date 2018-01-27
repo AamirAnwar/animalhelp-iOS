@@ -118,4 +118,25 @@ enum UtilityFunctions {
             }
         }
     }
+    
+    public static func setUserLocationInNavBar(customNavBar:CustomNavigationBar) {
+        guard var locality = LocationManager.sharedManager.userLocality else {return}
+        customNavBar.locationButton.setTitle(nil, for: .normal)
+        
+        if locality.count > 18 {
+            // Too long
+            locality = String(locality[locality.startIndex..<locality.index(locality.startIndex, offsetBy: 15)])
+            locality.append("...")
+        }
+        
+        let mutableAttrString = NSMutableAttributedString.init(string: "\(locality) ", attributes: [NSAttributedStringKey.font:CustomFontTitleBold, NSAttributedStringKey.foregroundColor:CustomColorTextBlack])
+        let chevronString = NSAttributedString.init(string: NSString.fontAwesomeIconString(forEnum: FAIcon.FAChevronDown), attributes: [
+            NSAttributedStringKey.foregroundColor:CustomColorMainTheme,
+            NSAttributedStringKey.font: UIFont.init(name: kFontAwesomeFamilyName, size: 16)!,
+            NSAttributedStringKey.baselineOffset: 2
+            ])
+        mutableAttrString.append(chevronString)
+        customNavBar.setAttributedTitle(mutableAttrString)
+    }
+    
 }

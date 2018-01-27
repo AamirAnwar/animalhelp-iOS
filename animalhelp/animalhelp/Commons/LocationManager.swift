@@ -16,14 +16,20 @@ protocol LocationManagerDelegate {
 class LocationManager: NSObject {
     
     fileprivate let locationManager = CLLocationManager()
+    public var userLocation:AppLocation? {
+        didSet {
+            NotificationCenter.default.post(kNotificationUserLocationChanged)
+            self.delegate?.userLocationDidChange()
+        }
+    }
     fileprivate var timer:Timer? = nil
     fileprivate var timeoutDuration:CFTimeInterval = 10.0
     fileprivate let geocoder = CLGeocoder()
     fileprivate var placeMark:CLPlacemark? = nil
     fileprivate var performingReverseGeocoding = false
-    
+    fileprivate var bufferLocation:CLLocation? = nil
     static let sharedManager = LocationManager()
-    public var userLocation:CLLocation? = nil
+    
     public var delegate:LocationManagerDelegate? = nil
     public var isLocationPermissionGranted:Bool {
         get {
@@ -33,7 +39,7 @@ class LocationManager: NSObject {
     
     public var userLocality:String? {
         get {
-            return self.placeMark?.name
+            return self.userLocation?.name
         }
     }
     
@@ -93,7 +99,7 @@ extension LocationManager: CLLocationManagerDelegate {
                 return
             }
             
-            if self.userLocation == nil || self.userLocation!.horizontalAccuracy > location.horizontalAccuracy {
+            if self.bufferLocation == nil || self.bufferLocation!.horizontalAccuracy > location.horizontalAccuracy {
                 
                 if self.performingReverseGeocoding == false {
                     performingReverseGeocoding = true
@@ -105,8 +111,8 @@ extension LocationManager: CLLocationManagerDelegate {
                         }
                         if let place = placemarks?.first {
                             self.placeMark = place
-                            self.userLocation = location
-                            
+                            self.bufferLocation = location
+                            self.userLocation = AppLocation.init(from: place)
                             NotificationCenter.default.post(kNotificationUserLocationChanged)
                             self.delegate?.userLocationDidChange()
                             self.locationManager.stopUpdatingLocation()
@@ -121,11 +127,5 @@ extension LocationManager: CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         self.startDetectingLocation()
-    }
-    
-    func setLocation(_ newLocation:CLLocation) {
-        self.userLocation = newLocation
-        NotificationCenter.default.post(kNotificationUserLocationChanged)
-        self.delegate?.userLocationDidChange()
     }
 }
