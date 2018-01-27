@@ -31,6 +31,16 @@ enum UtilityFunctions {
         }
     }
     
+    static func addBottomSeparator(toView view:UIView) {
+        let separator = CustomSeparator.separator
+        view.addSubview(separator)
+        separator.snp.makeConstraints { (make) in
+            make.bottom.equalToSuperview()
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+        }
+    }
+    
     static func assignFontLabelTo(_ view:UIView, icon:FAIcon) {
         guard let superview = view.superview else {return}
         let label = UILabel()
