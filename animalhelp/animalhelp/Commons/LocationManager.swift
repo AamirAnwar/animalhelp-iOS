@@ -33,7 +33,7 @@ class LocationManager: NSObject {
     
     public var userLocality:String? {
         get {
-            return self.placeMark?.locality
+            return self.placeMark?.name
         }
     }
     
@@ -54,6 +54,7 @@ class LocationManager: NSObject {
             locationManager.desiredAccuracy = kCLLocationAccuracyBest
             self.startLocationDetectionTimer()
             locationManager.startUpdatingLocation()
+            NotificationCenter.default.post(kNotificationDidStartUpdatingLocation)
         }
     }
     
@@ -75,6 +76,7 @@ class LocationManager: NSObject {
 
 extension LocationManager: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        NotificationCenter.default.post(kNotificationLocationDetectionFailed)
         print("Failed to update location")
         
     }
