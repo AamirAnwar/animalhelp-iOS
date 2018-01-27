@@ -33,7 +33,7 @@ class SelectLocationViewController: BaseViewController {
             self.tableView.reloadData()
         }
     }
-    var activeCities = [AppLocation.init(name: "Delhi", lat: 23.0, lon: 72.1)] {
+    var activeCities:[AppLocation] = [] {
         didSet {
             self.tableView.reloadData()
         }
@@ -71,6 +71,18 @@ class SelectLocationViewController: BaseViewController {
         }
         self.searchBar.delegate = self
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.showLoader()
+        AppLocation.getActiveCities { (cities) in
+            self.hideLoader()
+            self.activeCities = cities
+            self.tableView.reloadData()
+        }
+    }
+    
+    
     
     @objc func willShowKeyboard(notification:NSNotification) {
         guard self.view.window != nil else {return}
