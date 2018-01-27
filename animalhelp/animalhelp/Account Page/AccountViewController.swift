@@ -190,6 +190,7 @@ extension AccountViewController: UITableViewDelegate, UITableViewDataSource {
     func showFeedbackPage() {
 //        let vc = FeedbackViewController()
 //        self.navigationController?.pushViewController(vc, animated: true)
+        guard MFMailComposeViewController.canSendMail() else {return}
         let mailVC = MFMailComposeViewController()
         mailVC.setSubject("Feedback")
         mailVC.mailComposeDelegate = self
@@ -210,6 +211,11 @@ extension AccountViewController: UITableViewDelegate, UITableViewDataSource {
         // Show a bottom separator for all cells except the last
         if indexPath.row < self.accountItems.count - 1 {
             standardCell.showBottomPaddedSeparator()
+        }
+        else {
+            if loginManager.isLoggedIn {
+                standardCell.showsDisclosure(false)
+            }
         }
         return standardCell
     }

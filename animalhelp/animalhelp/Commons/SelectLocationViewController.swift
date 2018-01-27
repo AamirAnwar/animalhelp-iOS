@@ -33,7 +33,7 @@ class SelectLocationViewController: BaseViewController {
             self.tableView.reloadData()
         }
     }
-    var activeCities = ["Delhi","Delhi"] {
+    var activeCities:[AppLocation] = [] {
         didSet {
             self.tableView.reloadData()
         }
@@ -46,7 +46,10 @@ class SelectLocationViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        NotificationCenter.default.addObserver(self, selector: #selector(willShowKeyboard(notification:)), name: kNotificationWillShowKeyboard.name, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(willHideKeyboard), name: kNotificationWillHideKeyboard.name, object: nil)
         self.customNavBar.setTitle("Select Location")
+        self.customNavBar.shouldShowCrossButton(true)
         self.view.addSubview(self.tableView)
         self.view.addSubview(self.searchBar)
         self.tableView.delegate = self
@@ -68,6 +71,37 @@ class SelectLocationViewController: BaseViewController {
         }
         self.searchBar.delegate = self
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.showLoader()
+        AppLocation.getActiveCities { (cities) in
+            self.hideLoader()
+            self.activeCities = cities
+            self.tableView.reloadData()
+        }
+    }
+    
+    
+    
+    @objc func willShowKeyboard(notification:NSNotification) {
+        guard self.view.window != nil else {return}
+        
+        if let keyboardFrame = notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue {
+            let keyboardHeight = keyboardFrame.cgRectValue.height
+            
+            UIView.animate(withDuration: 1, animations: {
+                self.tableView.contentInset = UIEdgeInsets.init(top: 0, left: 0, bottom: keyboardHeight, right: 0)
+            })
+            
+        }
+    }
+    
+    @objc func willHideKeyboard() {
+        guard self.view.window != nil else {return}
+        self.tableView.contentInset = UIEdgeInsets.init(top: 0, left: 0, bottom: 0, right: 0)
+    }
+    
 }
 
 extension SelectLocationViewController:UISearchBarDelegate {
@@ -82,7 +116,9 @@ extension SelectLocationViewController:UISearchBarDelegate {
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        self.showLoader()
         CustomLocation.performLocationSearchWith(UserQuery: searchBar.text) { (locations) in
+            self.hideLoader()
             self.customLocations = locations
         }
     }
@@ -118,7 +154,7 @@ extension SelectLocationViewController:UITableViewDelegate,UITableViewDataSource
     func getCityCell(_ tableView:UITableView, indexPath:IndexPath) -> StandardListTableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: kCityCellReuseIdentifier) as! StandardListTableViewCell
         guard indexPath.row < self.activeCities.count else { return cell}
-        cell.setTitle(self.activeCities[indexPath.row])
+        cell.setTitle(self.activeCities[indexPath.row].name)
         cell.showsDisclosure(false)
         cell.showBottomPaddedSeparator()
         return cell
@@ -136,13 +172,17 @@ extension SelectLocationViewController:UITableViewDelegate,UITableViewDataSource
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         // Set app-wide location
-        self.dismiss(animated:true)
-    }
-    
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let y = scrollView.contentOffset.y
-        if y < -120 {
-            self.dismiss(animated: true)
+        if isSearching {
+            // Set from search results
+            guard indexPath.row < self.customLocations.count else {return}
+            LocationManager.sharedManager.userLocation = AppLocation.init(from: self.customLocations[indexPath.row])
         }
+        else {
+            guard indexPath.row < self.activeCities.count else {return}
+            // Get app location objects from API
+            LocationManager.sharedManager.userLocation = self.activeCities[indexPath.row]
+        }
+        
+        self.dismiss(animated:true)
     }
 }

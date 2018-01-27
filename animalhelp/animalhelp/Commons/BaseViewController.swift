@@ -36,17 +36,27 @@ class BaseViewController:UIViewController, CustomNavigationBarDelegate,UIGesture
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        NotificationCenter.default.addObserver(self, selector: #selector(locationChanged), name: kNotificationUserLocationChanged.name, object: nil)
         self.view.backgroundColor = UIColor.white
         self.view.addSubview(customNavBar)
         self.navigationController?.isNavigationBarHidden = true
         self.navigationController?.interactivePopGestureRecognizer?.delegate = self
         self.createEmptyStateView()
+        UtilityFunctions.setUserLocationInNavBar(customNavBar: self.customNavBar)
         customNavBar.delegate = self
         customNavBar.snp.makeConstraints { (make) in
             make.top.equalToSuperview()
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
-        }        
+        }
+        
+        self.customNavBar.shouldShowBackButton(false)
+        if let nav = self.navigationController {
+            if nav.viewControllers.count > 1 && nav.viewControllers.first! != self {
+                self.customNavBar.shouldShowBackButton(true)
+            }
+        }
+        
     }
     
     
@@ -85,5 +95,26 @@ class BaseViewController:UIViewController, CustomNavigationBarDelegate,UIGesture
     open func didTapEmptyStateButton() {
         
     }
+    
+    func showLoader() {
+        self.customNavBar.showLoader()
+    }
+    
+    func hideLoader() {
+        self.customNavBar.hideLoader()
+    }
+    
+    open func didTapBackButton() {
+        self.navigationController?.popViewController(animated: true)
+    }
+    
+    open func didTapCrossButton() {
+        self.dismiss(animated: true)
+    }
+    
+    @objc func locationChanged() {
+        
+    }
+    
 }
 

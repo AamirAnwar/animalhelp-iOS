@@ -14,9 +14,8 @@ import GoogleMaps
 protocol HomeViewModelDelegate {
     func locationServicesDenied() -> Void
     func didUpdate(_ updatedMarker:GMSMarker) -> Void
-    func showUserLocation(location:CLLocation)->Void
+    func showUserLocation(location:AppLocation)->Void
     func transitionTo(state:HomeViewState)
-    func showDrawerWith(clinic:Clinic)
     func showDrawerWith(selectedIndex:Int, clinics:[Clinic])
     func showMarkers(markers:[GMSMarker])
     func zoomIntoNearestClinic()
@@ -24,9 +23,12 @@ protocol HomeViewModelDelegate {
     func showEmptyStateView()
     func hideEmptyStateView()
     func didTapLocationButton()
+    func showLoader()
+    func hideLoader()
 }
 
 class HomeViewModel:NSObject {
+    
     let locationManager = animalhelp.LocationManager.sharedManager
     let APIService = animalhelp.APIService.sharedService
     var delegate:HomeViewModelDelegate?
@@ -37,6 +39,7 @@ class HomeViewModel:NSObject {
     }
     var nearbyClinics:[Clinic]?
     var nearbyClinicsMarkers:[GMSMarker]?
+    var userLocationMarker:GMSMarker?
     var nearestClinicMarker:GMSMarker? {
         get {
             return self.nearbyClinicsMarkers?.first
@@ -46,12 +49,35 @@ class HomeViewModel:NSObject {
         super.init()
         NotificationCenter.default.addObserver(self, selector: #selector(self.didChangeUserLocation), name: kNotificationUserLocationChanged.name, object: nil)
            NotificationCenter.default.addObserver(self, selector: #selector(self.locationPermissionDenied), name: kNotificationLocationPerimissionDenied.name, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.startedDetectingLocation), name: kNotificationDidStartUpdatingLocation.name, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.locationDetectionFailed), name: kNotificationLocationDetectionFailed.name, object: nil)
+    }
+    
+    @objc func startedDetectingLocation() {
+        self.delegate?.showLoader()
+    }
+    
+    @objc func locationDetectionFailed() {
+        self.delegate?.hideLoader()
     }
     
     @objc func didChangeUserLocation() {
         if let location = self.locationManager.userLocation {
+            self.delegate?.hideLoader()
             self.delegate?.hideEmptyStateView()
-            self.delegate?.transitionTo(state: .HiddenDrawer)
+            self.delegate?.transitionTo(state: .MinimizedDrawer)
+            self.getNearbyClinics()
+            
+            let marker = GMSMarker()
+            marker.position = CLLocationCoordinate2D(latitude: location.latitude, longitude: location.longitude)
+            marker.title = location.name
+            marker.icon = GMSMarker.markerImage(with: CustomColorGreen)
+            marker.appearAnimation = .pop
+            // Clear the previous marker
+            userLocationMarker?.map = nil
+            userLocationMarker = marker
+            
+            
             self.delegate?.showUserLocation(location: location)
         }
         else {
@@ -68,16 +94,14 @@ class HomeViewModel:NSObject {
             self.delegate?.transitionTo(state: .UserLocationUnknown)
         }
         else {
-            if self.locationManager.userLocation != nil {
-//                self.updateNearestClinic()
-            }
-            else {
+            if self.locationManager.userLocation == nil {
                 self.locationManager.startDetectingLocation()
             }
         }
     }
     
     func getNearbyClinics() {
+        self.delegate?.showLoader()
         Clinic.getNearbyClinics { (clinics) in
             guard clinics.isEmpty == false else {
                 self.delegate?.showEmptyStateView()
@@ -93,6 +117,7 @@ class HomeViewModel:NSObject {
             self.nearbyClinicsMarkers = clinics.map({ (clinic) -> GMSMarker in
                 return self.createMarkerWithClinic(clinic: clinic)
             })
+            self.delegate?.hideLoader()
             self.delegate?.hideEmptyStateView()
             self.delegate?.showMarkers(markers:self.nearbyClinicsMarkers!)
             self.delegate?.transitionTo(state: .SingleClinicDrawer)
@@ -105,19 +130,21 @@ class HomeViewModel:NSObject {
         marker.position = CLLocationCoordinate2D(latitude: clinic.lat, longitude: clinic.lon)
         marker.title = clinic.name
         marker.snippet = clinic.address
+        marker.appearAnimation = .pop
         return marker
     }
 }
 
 extension HomeViewModel:DrawerViewDelegate {
+    
+    func didTapFindNearbyClinics() {
+//        self.getNearbyClinics()
+    }
+    
     func didSwipeToClinicAt(index:Int) {
         if let markers = self.nearbyClinicsMarkers, markers.count > index {
             self.delegate?.zoomToMarker(markers[index])
         }
-    }
-    
-    func didTapHideDrawerButton() {
-        self.delegate?.transitionTo(state: .HiddenDrawer)
     }
     
     func didTapStickyButton(seeMore: Bool) {

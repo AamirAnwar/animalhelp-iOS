@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 class CustomSeparator:UIView {
-    static var paddedSeparator:CustomSeparator {
+    static var separator:CustomSeparator {
         get {
             let sep = CustomSeparator()
             sep.backgroundColor = CustomColorSeparatorGrey

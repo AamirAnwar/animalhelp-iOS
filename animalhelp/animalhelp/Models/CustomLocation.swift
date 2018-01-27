@@ -7,6 +7,81 @@
 //
 
 import Foundation
+import CoreLocation
+
+class AppLocation:NSObject, Codable {
+    var name:String
+    var latitude:Double
+    var longitude:Double
+
+    enum CodingKeys: String, CodingKey {
+        case name = "name"
+        case latitude = "lat"
+        case longitude = "lon"
+    }
+    
+    init(name:String, lat:Double, lon:Double) {
+        self.name = name
+        self.latitude = lat
+        self.longitude = lon
+        super.init()
+    }
+    
+    init?(from placemark:CLPlacemark) {
+        guard let name = placemark.name,let location = placemark.location else {return nil}
+        self.latitude = location.coordinate.latitude
+        self.longitude = location.coordinate.longitude
+        self.name = name
+        super.init()
+    }
+    
+    init(from location:CustomLocation) {
+        self.latitude = Double.init(location.latitude)
+        self.longitude = Double.init(location.longitude)
+        self.name = location.name
+        super.init()
+    }
+    
+    static func getActiveCities(completion:@escaping ([AppLocation]) -> Void) {
+        APIService.sharedService.request(.activeCities) { (result) in
+            switch result {
+            case .failure(let error):print("error! \(error.localizedDescription)")
+            case .success(let response):
+                do {
+                    _ = try response.filterSuccessfulStatusCodes()
+                    let data = try response.mapJSON()
+                    if let responseDict = data as? NSDictionary {
+                        completion(self.parseActiveCities(responseDict))
+                    }
+                } catch let error {
+                    print(error.localizedDescription)
+                }
+                
+            }
+        }
+    }
+    
+    static func parseActiveCities(_ jsonDict:NSDictionary) -> [AppLocation] {
+        let decoder = JSONDecoder()
+        if let locationsDict = jsonDict.value(forKey: "cities") as? Array<NSDictionary> {
+            guard locationsDict.isEmpty == false else {return []}
+            var parsedLocations = [AppLocation]()
+            for dict in locationsDict {
+                do {
+                    let location = try decoder.decode(AppLocation.self, from: JSONSerialization.data(withJSONObject: dict, options: .init(rawValue: 0)))
+                    parsedLocations += [location]
+                } catch let error {
+                    print(error)
+                    return []
+                }
+            }
+            return parsedLocations
+        }
+        return []
+    }
+}
+
+
 
 struct CustomLocation:Codable {
     var formattedAddress:String

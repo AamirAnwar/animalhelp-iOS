@@ -20,13 +20,13 @@ struct Clinic:Codable {
     
     static func getNearbyClinics(completion:@escaping ([Clinic])->Void) {
         if let location = LocationManager.sharedManager.userLocation {
-            APIService.sharedService.request(.clinics(lat: "\(location.coordinate.latitude)", lon: "\(location.coordinate.longitude)"), completion: { (result) in
+            APIService.sharedService.request(.clinics(lat: "\(location.latitude)", lon: "\(location.longitude)"), completion: { (result) in
                 switch result {
                 case .success(let response):
                     do {
                         _ = try response.filterSuccessfulStatusCodes()
                         let data = try response.mapJSON()
-                        print(data)
+//                        print(data)
                         if let jsonDictionary = data as? NSDictionary {
                             completion(self.parseClinics(json: jsonDictionary))
                         }

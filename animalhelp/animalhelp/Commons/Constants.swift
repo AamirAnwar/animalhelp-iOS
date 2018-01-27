@@ -10,9 +10,16 @@ import Foundation
 import UIKit
 
 var GoogleMapsAPIKey:String?
+let kMissingPetImageHeight:CGFloat = 265
+let kMinPopUpHeight:CGFloat = 200
 let kCornerRadius:CGFloat = 4
-let kStandardButtonHeight = 50
-let kCollectionViewHeight:CGFloat = 277
+let kStandardButtonHeight:CGFloat = 50
+
+let kDrawerUnknownLocationHeight:CGFloat = 280
+let kDrawerMinimizedStateHeight:CGFloat = 30
+let kSingleClinicStateHeight:CGFloat = 180
+
+let kCollectionViewHeight:CGFloat = 180
 let kSocialLoginButtonHeight:CGFloat = 48
 let kSidePadding:CGFloat = 18
 let kSeparatorHeight:CGFloat = 1
@@ -25,5 +32,11 @@ let kNotificationLogOutFailed = Notification(name: Notification.Name.init("kLogo
 let kNotificationUserLocationChanged = Notification(name: Notification.Name.init("userLocationChanged"))
 let kNotificationLocationPerimissionGiven = Notification(name: Notification.Name.init("LocationPerimissionGiven"))
 let kNotificationLocationPerimissionDenied = Notification(name: Notification.Name.init("LocationPerimissionDenied"))
+let kNotificationDidStartUpdatingLocation = Notification(name: Notification.Name.init("StartedUpatingLocation"))
+let kNotificationLocationDetectionFailed = Notification(name: Notification.Name.init("LocationDetectionFailed"))
+
+let kNotificationWillShowKeyboard = Notification(name: Notification.Name.UIKeyboardWillShow)
+let kNotificationWillHideKeyboard = Notification(name: Notification.Name.UIKeyboardWillHide)
+
 
 

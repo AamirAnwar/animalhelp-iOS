@@ -13,6 +13,7 @@ import UIKit
 class PetSearchViewController:BaseViewController, PetSearchViewModelDelegate {
     
     let kMissingPetCellReuseIdentifier = "MissingPetTableViewCell"
+    let kPetCountCellReuseIdentifier = "PetCountTableViewCell"
     
     let tableView = UITableView(frame: CGRect.zero, style: UITableViewStyle.plain)
     let searchBar = UISearchBar(frame: CGRect.zero)
@@ -22,17 +23,31 @@ class PetSearchViewController:BaseViewController, PetSearchViewModelDelegate {
         control.tintColor = CustomColorMainTheme
         return control
     }()
+    
+    var isSearching:Bool {
+        get {
+            return self.searchBar.text?.isEmpty == false
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        NotificationCenter.default.addObserver(self, selector: #selector(self.startedDetectingLocation), name: kNotificationDidStartUpdatingLocation.name, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.locationDetectionFailed), name: kNotificationLocationDetectionFailed.name, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(willShowKeyboard(notification:)), name: kNotificationWillShowKeyboard.name, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(willHideKeyboard), name: kNotificationWillHideKeyboard.name, object: nil)
         self.viewModel.delegate = self
-        
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.alignment = .center
-        let title = NSMutableAttributedString(string: "Pet Search\n", attributes: [NSAttributedStringKey.foregroundColor:CustomColorTextBlack,NSAttributedStringKey.font:CustomFontTitleBold,NSAttributedStringKey.paragraphStyle:paragraphStyle])
-        title.append(NSAttributedString(string: "Delhi", attributes:[NSAttributedStringKey.foregroundColor:CustomColorMainTheme,NSAttributedStringKey.font:CustomFontHeadingSmall,NSAttributedStringKey.paragraphStyle:paragraphStyle]))
-        customNavBar.setAttributedTitle(title)
         self.customNavBar.enableRightButtonWithTitle("Info")
         self.createSearchBar()
+        // Create separator
+        let separator = CustomSeparator.separator
+        view.addSubview(separator)
+        separator.snp.makeConstraints { (make) in
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.bottom.equalTo(self.searchBar.snp.bottom)
+        }
+        
         createTableView()
         self.viewModel.searchForMissingPets()
         self.emptyStateView.setMessage("No missing pets here :)", buttonTitle: "Change location")
@@ -63,6 +78,8 @@ class PetSearchViewController:BaseViewController, PetSearchViewModelDelegate {
         self.tableView.refreshControl = self.refreshControl
         self.tableView.contentInset = UIEdgeInsets(top: 8, left: 0, bottom: 20, right: 0)
         self.tableView.register(MissingPetTableViewCell.self, forCellReuseIdentifier: self.kMissingPetCellReuseIdentifier)
+        self.tableView.register(StandardListTableViewCell.self, forCellReuseIdentifier: self.kPetCountCellReuseIdentifier)
+        
         self.tableView.snp.makeConstraints { (make) in
             make.top.equalTo(self.searchBar.snp.bottom)
             make.left.equalToSuperview()
@@ -91,7 +108,7 @@ class PetSearchViewController:BaseViewController, PetSearchViewModelDelegate {
     }
     
     override func didTapRightBarButton() {
-        UtilityFunctions.showPopUpWith(title: "Add a missing pet", subtitle: "If you wish to add a pet please tap the button below to be redirected to a form where you can fill details. \nWe hope we can help you find your pet.", buttonTitle: "Proceed")
+        UtilityFunctions.showPopUpWith(title: "Add a missing pet", subtitle: "If you wish to add a pet please tap the button below to be redirected to a form where you can fill details", buttonTitle: "Proceed")
     }
     
     override func didTapEmptyStateButton() {
@@ -100,6 +117,42 @@ class PetSearchViewController:BaseViewController, PetSearchViewModelDelegate {
     
     @objc func didPromptRefresh() {
         self.viewModel.searchForMissingPets()
+    }
+    
+    override func locationChanged() {
+        self.hideLoader()
+        self.viewModel.searchForMissingPets()
+        UtilityFunctions.setUserLocationInNavBar(customNavBar: self.customNavBar)
+    }
+    
+    @objc func startedDetectingLocation() {
+        self.showLoader()
+    }
+    
+    @objc func locationDetectionFailed() {
+        self.hideLoader()
+    }
+    
+    @objc func willShowKeyboard(notification:NSNotification) {
+        guard self.view.window != nil else {return}
+        
+        if let keyboardFrame = notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue {
+            let keyboardHeight = keyboardFrame.cgRectValue.height
+            
+            UIView.animate(withDuration: 1, animations: {
+                self.tableView.contentInset = UIEdgeInsets.init(top: 0, left: 0, bottom: keyboardHeight, right: 0)
+            })
+            
+        }
+    }
+    
+    @objc func willHideKeyboard() {
+        guard self.view.window != nil else {return}
+        self.tableView.contentInset = UIEdgeInsets.init(top: 0, left: 0, bottom: 0, right: 0)
+    }
+    
+    func didGetSearchResults(_ results: [MissingPet]) {
+        self.tableView.reloadData()
     }
 }
 
@@ -110,6 +163,16 @@ extension PetSearchViewController:UISearchBarDelegate {
     
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         self.searchBar.setShowsCancelButton(false, animated: true)
+        if self.isSearching == false {
+            self.tableView.reloadData()
+        }
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        guard let q = searchBar.text else {
+            return
+        }
+        self.viewModel.searchPetsWithQuery(q)
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
@@ -119,19 +182,46 @@ extension PetSearchViewController:UISearchBarDelegate {
 
 extension PetSearchViewController:UITableViewDataSource, UITableViewDelegate {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return 2
     }
     
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.section == 0 {
+            return 22
+        }
         return 400
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.viewModel.missingPets.count
+        if section == 0 {
+            if self.viewModel.missingPets.isEmpty == true {
+                return 0
+            }
+            else {
+                return 1
+            }
+        }
+        
+        if self.isSearching {
+            return self.viewModel.searchResults.count
+        }
+        else {
+            return self.viewModel.missingPets.count
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let pet = self.viewModel.missingPets[indexPath.row]
+        if indexPath.section == 0 {
+            return self.getPetCountCell(tableView)
+        }
+        var pet:MissingPet! = nil
+        if self.isSearching {
+            pet = self.viewModel.searchResults[indexPath.row]
+        }
+        else {
+            pet = self.viewModel.missingPets[indexPath.row]
+        }
+        
         return self.getMissingPetCell(tableView, pet: pet)
     }
     
@@ -141,13 +231,30 @@ extension PetSearchViewController:UITableViewDataSource, UITableViewDelegate {
         return cell
     }
     
+    func getPetCountCell(_ tableView:UITableView) -> StandardListTableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: kPetCountCellReuseIdentifier) as! StandardListTableViewCell
+        cell.showsDisclosure(false)
+        cell.setTitleColor(CustomColorDarkGray)
+        cell.setTitleFont(CustomFontDemiSmall)
+        cell.updateVerticalPadding(with: 3)
+        let count = self.isSearching ? self.viewModel.searchResults.count:self.viewModel.missingPets.count
+        cell.setTitle("Showing \(count) missing pets around \(LocationManager.sharedManager.userLocality ?? "current vicinity")")
+        return cell
+    }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard indexPath.row < self.viewModel.missingPets.count else {
+        guard indexPath.section > 0 && indexPath.row < self.viewModel.missingPets.count else {
             return
         }
         let missingPetDetailVC = MissingPetDetailViewController()
-        missingPetDetailVC.pet = self.viewModel.missingPets[indexPath.row]
+        var pet:MissingPet! = nil
+        if self.isSearching {
+            pet = self.viewModel.searchResults[indexPath.row]
+        }
+        else {
+            pet = self.viewModel.missingPets[indexPath.row]
+        }
+        missingPetDetailVC.pet = pet
         self.navigationController?.pushViewController(missingPetDetailVC, animated: true)
-        
     }
 }

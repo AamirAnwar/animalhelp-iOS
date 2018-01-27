@@ -11,6 +11,7 @@
 		43367EED2008A771004D6B2C /* ClinicCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43367EEC2008A771004D6B2C /* ClinicCollectionViewCell.swift */; };
 		43378CCF200DF6CB00F088C4 /* MissingPet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43378CCE200DF6CB00F088C4 /* MissingPet.swift */; };
 		43378CD1200DF99200F088C4 /* PetSearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43378CD0200DF99200F088C4 /* PetSearchViewModel.swift */; };
+		4339A3FC201B3ED50094B310 /* group3.png in Resources */ = {isa = PBXBuildFile; fileRef = 4339A3F9201B3ED50094B310 /* group3.png */; };
 		433B09CA1FFE587C00EA0906 /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433B09C91FFE587C00EA0906 /* AccountViewController.swift */; };
 		43617C4220124B3D0025FEA5 /* MissingPetTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43617C4120124B3D0025FEA5 /* MissingPetTableViewCell.swift */; };
 		43705BF02014C9F200D7296B /* EmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43705BEF2014C9F200D7296B /* EmptyStateView.swift */; };
@@ -26,8 +27,6 @@
 		438A0D451FCDCB27005A8CA4 /* GoogleMapsBase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 438A0D441FCDCB27005A8CA4 /* GoogleMapsBase.framework */; };
 		438A0D4F1FCDCB90005A8CA4 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 438A0D4E1FCDCB90005A8CA4 /* libc++.tbd */; };
 		438A0D511FCDCB9A005A8CA4 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 438A0D501FCDCB99005A8CA4 /* libz.tbd */; };
-		438A0D571FCDCD9F005A8CA4 /* GoogleMapsCore.framework in Resources */ = {isa = PBXBuildFile; fileRef = 438A0D411FCDCB25005A8CA4 /* GoogleMapsCore.framework */; };
-		438A0D581FCDCDA3005A8CA4 /* GoogleMapsBase.framework in Resources */ = {isa = PBXBuildFile; fileRef = 438A0D441FCDCB27005A8CA4 /* GoogleMapsBase.framework */; };
 		438A0D5C1FCDD703005A8CA4 /* GoogleMaps.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 438A0D5B1FCDD703005A8CA4 /* GoogleMaps.framework */; };
 		438A0D5E1FCDD709005A8CA4 /* GoogleMaps.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 438A0D5D1FCDD709005A8CA4 /* GoogleMaps.bundle */; };
 		438A0D621FCDEF70005A8CA4 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 438A0D611FCDEF70005A8CA4 /* Constants.swift */; };
@@ -50,6 +49,9 @@
 		43AC0A031FFE7BD0009F8D70 /* CustomFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AC0A021FFE7BD0009F8D70 /* CustomFonts.swift */; };
 		43AC0A051FFE7D25009F8D70 /* DrawerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AC0A041FFE7D25009F8D70 /* DrawerView.swift */; };
 		43AC0A071FFE7E25009F8D70 /* CustomColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AC0A061FFE7E25009F8D70 /* CustomColors.swift */; };
+		43AE9B94201B1B9A0011272E /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 43AE9B93201B1B9A0011272E /* FontAwesome.ttf */; };
+		43AE9B95201B1E960011272E /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 43E86ACA1FBC320500B7130B /* Info.plist */; };
+		43AE9B98201B22A20011272E /* NSString+FontAwesome.m in Sources */ = {isa = PBXBuildFile; fileRef = 43AE9B97201B22A10011272E /* NSString+FontAwesome.m */; };
 		43BC0485200E6CC400EF64FD /* MissingPetDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BC0484200E6CC400EF64FD /* MissingPetDetailViewController.swift */; };
 		43BC0487200E755B00EF64FD /* LoginManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BC0486200E755B00EF64FD /* LoginManager.swift */; };
 		43BC0491200E811F00EF64FD /* GoogleSignIn.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 43BC048E200E811D00EF64FD /* GoogleSignIn.bundle */; };
@@ -90,6 +92,7 @@
 		43367EEC2008A771004D6B2C /* ClinicCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClinicCollectionViewCell.swift; sourceTree = "<group>"; };
 		43378CCE200DF6CB00F088C4 /* MissingPet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissingPet.swift; sourceTree = "<group>"; };
 		43378CD0200DF99200F088C4 /* PetSearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetSearchViewModel.swift; sourceTree = "<group>"; };
+		4339A3F9201B3ED50094B310 /* group3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = group3.png; sourceTree = "<group>"; };
 		433B09C91FFE587C00EA0906 /* AccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
 		43617C4120124B3D0025FEA5 /* MissingPetTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissingPetTableViewCell.swift; sourceTree = "<group>"; };
 		43705BEF2014C9F200D7296B /* EmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateView.swift; sourceTree = "<group>"; };
@@ -141,6 +144,9 @@
 		43AC0A021FFE7BD0009F8D70 /* CustomFonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFonts.swift; sourceTree = "<group>"; };
 		43AC0A041FFE7D25009F8D70 /* DrawerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawerView.swift; sourceTree = "<group>"; };
 		43AC0A061FFE7E25009F8D70 /* CustomColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomColors.swift; sourceTree = "<group>"; };
+		43AE9B93201B1B9A0011272E /* FontAwesome.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome.ttf; sourceTree = "<group>"; };
+		43AE9B96201B22A10011272E /* NSString+FontAwesome.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+FontAwesome.h"; sourceTree = "<group>"; };
+		43AE9B97201B22A10011272E /* NSString+FontAwesome.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+FontAwesome.m"; sourceTree = "<group>"; };
 		43BC0484200E6CC400EF64FD /* MissingPetDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissingPetDetailViewController.swift; sourceTree = "<group>"; };
 		43BC0486200E755B00EF64FD /* LoginManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginManager.swift; sourceTree = "<group>"; };
 		43BC048E200E811D00EF64FD /* GoogleSignIn.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = GoogleSignIn.bundle; sourceTree = "<group>"; };
@@ -249,6 +255,8 @@
 			isa = PBXGroup;
 			children = (
 				4313A85B1FFE9A3D0043C927 /* animalhelp-Bridging-Header.h */,
+				43AE9B96201B22A10011272E /* NSString+FontAwesome.h */,
+				43AE9B97201B22A10011272E /* NSString+FontAwesome.m */,
 				4313A85C1FFE9A3F0043C927 /* UIImage+ImageEffects.h */,
 				4313A85D1FFE9A3F0043C927 /* UIImage+ImageEffects.m */,
 				439E489B1FCEBB2000FAFB67 /* APIService.swift */,
@@ -284,6 +292,20 @@
 			path = "Pet Search page";
 			sourceTree = "<group>";
 		};
+		43AE9B92201B1B730011272E /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				43AE9B93201B1B9A0011272E /* FontAwesome.ttf */,
+				43BC0498200E81C900EF64FD /* GoogleService-Info.plist */,
+				43E86ABE1FBC320500B7130B /* AppDelegate.swift */,
+				43E86AC51FBC320500B7130B /* Assets.xcassets */,
+				4339A3F9201B3ED50094B310 /* group3.png */,
+				43E86AC71FBC320500B7130B /* LaunchScreen.storyboard */,
+				43E86ACA1FBC320500B7130B /* Info.plist */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		43E86AB21FBC320500B7130B = {
 			isa = PBXGroup;
 			children = (
@@ -306,16 +328,12 @@
 		43E86ABD1FBC320500B7130B /* animalhelp */ = {
 			isa = PBXGroup;
 			children = (
-				43BC0498200E81C900EF64FD /* GoogleService-Info.plist */,
 				43AC09FF1FFE5A6E009F8D70 /* Pet Search page */,
 				433B09CB1FFE588000EA0906 /* Account Page */,
 				4387C4491FFA212800810698 /* Home Page */,
 				4387C44B1FFA214500810698 /* Commons */,
 				4387C44A1FFA213F00810698 /* Models */,
-				43E86ABE1FBC320500B7130B /* AppDelegate.swift */,
-				43E86AC51FBC320500B7130B /* Assets.xcassets */,
-				43E86AC71FBC320500B7130B /* LaunchScreen.storyboard */,
-				43E86ACA1FBC320500B7130B /* Info.plist */,
+				43AE9B92201B1B730011272E /* Resources */,
 			);
 			path = animalhelp;
 			sourceTree = "<group>";
@@ -452,13 +470,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				438A0D581FCDCDA3005A8CA4 /* GoogleMapsBase.framework in Resources */,
-				438A0D571FCDCD9F005A8CA4 /* GoogleMapsCore.framework in Resources */,
 				43E86AC91FBC320500B7130B /* LaunchScreen.storyboard in Resources */,
 				43E86AC61FBC320500B7130B /* Assets.xcassets in Resources */,
 				43BC0491200E811F00EF64FD /* GoogleSignIn.bundle in Resources */,
 				438A0D5E1FCDD709005A8CA4 /* GoogleMaps.bundle in Resources */,
 				43BC0499200E81C900EF64FD /* GoogleService-Info.plist in Resources */,
+				4339A3FC201B3ED50094B310 /* group3.png in Resources */,
+				43AE9B94201B1B9A0011272E /* FontAwesome.ttf in Resources */,
+				43AE9B95201B1E960011272E /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -513,6 +532,7 @@
 				43367EED2008A771004D6B2C /* ClinicCollectionViewCell.swift in Sources */,
 				43378CD1200DF99200F088C4 /* PetSearchViewModel.swift in Sources */,
 				43BC0487200E755B00EF64FD /* LoginManager.swift in Sources */,
+				43AE9B98201B22A20011272E /* NSString+FontAwesome.m in Sources */,
 				4397D4622013C4D900A1C238 /* SelectLocationViewController.swift in Sources */,
 				4313A85E1FFE9A3F0043C927 /* UIImage+ImageEffects.m in Sources */,
 				4399372A200D3C00002D46BC /* CustomNavigationBar.swift in Sources */,
@@ -710,7 +730,7 @@
 		43E86ACE1FBC320500B7130B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = C3RT9P7X65;
@@ -719,7 +739,7 @@
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 					"$(PROJECT_DIR)",
 				);
-				INFOPLIST_FILE = animalhelp/Info.plist;
+				INFOPLIST_FILE = animalhelp/resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				"OTHER_LDFLAGS[arch=*]" = (
 					"$(OTHER_LDFLAGS)",
@@ -737,7 +757,7 @@
 		43E86ACF1FBC320500B7130B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = C3RT9P7X65;
@@ -746,8 +766,9 @@
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 					"$(PROJECT_DIR)",
 				);
-				INFOPLIST_FILE = animalhelp/Info.plist;
+				INFOPLIST_FILE = animalhelp/resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				"OTHER_LDFLAGS[arch=*]" = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.aamiranwar.animalhelp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "animalhelp/Commons/animalhelp-Bridging-Header.h";

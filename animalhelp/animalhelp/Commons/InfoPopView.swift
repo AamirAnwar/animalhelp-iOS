@@ -59,7 +59,7 @@ class InfoPopView: UIView {
             make.center.equalToSuperview().offset(UIScreen.main.bounds.size.height)
             make.leading.equalToSuperview().offset(kSidePadding)
             make.trailing.equalToSuperview().inset(kSidePadding)
-            make.height.greaterThanOrEqualTo(kMissingPetImageHeight)
+            make.height.greaterThanOrEqualTo(kMinPopUpHeight)
         })
         
         self.titleLabel.snp.makeConstraints { (make) in
@@ -107,6 +107,7 @@ class InfoPopView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         UtilityFunctions.addShadowTo(view: self.containerView)
+        self.layoutIfNeeded()
         self.containerView.snp.updateConstraints({ (make) in
             make.center.equalToSuperview()
         })
