@@ -15,4 +15,4 @@ let CustomFontButtonTitle = UIFont(name: "AvenirNext-DemiBold", size: 19)!
 let CustomFontDemiSmall = UIFont(name: "AvenirNext-DemiBold", size: 13)!
 let CustomFontUsername = UIFont(name: "AvenirNext-DemiBold", size: 21)!
 let CustomFontHeadingSmall = UIFont(name: "AvenirNext-DemiBold", size: 14)!
-let CustomFontTitleBold = UIFont(name: "AvenirNext-Bold", size: 26)!
+let CustomFontTitleBold = UIFont(name: "AvenirNext-Bold", size: 24)!
