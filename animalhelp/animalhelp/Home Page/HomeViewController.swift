@@ -12,7 +12,8 @@ import CoreLocation
 import MapKit
 import GoogleMaps
 import Moya
-
+let kMapButtonSize:CGFloat = 44
+let kMapButtonFontSize:CGFloat = 22
 
 enum HomeViewState {
     case InitialSetup
@@ -28,8 +29,6 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
     var totalPan:CGFloat = 0
     var delta:CGFloat = 0
     let drawerView = DrawerView()
-    var drawerViewTopConstraint:ConstraintMakerEditable? = nil
-    var mapViewBottomConstraint:ConstraintMakerEditable? = nil
     var state:HomeViewState = .InitialSetup {
         didSet {
             self.refreshDrawerWithState(self.state)
@@ -37,20 +36,25 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
     }
     let myLocationButton:UIButton = {
        let button = UIButton(type: .system)
-        button.setTitle("My Location", for: .normal)
-        button.titleLabel?.font = CustomFontSmallBodyMedium
+        
+        button.setTitle(NSString.fontAwesomeIconString(forEnum: FAIcon.FACrosshairs), for: .normal)
+        button.titleLabel?.font = UIFont.init(name: kFontAwesomeFamilyName, size: kMapButtonFontSize)
         button.setTitleColor(CustomColorTextBlack, for: .normal)
         button.backgroundColor = UIColor.white
         button.layer.cornerRadius = kCornerRadius
         button.contentEdgeInsets = UIEdgeInsetsMake(inset, inset, inset, inset)
+        button.layer.borderColor = CustomColorSeparatorGrey.cgColor
+        button.layer.borderWidth = 1
         return button
     }()
     
     let showNearestClinicButton:UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Nearest Clinic", for: .normal)
+        button.setTitle(NSString.fontAwesomeIconString(forEnum: FAIcon.FAMapMarker), for: .normal)
+        button.titleLabel?.font = UIFont.init(name: kFontAwesomeFamilyName, size: kMapButtonFontSize)
         button.setTitleColor(CustomColorTextBlack, for: .normal)
-        button.titleLabel?.font = CustomFontSmallBodyMedium
+        button.layer.borderColor = CustomColorSeparatorGrey.cgColor
+        button.layer.borderWidth = 1
         button.backgroundColor = UIColor.white
         button.layer.cornerRadius = kCornerRadius
         button.contentEdgeInsets = UIEdgeInsetsMake(inset, inset, inset, inset)
@@ -95,9 +99,16 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        if self.viewModel.locationManager.isLocationPermissionGranted {
+            self.customNavBar.setTitle("Detecting Location")
+        }
+        else {
+            self.customNavBar.setTitle("Set Location")
+        }
         self.setupViews()
         self.viewModel.delegate = self
         self.viewModel.updateViewState()
+        
     }
     
     fileprivate func setupViews() {
@@ -121,6 +132,7 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
         myLocationButton.snp.makeConstraints { (make) in
             make.trailing.equalToSuperview().offset(-20)
             make.top.equalTo(self.view.snp.top).offset(100)
+            make.size.equalTo(kMapButtonSize)
         }
         myLocationButton.addTarget(self, action: #selector(didTapMyLocationButton), for: .touchUpInside)
     }
@@ -130,6 +142,7 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
         self.showNearestClinicButton.snp.makeConstraints { (make) in
             make.trailing.equalTo(myLocationButton.snp.trailing)
             make.top.equalTo(myLocationButton.snp.bottom).offset(20)
+            make.size.equalTo(kMapButtonSize)
         }
         self.showNearestClinicButton.addTarget(self, action: #selector(didTapShowNearestClinic), for: .touchUpInside)
     }
@@ -138,13 +151,7 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
     fileprivate func createGoogleMapView() {
         view.addSubview(googleMapView)
         self.googleMapView.delegate = self.viewModel
-        googleMapView.snp.makeConstraints { (make) in
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
-            // Adding some space for the navigation bar shadow
-            make.top.equalTo(self.customNavBar.snp.bottom)
-         self.mapViewBottomConstraint =  make.bottom.equalToSuperview()
-        }
+        self.googleMapView.frame = CGRect.init(x: 0.0, y: CustomNavigationBar.kCustomNavBarHeight, width: self.view.width(), height: self.view.height() - (self.customNavBar.height() + self.tabBarHeight))
     }
     
     override func didTapEmptyStateButton() {
@@ -248,6 +255,7 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
             })
         case .MinimizedDrawer:
             self.drawerView.setY(self.view.height())
+            self.drawerView.setHeight(kDrawerMinimizedStateHeight)
             UIView.animate(withDuration: 0.3, animations: {
                 self.drawerView.setY(self.view.height() - (self.tabBarHeight + kDrawerMinimizedStateHeight))
             })
@@ -263,7 +271,6 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
                 UIView.animate(withDuration: 0.3, animations: {
                     self.drawerView.setY(self.view.height())
                 }, completion: { (_) in
-//                    self.drawerView.setHeight(kSingleClinicStateHeight)
                     UIView.animate(withDuration: 1, animations: {
                         self.drawerView.setY(self.view.height() - (self.tabBarHeight + kSingleClinicStateHeight))
                     })
@@ -282,35 +289,64 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
         guard self.state != state else {
             return
         }
+        print("Going from state \(self.state) to \(state)")
+        
         switch state {
         case .UserLocationUnknown:
             self.updateVisibleMapElements(self,true)
             self.drawerView.showUnknownLocationState()
-//            self.mapViewBottomConstraint?.constraint.update(inset: 0)
+            UIView.animate(withDuration: 0.3, animations: {
+                self.googleMapView.setHeight(self.view.height() - (self.tabBarHeight + self.customNavBar.height()))
+            })
             
         case .HiddenDrawer:
             self.updateVisibleMapElements(self,false)
-//            self.mapViewBottomConstraint?.constraint.update(inset: 0)
+            UIView.animate(withDuration: 0.3, animations: {
+                self.googleMapView.setHeight(self.view.height() - (self.tabBarHeight + self.customNavBar.height()))
+            })
             
             
         case .MinimizedDrawer:
             //Tell drawer to minimize itself with a message
             self.updateVisibleMapElements(self,false)
             self.drawerView.isHidden = false
-            let updatedInset = kDrawerMinimizedStateHeight + self.tabBarHeight
-//            self.mapViewBottomConstraint?.constraint.update(inset: updatedInset)
+            UIView.animate(withDuration: 0.2, animations: {
+            self.googleMapView.setHeight(self.view.height() - (self.tabBarHeight + self.customNavBar.height() + kDrawerMinimizedStateHeight))
+            })
             self.drawerView.switchToMinimizedDrawer(title: "Finding clinics around you")
             
             
         case .SingleClinicDrawer:
             //Tell drawer to show nearest clinic only with a left to right swipeable inteface
             if let clinics = self.viewModel.nearbyClinics, let markers = self.viewModel.nearbyClinicsMarkers, clinics.isEmpty == false && markers.isEmpty == false {
-                self.updateVisibleMapElements(self,false)
-                self.drawerView.switchToSingleDrawer()
-                self.drawerView.showClinics(clinics)
-                let updatedInset = kSingleClinicStateHeight + self.tabBarHeight
-//                self.mapViewBottomConstraint?.constraint.update(inset: updatedInset)
-                self.drawerView.isHidden = false
+                let closure:()->Void = {
+                    self.updateVisibleMapElements(self,false)
+                    self.drawerView.switchToSingleDrawer()
+                    self.drawerView.showClinics(clinics)
+                    self.drawerView.isHidden = false
+                    self.state = state
+                }
+                
+                if self.state == .MinimizedDrawer {
+                    UIView.animate(withDuration: 0.3, animations: {
+                        self.googleMapView.setHeight(self.view.height() - (self.tabBarHeight + CustomNavigationBar.kCustomNavBarHeight))})
+                    UIView.animate(withDuration: 0.5, animations: {
+                        self.drawerView.setY(self.view.height())
+                        
+                    }, completion: { (_) in
+                        closure()
+                        UIView.animate(withDuration: 0.3, delay: 0.3, options: [.curveEaseOut], animations: {
+                            self.googleMapView.setHeight(self.view.height() - (self.tabBarHeight + CustomNavigationBar.kCustomNavBarHeight + kSingleClinicStateHeight))
+                        }, completion: nil)
+                    })
+                    return
+                }
+                else {
+                    closure()
+                    UIView.animate(withDuration: 0.3, animations: {
+                        self.googleMapView.setHeight(self.view.height() - (self.tabBarHeight + self.customNavBar.height() + kSingleClinicStateHeight))
+                    })
+                }
             }
             
             
@@ -324,7 +360,9 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
         case .InitialSetup:
             self.drawerView.isHidden = true
             print("Drawer view still in initial setup")
-//            Do Nothing
+            UIView.animate(withDuration: 0.1, animations: {
+                self.googleMapView.setHeight(self.view.height() - (self.tabBarHeight + self.customNavBar.height()))
+            })
         }
         self.state = state
     }
@@ -388,7 +426,6 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
             print("Maximize!")
         }
         else {
-            
             UIView.animate(withDuration: 0.3, animations: {
                 self.drawerView.setY(self.view.height() - (self.tabBarHeight + kSingleClinicStateHeight))
                 self.drawerView.setHeight(kSingleClinicStateHeight)
@@ -424,7 +461,6 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
         if finalY > self.singleClinicStateY {
             finalY = self.singleClinicStateY
         }
-//        print("\(finalY) - \(finalHeight)")
         
         if finalY < self.singleClinicStateY {
             self.drawerView.flowLayout.scrollDirection = .vertical
