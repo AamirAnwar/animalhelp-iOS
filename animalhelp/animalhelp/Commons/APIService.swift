@@ -15,8 +15,10 @@ enum APIService {
     case nearestClinic(lat:String, lon:String)
     case clinics(lat:String, lon:String)
     case missingPets(cityID:Int)
+    case petSearch(cityID:Int, query:String)
     case imageURL(urlString:String)
     case locationSearch(query:String)
+    case activeCities
 }
 
 extension APIService: TargetType {
@@ -36,6 +38,8 @@ extension APIService: TargetType {
             return URL(string:"https://maps.googleapis.com/maps/api/place/textsearch/json?query=\(query))&key=\(GoogleMapsAPIKey!)")!
         default:break;
         }
+        
+        
         return URL(string: "https://lit-escarpment-51045.herokuapp.com")!
     }
     
@@ -44,6 +48,9 @@ extension APIService: TargetType {
         case .nearestClinic: return "/clinics/nearest"
         case .clinics:return "/clinics"
         case .missingPets:return "/missing_pets"
+        case .petSearch:return "/missing_pets/search"
+        case .activeCities: return "/active_cities"
+            
         default:return ""
         }
     }
@@ -65,9 +72,13 @@ extension APIService: TargetType {
         switch self {
         case .clinics(let lat, let lon),.nearestClinic(let lat, let lon):
             return Moya.Task.requestParameters(parameters: ["lat":lat,"lon":lon], encoding: URLEncoding.queryString)
+        case .petSearch(let cityID, let query):
+            return Moya.Task.requestParameters(parameters: ["city_id":cityID,"q":query], encoding: URLEncoding.queryString)
         case .missingPets(let cityID):
             return Moya.Task.requestParameters(parameters: ["city_id":cityID], encoding: URLEncoding.queryString)
         case .imageURL,.locationSearch:
+            return Moya.Task.requestPlain
+        case .activeCities:
             return Moya.Task.requestPlain
         }
     }
