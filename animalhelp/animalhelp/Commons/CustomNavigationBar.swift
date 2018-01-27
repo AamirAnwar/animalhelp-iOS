@@ -22,7 +22,7 @@ protocol CustomNavigationBarDelegate {
 }
 
 class CustomNavigationBar:UIView {
-    static let kCustomNavBarHeight = 64
+    static let kCustomNavBarHeight:CGFloat = 64
     var delegate:CustomNavigationBarDelegate? = nil
     let locationButton:UIButton = {
         let button = UIButton(type:.system)
@@ -187,6 +187,7 @@ class CustomNavigationBar:UIView {
     }
     
     func showLoader() {
+        guard self.loaderIsActive == false else {return}
         self.loaderIsActive = true
         layer.addSublayer(gradientLayer)
         let gradientAnimation = CABasicAnimation(keyPath: "locations")
