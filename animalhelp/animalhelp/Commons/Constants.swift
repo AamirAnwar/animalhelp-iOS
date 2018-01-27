@@ -32,5 +32,11 @@ let kNotificationLogOutFailed = Notification(name: Notification.Name.init("kLogo
 let kNotificationUserLocationChanged = Notification(name: Notification.Name.init("userLocationChanged"))
 let kNotificationLocationPerimissionGiven = Notification(name: Notification.Name.init("LocationPerimissionGiven"))
 let kNotificationLocationPerimissionDenied = Notification(name: Notification.Name.init("LocationPerimissionDenied"))
+let kNotificationDidStartUpdatingLocation = Notification(name: Notification.Name.init("StartedUpatingLocation"))
+let kNotificationLocationDetectionFailed = Notification(name: Notification.Name.init("LocationDetectionFailed"))
+
+let kNotificationWillShowKeyboard = Notification(name: Notification.Name.UIKeyboardWillShow)
+let kNotificationWillHideKeyboard = Notification(name: Notification.Name.UIKeyboardWillHide)
+
 
 
