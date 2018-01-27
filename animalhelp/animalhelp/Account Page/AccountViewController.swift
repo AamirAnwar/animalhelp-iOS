@@ -213,7 +213,9 @@ extension AccountViewController: UITableViewDelegate, UITableViewDataSource {
             standardCell.showBottomPaddedSeparator()
         }
         else {
-            standardCell.showsDisclosure(false)
+            if loginManager.isLoggedIn {
+                standardCell.showsDisclosure(false)
+            }
         }
         return standardCell
     }
