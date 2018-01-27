@@ -28,6 +28,7 @@ protocol DrawerViewUIDelegate {
 
 class DrawerView:UIView {
     let locationPinImageView = UIImageView(image: #imageLiteral(resourceName: "LocationPin"))
+    let graphicImageView = UIImageView.init(image: #imageLiteral(resourceName: "Onboarding_Art"))
     let infoLabel = UILabel()
     let hideButton:UIButton = {
         let button = UIButton(type: .system)
@@ -130,6 +131,7 @@ class DrawerView:UIView {
         onboardingContainerView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
+        onboardingContainerView.addSubview(graphicImageView)
         onboardingContainerView.addSubview(locationPinImageView)
         onboardingContainerView.addSubview(infoLabel)
         onboardingContainerView.addSubview(manualLocationButton)
@@ -155,34 +157,42 @@ class DrawerView:UIView {
         manualLocationButton.layer.borderColor = CustomColorDarkGray.cgColor
         manualLocationButton.addTarget(self, action: #selector(manuallySelectLocationButtonTapped), for: .touchUpInside)
         
-        locationPinImageView.snp.makeConstraints { (make) in
-            make.top.greaterThanOrEqualTo(self.snp.top).offset(20)
-            make.centerX.equalToSuperview()
-        }
-        
-        infoLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(locationPinImageView.snp.bottom).offset(8)
-            make.centerX.equalToSuperview()
-            make.leading.equalToSuperview().offset(8)
-            make.trailing.equalToSuperview().offset(-8)
-        }
-        
-        detectLocationButton.snp.makeConstraints { (make) in
-            make.leading.equalToSuperview().offset(24)
-            make.trailing.equalToSuperview().offset(-24)
-            make.top.equalTo(infoLabel.snp.bottom).offset(16)
-            make.height.equalTo(kStandardButtonHeight)
-        }
+        graphicImageView.contentMode = .scaleAspectFit
+        graphicImageView.clipsToBounds = true
         
         manualLocationButton.snp.makeConstraints { (make) in
-            make.leading.equalTo(detectLocationButton.snp.leading)
-            make.trailing.equalTo(detectLocationButton.snp.trailing)
-            make.top.equalTo(detectLocationButton.snp.bottom).offset(16)
+            make.leading.equalToSuperview().offset(kSidePadding)
+            make.trailing.equalToSuperview().inset(kSidePadding)
             make.height.equalTo(detectLocationButton.snp.height)
             make.bottom.equalTo(self.snp.bottom).offset(-20)
         }
         
+        detectLocationButton.snp.makeConstraints { (make) in
+            make.leading.equalToSuperview().offset(kSidePadding)
+            make.trailing.equalToSuperview().inset(kSidePadding)
+            make.bottom.equalTo(manualLocationButton.snp.top).offset(-16)
+            make.height.equalTo(kStandardButtonHeight)
+        }
         
+        infoLabel.snp.makeConstraints { (make) in
+            make.bottom.equalTo(detectLocationButton.snp.top).offset(-16)
+            make.leading.equalToSuperview().offset(kSidePadding)
+            make.trailing.equalToSuperview().inset(kSidePadding)
+        }
+        
+        locationPinImageView.snp.makeConstraints { (make) in
+            make.bottom.equalTo(self.infoLabel.snp.top).offset(-8)
+            make.centerX.equalToSuperview()
+            make.height.equalTo(34)
+            make.width.equalTo(22)
+        }
+        
+        graphicImageView.snp.makeConstraints { (make) in
+            make.top.greaterThanOrEqualToSuperview().offset(CustomNavigationBar.kCustomNavBarHeight)
+            make.leading.equalToSuperview().offset(kSidePadding)
+            make.trailing.equalToSuperview().inset(kSidePadding)
+            make.bottom.equalTo(self.locationPinImageView.snp.top).offset(-16)
+        }
     }
     func showClinics(_ clinics:[Clinic]) {
         self.onboardingContainerView.isHidden = true
@@ -358,6 +368,9 @@ extension DrawerView:UICollectionViewDelegate,UICollectionViewDelegateFlowLayout
     
     
     @objc func didPan() {
+        guard self.collectionView.isHidden == false else {
+            return
+        }
         self.uiDelegate?.didPan(drawer: self, panGesture: self.panGesture)
     }
 }

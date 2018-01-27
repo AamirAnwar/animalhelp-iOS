@@ -257,10 +257,11 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
         switch self.state {
         case .InitialSetup:break;
         case .UserLocationUnknown:
-            UIView.animate(withDuration: 0.3, animations: {
-                self.drawerView.setY(self.view.height() - (self.tabBarHeight + kDrawerUnknownLocationHeight))
-                self.drawerView.setHeight(kDrawerUnknownLocationHeight)
-            })
+//            UIView.animate(withDuration: 0.3, animations: {
+                self.drawerView.setY(CustomNavigationBar.kCustomNavBarHeight)
+                self.drawerView.setHeight(self.view.height() - (CustomNavigationBar.kCustomNavBarHeight + self.tabBarHeight))
+            self.drawerView.layoutIfNeeded()
+//            })
         case .HiddenDrawer:
             UIView.animate(withDuration: 0.3, animations: {
                 self.drawerView.setY(self.view.height())
