@@ -257,11 +257,10 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
         switch self.state {
         case .InitialSetup:break;
         case .UserLocationUnknown:
-//            UIView.animate(withDuration: 0.3, animations: {
-                self.drawerView.setY(CustomNavigationBar.kCustomNavBarHeight)
-                self.drawerView.setHeight(self.view.height() - (CustomNavigationBar.kCustomNavBarHeight + self.tabBarHeight))
+            self.drawerView.setY(CustomNavigationBar.kCustomNavBarHeight)
+            self.drawerView.setHeight(self.view.height() - (CustomNavigationBar.kCustomNavBarHeight + self.tabBarHeight))
             self.drawerView.layoutIfNeeded()
-//            })
+
         case .HiddenDrawer:
             UIView.animate(withDuration: 0.3, animations: {
                 self.drawerView.setY(self.view.height())
@@ -302,12 +301,10 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
         guard self.state != state else {
             return
         }
-        print("Going from state \(self.state) to \(state)")
-        
         switch state {
         case .UserLocationUnknown:
             self.updateVisibleMapElements(self,true)
-            self.drawerView.showUnknownLocationState()
+            self.present(OnboardingViewController(), animated: true)
             UIView.animate(withDuration: 0.3, animations: {
                 self.googleMapView.setHeight(self.view.height() - (self.tabBarHeight + self.customNavBar.height()))
             })

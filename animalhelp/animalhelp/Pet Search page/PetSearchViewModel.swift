@@ -46,7 +46,6 @@ class PetSearchViewModel {
         }
     }
     fileprivate func parse(json:NSDictionary) {
-        print(json)
         let decoder = JSONDecoder()
         if let missingPetDict = json.value(forKey: "pets") as? Array<NSDictionary> {
             guard missingPetDict.count > 0 else {return}

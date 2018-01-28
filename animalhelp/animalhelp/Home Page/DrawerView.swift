@@ -27,9 +27,6 @@ protocol DrawerViewUIDelegate {
 }
 
 class DrawerView:UIView {
-    let locationPinImageView = UIImageView(image: #imageLiteral(resourceName: "LocationPin"))
-    let graphicImageView = UIImageView.init(image: #imageLiteral(resourceName: "Onboarding_Art"))
-    let infoLabel = UILabel()
     let hideButton:UIButton = {
         let button = UIButton(type: .system)
         button.titleLabel?.font = UIFont.init(name: kFontAwesomeFamilyName, size: 14)
@@ -40,11 +37,7 @@ class DrawerView:UIView {
         button.contentEdgeInsets = UIEdgeInsetsMake(0, 3, 0, 3)
         return button
     }()
-    let detectLocationButton = UIButton(type: .system)
-    let manualLocationButton = UIButton(type: .system)
     let stickyButton = UIButton(type: .system)
-    let onboardingContainerView = UIView()
-    let tapGesture = UITapGestureRecognizer()
     var delegate:DrawerViewDelegate? = nil
     var uiDelegate:DrawerViewUIDelegate? = nil
     var flowLayout:UICollectionViewFlowLayout = {
@@ -54,7 +47,6 @@ class DrawerView:UIView {
     }()
     var collectionView:UICollectionView!
     let clinicCellReuseIdentifier = "ClinicCellReuseIdentifier"
-    var nearestClinic:Clinic? = nil
     var nearbyClinics:[Clinic]?
     let showNearbyClinicsButton = UIButton.getRoundedRectButon()
     var panGesture:UIPanGestureRecognizer!
@@ -71,11 +63,9 @@ class DrawerView:UIView {
         self.addGestureRecognizer(panGesture)
         self.backgroundColor = UIColor.white
         
-        
-        
         self.collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: self.flowLayout)
         self.collectionView.delegate = self
-//        self.collectionView.delaysContentTouches = false
+        self.collectionView.delaysContentTouches = false
         self.collectionView.dataSource = self
         self.collectionView.isPagingEnabled = true
         self.collectionView.backgroundColor = UIColor.white
@@ -118,84 +108,9 @@ class DrawerView:UIView {
         }
         self.showNearbyClinicsButton.layer.cornerRadius = 0
         self.showNearbyClinicsButton.contentEdgeInsets = UIEdgeInsets.init(top: -2, left: 0, bottom: 0, right: 0 )
-        
-        
     }
     
-    fileprivate func setupUnkownLocationView() {
-        guard onboardingContainerView.superview == nil else {
-            return
-        }
-        
-        self.addSubview(onboardingContainerView)
-        onboardingContainerView.snp.makeConstraints { (make) in
-            make.edges.equalToSuperview()
-        }
-        onboardingContainerView.addSubview(graphicImageView)
-        onboardingContainerView.addSubview(locationPinImageView)
-        onboardingContainerView.addSubview(infoLabel)
-        onboardingContainerView.addSubview(manualLocationButton)
-        onboardingContainerView.addSubview(detectLocationButton)
-        
-        infoLabel.text = "We need your location to find clinics around you"
-        infoLabel.numberOfLines = 0
-        infoLabel.font = CustomFontBodyMedium
-        infoLabel.textAlignment = .center
-        
-        detectLocationButton.setTitle("Detect Location", for: .normal)
-        detectLocationButton.setTitleColor(UIColor.white, for: .normal)
-        detectLocationButton.backgroundColor = CustomColorMainTheme
-        detectLocationButton.layer.cornerRadius = kCornerRadius
-        detectLocationButton.titleLabel?.font = CustomFontButtonTitle
-        detectLocationButton.addTarget(self, action: #selector(detectLocationButtonTapped), for: .touchUpInside)
-        
-        manualLocationButton.setTitle("Manually Select Location", for: .normal)
-        manualLocationButton.setTitleColor(CustomColorDarkGray, for: .normal)
-        manualLocationButton.layer.cornerRadius = kCornerRadius
-        manualLocationButton.layer.borderWidth = 1
-        manualLocationButton.titleLabel?.font = CustomFontButtonTitle
-        manualLocationButton.layer.borderColor = CustomColorDarkGray.cgColor
-        manualLocationButton.addTarget(self, action: #selector(manuallySelectLocationButtonTapped), for: .touchUpInside)
-        
-        graphicImageView.contentMode = .scaleAspectFit
-        graphicImageView.clipsToBounds = true
-        
-        manualLocationButton.snp.makeConstraints { (make) in
-            make.leading.equalToSuperview().offset(kSidePadding)
-            make.trailing.equalToSuperview().inset(kSidePadding)
-            make.height.equalTo(detectLocationButton.snp.height)
-            make.bottom.equalTo(self.snp.bottom).offset(-20)
-        }
-        
-        detectLocationButton.snp.makeConstraints { (make) in
-            make.leading.equalToSuperview().offset(kSidePadding)
-            make.trailing.equalToSuperview().inset(kSidePadding)
-            make.bottom.equalTo(manualLocationButton.snp.top).offset(-16)
-            make.height.equalTo(kStandardButtonHeight)
-        }
-        
-        infoLabel.snp.makeConstraints { (make) in
-            make.bottom.equalTo(detectLocationButton.snp.top).offset(-16)
-            make.leading.equalToSuperview().offset(kSidePadding)
-            make.trailing.equalToSuperview().inset(kSidePadding)
-        }
-        
-        locationPinImageView.snp.makeConstraints { (make) in
-            make.bottom.equalTo(self.infoLabel.snp.top).offset(-8)
-            make.centerX.equalToSuperview()
-            make.height.equalTo(34)
-            make.width.equalTo(22)
-        }
-        
-        graphicImageView.snp.makeConstraints { (make) in
-            make.top.greaterThanOrEqualToSuperview().offset(CustomNavigationBar.kCustomNavBarHeight)
-            make.leading.equalToSuperview().offset(kSidePadding)
-            make.trailing.equalToSuperview().inset(kSidePadding)
-            make.bottom.equalTo(self.locationPinImageView.snp.top).offset(-16)
-        }
-    }
     func showClinics(_ clinics:[Clinic]) {
-        self.onboardingContainerView.isHidden = true
         self.collectionView.isHidden = false
         self.stickyButton.isHidden = false
         self.nearbyClinics = clinics
@@ -208,32 +123,9 @@ class DrawerView:UIView {
     }
     
     public func showUnknownLocationState() {
-        self.onboardingContainerView.isHidden = false
         self.collectionView.isHidden = true
         self.stickyButton.isHidden = true
         self.hideButton.isHidden = true
-        setupUnkownLocationView()
-    }
-
-    
-    //MARK: Button Callbacks
-    @objc fileprivate func detectLocationButtonTapped() {
-        self.delegate?.didTapDetectLocation()
-    }
-    
-    @objc fileprivate func manuallySelectLocationButtonTapped() {
-        self.delegate?.didTapManuallySelectLocation()
-    }
-    
-    @objc fileprivate func drawerTapped() {
-        UIView.animate(withDuration: 0.2) {
-            if self.transform.isIdentity {
-                self.transform = CGAffineTransform.init(translationX: 0, y: 50)
-            }
-            else {
-                self.transform = .identity
-            }
-        }
     }
 }
 
@@ -316,7 +208,6 @@ extension DrawerView:UICollectionViewDelegate,UICollectionViewDelegateFlowLayout
     
     func switchToMinimizedDrawer(title:String) {
         self.showNearbyClinicsButton.isHidden = false
-        self.onboardingContainerView.isHidden = true
         self.collectionView.isHidden = true
         self.showNearbyClinicsButton.titleLabel?.font = CustomFontDemiSmall
         self.showNearbyClinicsButton.setTitle(title, for: .normal)
@@ -327,7 +218,6 @@ extension DrawerView:UICollectionViewDelegate,UICollectionViewDelegateFlowLayout
     func switchToMaximizedDrawer() {
         self.showNearbyClinicsButton.isHidden = true
         self.collectionView.isHidden = false
-        self.onboardingContainerView.isHidden = true
         self.collectionView.setContentOffset(CGPoint(x: 0, y: 0), animated: false)
         self.flowLayout.scrollDirection = .vertical
         self.collectionView.isPagingEnabled = false
@@ -342,7 +232,7 @@ extension DrawerView:UICollectionViewDelegate,UICollectionViewDelegateFlowLayout
     
     func switchToSingleDrawer() {
         self.showNearbyClinicsButton.isHidden = true
-        self.onboardingContainerView.isHidden = true
+        
         self.flowLayout.scrollDirection = .horizontal
         self.collectionView.isPagingEnabled = true
         UIView.transition(with: self.stickyButton, duration: 0.3, options: .transitionCrossDissolve, animations: {
