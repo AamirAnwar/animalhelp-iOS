@@ -12,7 +12,7 @@ class OnboardingViewController: BaseViewController {
     let onboardingView = DetectLocationView()
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.customNavBar.setTitle("Set Location")
+        self.customNavBar.setTitle(kStringSetLocation)
         view.addSubview(onboardingView)
         onboardingView.delegate = self
         onboardingView.snp.makeConstraints { (make) in

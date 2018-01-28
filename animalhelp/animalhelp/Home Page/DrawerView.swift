@@ -15,7 +15,7 @@ protocol DrawerViewDelegate {
     func didTapManuallySelectLocation()
     func didTapOpenInGoogleMaps(forIndex indexPath:IndexPath)
     func didSwipeToClinicAt(index:Int)
-    func didTapFindNearbyClinics()
+    func didTapMiniMessageButton()
 }
 
 protocol DrawerViewUIDelegate {
@@ -93,8 +93,7 @@ class DrawerView:UIView {
         self.addSubview(miniMessageButton)
         self.miniMessageButton.isHidden = true
         self.miniMessageButton.titleLabel?.font = CustomFontDemiSmall
-        self.miniMessageButton.isUserInteractionEnabled = false
-        self.miniMessageButton.addTarget(self, action: #selector(didTapFindNearbyClinics), for: .touchUpInside)
+        self.miniMessageButton.addTarget(self, action: #selector(didTapMiniMessageButton), for: .touchUpInside)
         self.miniMessageButton.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
@@ -103,7 +102,7 @@ class DrawerView:UIView {
     }
     
     
-    //MARK: Open API
+    //MARK: Public API
     // Show a list of clinics in the collection view
     public func showClinics(_ clinics:[Clinic]) {
         self.collectionView.isHidden = false
@@ -129,16 +128,19 @@ class DrawerView:UIView {
         self.miniMessageButton.isHidden = true
         self.collectionView.isHidden = false
         self.hideButton.isHidden = true
-        self.collectionView.setContentOffset(CGPoint(x: 0, y: 0), animated: false)
-        self.flowLayout.scrollDirection = .vertical
-        self.collectionView.isPagingEnabled = false
+        self.setScrollDirection(.vertical)
     }
     
     public func switchToSingleDrawer() {
         self.miniMessageButton.isHidden = true
-        self.flowLayout.scrollDirection = .horizontal
-        self.collectionView.isPagingEnabled = true
         self.hideButton.isHidden = false
+        self.setScrollDirection(.horizontal)
+    }
+    
+    public func setScrollDirection(_ direction:UICollectionViewScrollDirection) {
+        guard self.flowLayout.scrollDirection != direction else {return}
+        self.flowLayout.scrollDirection = direction
+        self.collectionView.isPagingEnabled = (self.flowLayout.scrollDirection == .horizontal)
     }
     
     //MARK: Tap Events
@@ -162,8 +164,8 @@ class DrawerView:UIView {
         self.uiDelegate?.didTapHideDrawerButton()
     }
     
-    @objc func didTapFindNearbyClinics() {
-        self.delegate?.didTapFindNearbyClinics()
+    @objc func didTapMiniMessageButton() {
+        self.delegate?.didTapMiniMessageButton()
     }
     
     @objc func didPan() {

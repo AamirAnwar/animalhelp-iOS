@@ -39,4 +39,6 @@ let kNotificationWillShowKeyboard = Notification(name: Notification.Name.UIKeybo
 let kNotificationWillHideKeyboard = Notification(name: Notification.Name.UIKeyboardWillHide)
 
 
+let kStringSetLocation = "Set Location"
+let kStringFindingLocation = "Finding clinics around you"
 

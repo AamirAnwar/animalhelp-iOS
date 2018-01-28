@@ -13,9 +13,9 @@ import GoogleMaps
 
 protocol HomeViewModelDelegate {
     func locationServicesDenied() -> Void
-    func didUpdate(_ updatedMarker:GMSMarker) -> Void
     func showUserLocation(location:AppLocation)->Void
     func transitionTo(state:HomeViewState)
+    func didRefreshClinics()
     func showDrawerWith(clinics:[Clinic],scrollToIndex index:Int)
     func showMarkers(markers:[GMSMarker])
     func zoomIntoNearestClinic()
@@ -30,7 +30,6 @@ protocol HomeViewModelDelegate {
 class HomeViewModel:NSObject {
     
     let locationManager = animalhelp.LocationManager.sharedManager
-    let APIService = animalhelp.APIService.sharedService
     var delegate:HomeViewModelDelegate?
     var nearestClinic:Clinic? {
         get {
@@ -65,6 +64,7 @@ class HomeViewModel:NSObject {
         if let location = self.locationManager.userLocation {
             self.delegate?.hideLoader()
             self.delegate?.hideEmptyStateView()
+        
             self.delegate?.transitionTo(state: .MinimizedDrawer)
             self.getNearbyClinics()
             
@@ -73,11 +73,10 @@ class HomeViewModel:NSObject {
             marker.title = location.name
             marker.icon = GMSMarker.markerImage(with: CustomColorGreen)
             marker.appearAnimation = .pop
+            
             // Clear the previous marker
             userLocationMarker?.map = nil
             userLocationMarker = marker
-            
-            
             self.delegate?.showUserLocation(location: location)
         }
         else {
@@ -120,7 +119,8 @@ class HomeViewModel:NSObject {
             self.delegate?.hideLoader()
             self.delegate?.hideEmptyStateView()
             self.delegate?.showMarkers(markers:self.nearbyClinicsMarkers!)
-            self.delegate?.transitionTo(state: .SingleClinicDrawer)
+            self.delegate?.didRefreshClinics()
+            
             self.delegate?.zoomIntoNearestClinic()
         }
     }
@@ -137,8 +137,10 @@ class HomeViewModel:NSObject {
 
 extension HomeViewModel:DrawerViewDelegate {
     
-    func didTapFindNearbyClinics() {
-//        self.getNearbyClinics()
+    func didTapMiniMessageButton() {
+        if self.nearestClinic != nil {
+            self.delegate?.transitionTo(state: .SingleClinicDrawer)
+        }
     }
     
     func didSwipeToClinicAt(index:Int) {
@@ -150,14 +152,7 @@ extension HomeViewModel:DrawerViewDelegate {
     func didTapOpenInGoogleMaps(forIndex indexPath: IndexPath) {
         guard let nearbyClinics = self.nearbyClinicsMarkers, indexPath.row < nearbyClinics.count else {return}
         if let clinic = self.nearbyClinics?[indexPath.row] {
-            let urlString = "comgooglemaps://?daddr=\(clinic.address)&directionsmode=driving".addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)
-            if let urlString = urlString ,let url = URL(string:urlString) ,(UIApplication.shared.canOpenURL(URL(string:"comgooglemaps://")!)) {
-                
-                UIApplication.shared.open(url, options: [:], completionHandler: nil)
-                
-            } else {
-                print("Unable to open in google maps \(clinic)");
-            }
+            UtilityFunctions.openAddressInGoogleMaps(clinic.address)
         }
    }
     
