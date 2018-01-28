@@ -197,9 +197,8 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
         }
     }
     
-    func showDrawerWith(selectedIndex:Int, clinics:[Clinic]) {
-        // TODO fix parameter ordering
-        self.drawerView.showClinics(clinics, selectedIndex: selectedIndex)
+    func showDrawerWith(clinics:[Clinic],scrollToIndex index:Int) {
+        self.drawerView.showClinics(clinics, scrollToIndex: index)
     }
     
 

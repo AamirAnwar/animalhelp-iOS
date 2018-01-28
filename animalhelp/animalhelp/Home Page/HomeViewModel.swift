@@ -16,7 +16,7 @@ protocol HomeViewModelDelegate {
     func didUpdate(_ updatedMarker:GMSMarker) -> Void
     func showUserLocation(location:AppLocation)->Void
     func transitionTo(state:HomeViewState)
-    func showDrawerWith(selectedIndex:Int, clinics:[Clinic])
+    func showDrawerWith(clinics:[Clinic],scrollToIndex index:Int)
     func showMarkers(markers:[GMSMarker])
     func zoomIntoNearestClinic()
     func zoomToMarker(_ marker:GMSMarker)
@@ -146,17 +146,7 @@ extension HomeViewModel:DrawerViewDelegate {
             self.delegate?.zoomToMarker(markers[index])
         }
     }
-    
-    func didTapStickyButton(seeMore: Bool) {
-        if seeMore {
-                self.delegate?.transitionTo(state: .MaximizedDrawer)
-        }
-        else {
-            self.delegate?.transitionTo(state: .SingleClinicDrawer)
-        }
-        
-    }
-    
+
     func didTapOpenInGoogleMaps(forIndex indexPath: IndexPath) {
         guard let nearbyClinics = self.nearbyClinicsMarkers, indexPath.row < nearbyClinics.count else {return}
         if let clinic = self.nearbyClinics?[indexPath.row] {
@@ -188,7 +178,7 @@ extension HomeViewModel:GMSMapViewDelegate {
         if let clinics = self.nearbyClinics, let markers = self.nearbyClinicsMarkers {
             if let index = markers.index(of: marker) {
                 self.delegate?.transitionTo(state: .SingleClinicDrawer)
-                self.delegate?.showDrawerWith(selectedIndex: index, clinics: clinics)
+                self.delegate?.showDrawerWith(clinics: clinics, scrollToIndex: index)
             }
         }
         return true
