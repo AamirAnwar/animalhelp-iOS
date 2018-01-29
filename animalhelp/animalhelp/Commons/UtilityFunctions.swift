@@ -150,4 +150,12 @@ enum UtilityFunctions {
         }
     }
     
+    public static func showErrorDropdown(withController controller:BaseViewController) {
+        controller.setStatusBarVisibility(shouldShow: false) {
+            DropdownView.showWith(message: "Something went wrong :(", completion: {
+                controller.setStatusBarVisibility(shouldShow: true, withCompletion:nil)
+            })
+        }
+    }
+    
 }

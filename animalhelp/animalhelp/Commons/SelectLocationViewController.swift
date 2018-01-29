@@ -11,7 +11,6 @@ import UIKit
 class SelectLocationViewController: BaseViewController {
     let kCityCellReuseIdentifier = "CityCellReuseIdentifier"
     let kCustomLocationCellReuseIdentifier = "CustomLocationCellReuseIdentifier"
-    
     let tableView:UITableView =  {
         let tv = UITableView()
         tv.separatorStyle = .none
@@ -46,6 +45,7 @@ class SelectLocationViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.emptyStateView.setMessage("Whoops something went wrong!", buttonTitle: "Try again")
         NotificationCenter.default.addObserver(self, selector: #selector(willShowKeyboard(notification:)), name: kNotificationWillShowKeyboard.name, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(willHideKeyboard), name: kNotificationWillHideKeyboard.name, object: nil)
         self.customNavBar.setTitle("Select Location")
@@ -74,15 +74,28 @@ class SelectLocationViewController: BaseViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        self.refreshActiveCities()
+    }
+    
+    func refreshActiveCities() {
         self.showLoader()
-        AppLocation.getActiveCities { (cities) in
+        AppLocation.getActiveCities { (cities,error) in
+            guard error == nil else {
+                self.hideLoader()
+                UtilityFunctions.showErrorDropdown(withController: self)
+                self.showEmptyStateView()
+                return
+            }
             self.hideLoader()
             self.activeCities = cities
             self.tableView.reloadData()
         }
     }
     
-    
+    override func didTapEmptyStateButton() {
+        self.refreshActiveCities()
+        self.hideEmptyStateView()
+    }
     
     @objc func willShowKeyboard(notification:NSNotification) {
         guard self.view.window != nil else {return}

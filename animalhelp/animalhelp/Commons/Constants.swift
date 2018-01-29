@@ -14,10 +14,12 @@ let kMissingPetImageHeight:CGFloat = 265
 let kMinPopUpHeight:CGFloat = 200
 let kCornerRadius:CGFloat = 4
 let kStandardButtonHeight:CGFloat = 50
-
+let kDefaultPadding:CGFloat = 8
 let kDrawerUnknownLocationHeight:CGFloat = 280
 let kDrawerMinimizedStateHeight:CGFloat = 30
 let kSingleClinicStateHeight:CGFloat = 180
+public let kDropdownAnimationDuration = 0.3
+public let kStatusBarHeight:CGFloat = 20
 
 let kCollectionViewHeight:CGFloat = 180
 let kSocialLoginButtonHeight:CGFloat = 48
@@ -38,6 +40,8 @@ let kNotificationLocationDetectionFailed = Notification(name: Notification.Name.
 let kNotificationWillShowKeyboard = Notification(name: Notification.Name.UIKeyboardWillShow)
 let kNotificationWillHideKeyboard = Notification(name: Notification.Name.UIKeyboardWillHide)
 
+let kNotificationDidShowStatusBar = Notification(name: Notification.Name.init("didShowStatusBar"))
+let kNotificationDidHideStatusBar = Notification(name: Notification.Name.init("didHideStatusBar"))
 
 let kStringSetLocation = "Set Location"
 let kStringFindingLocation = "Finding clinics around you"
