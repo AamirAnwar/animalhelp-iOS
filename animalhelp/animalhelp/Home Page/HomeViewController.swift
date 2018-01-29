@@ -16,7 +16,7 @@ import Moya
 let kMapButtonSize:CGFloat = 44
 let kMapButtonFontSize:CGFloat = 22
 
-enum HomeViewState {
+public enum HomeViewState:Int {
     case InitialSetup
     case UserLocationUnknown
     case HiddenDrawer
@@ -24,9 +24,11 @@ enum HomeViewState {
     case SingleClinicDrawer
     case MaximizedDrawer
 }
+
 class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewUIDelegate {
     
     static let inset:CGFloat = 10
+    var isTransitioning = false
     var totalPan:CGFloat = 0
     var delta:CGFloat = 0
     let drawerView = DrawerView()
@@ -104,7 +106,7 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
             self.customNavBar.setTitle("Detecting Location")
         }
         else {
-            self.customNavBar.setTitle("Set Location")
+            self.customNavBar.setTitle(kStringSetLocation)
         }
         self.setupViews()
         self.viewModel.delegate = self
@@ -117,6 +119,12 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
         self.setupMyLocationButton()
         self.setupNearestClinicButton()
         self.setupDrawerView()
+    }
+    
+    fileprivate func createGoogleMapView() {
+        view.addSubview(googleMapView)
+        self.googleMapView.delegate = self.viewModel
+        self.googleMapView.frame = CGRect.init(x: 0.0, y: CustomNavigationBar.kCustomNavBarHeight, width: self.view.width(), height: self.view.height() - (self.customNavBar.height() + self.tabBarHeight))
     }
     
     fileprivate func setupDrawerView() {
@@ -147,18 +155,6 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
         }
         self.showNearestClinicButton.addTarget(self, action: #selector(didTapShowNearestClinic), for: .touchUpInside)
     }
-    
-    
-    fileprivate func createGoogleMapView() {
-        view.addSubview(googleMapView)
-        self.googleMapView.delegate = self.viewModel
-        self.googleMapView.frame = CGRect.init(x: 0.0, y: CustomNavigationBar.kCustomNavBarHeight, width: self.view.width(), height: self.view.height() - (self.customNavBar.height() + self.tabBarHeight))
-    }
-    
-    override func didTapEmptyStateButton() {
-        self.didTapLocationButton()
-    }
-    
 
     func showLocationServicesDeniedAlert() {
         let alert = UIAlertController(
@@ -170,9 +166,17 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
         alert.addAction(okAction)
     }
     
-    func didUpdate(_ updatedMarker:GMSMarker) -> Void {
-        updatedMarker.map = self.googleMapView
-        showNearestClinic(withMarker: updatedMarker)
+    func didRefreshClinics() {
+        if self.state == .HiddenDrawer || self.state == .MinimizedDrawer {
+            self.showNearestClinicInMinimizedState()
+        }
+    }
+    
+    func showNearestClinicInMinimizedState() {
+        if let nearestClinic = self.viewModel.nearestClinic {
+            // Show message with nearest clinic name
+            self.showMiniDrawer(withMessage:"Nearest Clinic - \(nearestClinic.name)")
+        }
     }
     
     func zoomIntoNearestClinic() {
@@ -197,12 +201,10 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
         }
     }
     
-    func showDrawerWith(selectedIndex:Int, clinics:[Clinic]) {
-        // TODO fix parameter ordering
-        self.drawerView.showClinics(clinics, selectedIndex: selectedIndex)
+    func showDrawerWith(clinics:[Clinic],scrollToIndex index:Int) {
+        self.drawerView.showClinics(clinics, scrollToIndex: index)
     }
     
-
     func showUserLocation(location:AppLocation) {
         let camera = GMSCameraPosition.camera(withLatitude: location.latitude,
                                               longitude: location.longitude,
@@ -212,9 +214,8 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
             self.refreshUserMarker()
         }
         else {
-            self.transitionTo(state: .MinimizedDrawer)
+            self.showMiniDrawer(withMessage: kStringFindingLocation)
         }
-        
     }
     
     func refreshUserMarker() {
@@ -253,20 +254,25 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
     }
     
     
+    override func didTapEmptyStateButton() {
+        self.didTapLocationButton()
+    }
+    
+    
     fileprivate func refreshDrawerWithState(_ state:HomeViewState) {
         switch self.state {
         case .InitialSetup:break;
         case .UserLocationUnknown:
-//            UIView.animate(withDuration: 0.3, animations: {
-                self.drawerView.setY(CustomNavigationBar.kCustomNavBarHeight)
-                self.drawerView.setHeight(self.view.height() - (CustomNavigationBar.kCustomNavBarHeight + self.tabBarHeight))
+            self.drawerView.setY(CustomNavigationBar.kCustomNavBarHeight)
+            self.drawerView.setHeight(self.view.height() - (CustomNavigationBar.kCustomNavBarHeight + self.tabBarHeight))
             self.drawerView.layoutIfNeeded()
-//            })
+
         case .HiddenDrawer:
             UIView.animate(withDuration: 0.3, animations: {
                 self.drawerView.setY(self.view.height())
             })
         case .MinimizedDrawer:
+            guard self.drawerView.originY() != (self.view.height() - (self.tabBarHeight + kDrawerMinimizedStateHeight)) else {return}
             self.drawerView.setY(self.view.height())
             self.drawerView.setHeight(kDrawerMinimizedStateHeight)
             UIView.animate(withDuration: 0.3, animations: {
@@ -299,15 +305,16 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
     }
     
     func transitionTo(state:HomeViewState) {
+        guard isTransitioning == false else {return}
+        self.isTransitioning = true
         guard self.state != state else {
+            self.isTransitioning = false
             return
         }
-        print("Going from state \(self.state) to \(state)")
-        
         switch state {
         case .UserLocationUnknown:
             self.updateVisibleMapElements(self,true)
-            self.drawerView.showUnknownLocationState()
+            self.present(OnboardingViewController(), animated: true)
             UIView.animate(withDuration: 0.3, animations: {
                 self.googleMapView.setHeight(self.view.height() - (self.tabBarHeight + self.customNavBar.height()))
             })
@@ -320,15 +327,11 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
             
             
         case .MinimizedDrawer:
-            //Tell drawer to minimize itself with a message
-            self.updateVisibleMapElements(self,false)
-            self.drawerView.isHidden = false
-            UIView.animate(withDuration: 0.2, animations: {
-            self.googleMapView.setHeight(self.view.height() - (self.tabBarHeight + self.customNavBar.height() + kDrawerMinimizedStateHeight))
-            })
-            self.drawerView.switchToMinimizedDrawer(title: "Finding clinics around you")
-            
-            
+            // Default
+            self.showMiniDrawer(withMessage: kStringFindingLocation)
+            self.isTransitioning = false
+            return
+        
         case .SingleClinicDrawer:
             //Tell drawer to show nearest clinic only with a left to right swipeable inteface
             if let clinics = self.viewModel.nearbyClinics, let markers = self.viewModel.nearbyClinicsMarkers, clinics.isEmpty == false && markers.isEmpty == false {
@@ -340,7 +343,8 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
                     self.state = state
                 }
                 
-                if self.state == .MinimizedDrawer {
+                switch self.state {
+                case .MinimizedDrawer:
                     UIView.animate(withDuration: 0.3, animations: {
                         self.googleMapView.setHeight(self.view.height() - (self.tabBarHeight + CustomNavigationBar.kCustomNavBarHeight))})
                     UIView.animate(withDuration: 0.5, animations: {
@@ -352,9 +356,10 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
                             self.googleMapView.setHeight(self.view.height() - (self.tabBarHeight + CustomNavigationBar.kCustomNavBarHeight + kSingleClinicStateHeight))
                         }, completion: nil)
                     })
+                    self.isTransitioning = false
                     return
-                }
-                else {
+                    
+                default:
                     closure()
                     UIView.animate(withDuration: 0.3, animations: {
                         self.googleMapView.setHeight(self.view.height() - (self.tabBarHeight + self.customNavBar.height() + kSingleClinicStateHeight))
@@ -365,29 +370,78 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
             
         case .MaximizedDrawer:
             //Tell drawer to expand to cover it's superview and show all clinics like a list view
+            guard let clinics = self.viewModel.nearbyClinics else {return}
             self.updateVisibleMapElements(self,false)
+            self.drawerView.showClinics(clinics)
             self.drawerView.switchToMaximizedDrawer()
             self.drawerView.isHidden = false
             
             
         case .InitialSetup:
             self.drawerView.isHidden = true
-            print("Drawer view still in initial setup")
             UIView.animate(withDuration: 0.1, animations: {
                 self.googleMapView.setHeight(self.view.height() - (self.tabBarHeight + self.customNavBar.height()))
             })
         }
         self.state = state
+        self.isTransitioning = false
+    }
+    
+    func showMiniDrawer(withMessage message:String) {
+        guard isTransitioning == false else {return}
+        isTransitioning = true
+        //Tell drawer to minimize itself with a message
+        guard self.state != .MinimizedDrawer else {
+            UIView.transition(with: self.drawerView.miniMessageButton, duration: 0.3, options: [.curveEaseOut], animations: {
+                    self.drawerView.switchToMinimizedDrawer(title:message)
+            }, completion: nil)
+            self.isTransitioning = false
+            return
+        }
+        self.updateVisibleMapElements(self,false)
+        self.drawerView.isHidden = false
+        if self.state == .SingleClinicDrawer || self.state == .MaximizedDrawer {
+            UIView.animate(withDuration: 0.4, animations: {
+                self.drawerView.setY(self.view.height())
+                self.googleMapView.setHeight(self.view.height() - (self.tabBarHeight + self.customNavBar.height()))
+            }, completion: { (_) in
+                
+                self.drawerView.switchToMinimizedDrawer(title:message)
+                self.drawerView.setHeight(kDrawerMinimizedStateHeight)
+                UIView.animate(withDuration: 0.3, animations: {
+                    self.googleMapView.setHeight(self.view.height() - (self.tabBarHeight + self.customNavBar.height() + kDrawerMinimizedStateHeight))
+                    self.drawerView.setY(self.view.height() - (self.tabBarHeight + kDrawerMinimizedStateHeight))
+                }, completion:{_ in
+                    self.state = .MinimizedDrawer
+                    self.isTransitioning = false
+                })
+            })
+        }
+        else {
+            UIView.animate(withDuration: 0.2, animations: {
+                self.googleMapView.setHeight(self.view.height() - (self.tabBarHeight + self.customNavBar.height() + kDrawerMinimizedStateHeight))
+            })
+            self.state = .MinimizedDrawer
+            self.isTransitioning = false
+        }
+
     }
     
     override func didTapRightBarButton() {
-        if self.state == .MaximizedDrawer {
+        
+        switch self.state {
+        case .MaximizedDrawer:
             self.customNavBar.setRightButtonIcon(icon:FAIcon.FAList)
-            self.transitionTo(state:.HiddenDrawer)
-        }
-        else {
+            if let _ = self.viewModel.nearestClinic {
+                self.showNearestClinicInMinimizedState()
+            }
+            else {
+                self.transitionTo(state:.HiddenDrawer)
+            }
+        default:
             self.customNavBar.setRightButtonIcon(icon:FAIcon.FAmap)
             self.transitionTo(state:.MaximizedDrawer)
+            
         }
     }
     
@@ -398,7 +452,12 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
     }
     
     func didTapHideDrawerButton() {
-        self.transitionTo(state: .HiddenDrawer)
+        if let _ = self.viewModel.nearestClinic {
+            self.showNearestClinicInMinimizedState()
+        }
+        else {
+            self.transitionTo(state: .HiddenDrawer)
+        }
     }
     
     func didPan(drawer:DrawerView, panGesture:UIPanGestureRecognizer) {
@@ -410,14 +469,13 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
             delta = 0
         case .changed :
             delta = y - totalPan
-            print("Delta : \(delta)")
             totalPan = y
             updateDrawerWithDelta(delta)
             
         case .cancelled,.ended:
             self.updateDrawerWithTotalDrag(drag: totalPan)
         default:
-            print("ended")
+            break;
         }
         
     }
@@ -436,7 +494,6 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
         if drag < -200 {
             self.drawerView.flowLayout.scrollDirection = .vertical
             self.transitionTo(state: .MaximizedDrawer)
-            print("Maximize!")
         }
         else {
             UIView.animate(withDuration: 0.3, animations: {
@@ -446,7 +503,6 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
                 self.drawerView.flowLayout.scrollDirection = .horizontal
                 self.transitionTo(state: .SingleClinicDrawer)
             })
-            print("Minimize!")
         }
     }
     
@@ -486,8 +542,5 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
         self.drawerView.setHeight(finalHeight)
 
     }
-    
-    
-        
 }
 

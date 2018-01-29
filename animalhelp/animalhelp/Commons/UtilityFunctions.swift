@@ -139,4 +139,15 @@ enum UtilityFunctions {
         customNavBar.setAttributedTitle(mutableAttrString)
     }
     
+    public static func openAddressInGoogleMaps(_ address:String) {
+        let urlString = "comgooglemaps://?daddr=\(address)&directionsmode=driving".addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)
+        if let urlString = urlString ,let url = URL(string:urlString) ,(UIApplication.shared.canOpenURL(URL(string:"comgooglemaps://")!)) {
+            
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            
+        } else {
+            print("Unable to open in google maps \(address)");
+        }
+    }
+    
 }
