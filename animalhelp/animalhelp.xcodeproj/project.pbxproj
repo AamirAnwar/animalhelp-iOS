@@ -47,6 +47,7 @@
 		43A2A56E2011E358000A7D76 /* CustomUIKitExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A2A56D2011E358000A7D76 /* CustomUIKitExtensions.swift */; };
 		43A94EB2201E40020018F3EA /* DetectLocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A94EB1201E40020018F3EA /* DetectLocationView.swift */; };
 		43A94EB4201E44360018F3EA /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A94EB3201E44360018F3EA /* OnboardingViewController.swift */; };
+		43A94EB6201E68D90018F3EA /* DropdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A94EB5201E68D90018F3EA /* DropdownView.swift */; };
 		43AC0A011FFE5BAD009F8D70 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AC0A001FFE5BAD009F8D70 /* BaseViewController.swift */; };
 		43AC0A031FFE7BD0009F8D70 /* CustomFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AC0A021FFE7BD0009F8D70 /* CustomFonts.swift */; };
 		43AC0A051FFE7D25009F8D70 /* DrawerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AC0A041FFE7D25009F8D70 /* DrawerView.swift */; };
@@ -144,6 +145,7 @@
 		43A2A56D2011E358000A7D76 /* CustomUIKitExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomUIKitExtensions.swift; sourceTree = "<group>"; };
 		43A94EB1201E40020018F3EA /* DetectLocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetectLocationView.swift; sourceTree = "<group>"; };
 		43A94EB3201E44360018F3EA /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
+		43A94EB5201E68D90018F3EA /* DropdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropdownView.swift; sourceTree = "<group>"; };
 		43AC0A001FFE5BAD009F8D70 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		43AC0A021FFE7BD0009F8D70 /* CustomFonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFonts.swift; sourceTree = "<group>"; };
 		43AC0A041FFE7D25009F8D70 /* DrawerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawerView.swift; sourceTree = "<group>"; };
@@ -281,6 +283,7 @@
 				4397D4632013CB4C00A1C238 /* LocationManager.swift */,
 				43705BEF2014C9F200D7296B /* EmptyStateView.swift */,
 				43705BF32014EED600D7296B /* InfoPopView.swift */,
+				43A94EB5201E68D90018F3EA /* DropdownView.swift */,
 			);
 			path = Commons;
 			sourceTree = "<group>";
@@ -534,6 +537,7 @@
 				43378CCF200DF6CB00F088C4 /* MissingPet.swift in Sources */,
 				43AC0A071FFE7E25009F8D70 /* CustomColors.swift in Sources */,
 				437312CC20126EE9000EC23E /* ListItemDetailTableViewCell.swift in Sources */,
+				43A94EB6201E68D90018F3EA /* DropdownView.swift in Sources */,
 				43A2A56C2011E15D000A7D76 /* CustomSeparator.swift in Sources */,
 				43367EED2008A771004D6B2C /* ClinicCollectionViewCell.swift in Sources */,
 				43378CD1200DF99200F088C4 /* PetSearchViewModel.swift in Sources */,
@@ -738,7 +742,7 @@
 		43E86ACE1FBC320500B7130B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = C3RT9P7X65;
@@ -765,7 +769,7 @@
 		43E86ACF1FBC320500B7130B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = C3RT9P7X65;

@@ -42,16 +42,18 @@ class AppLocation:NSObject, Codable {
         super.init()
     }
     
-    static func getActiveCities(completion:@escaping ([AppLocation]) -> Void) {
+    static func getActiveCities(completion:@escaping ([AppLocation], Error?) -> Void) {
         APIService.sharedService.request(.activeCities) { (result) in
             switch result {
-            case .failure(let error):print("error! \(error.localizedDescription)")
+            case .failure(let error):
+                print("error! \(error.localizedDescription)")
+                completion([],error)
             case .success(let response):
                 do {
                     _ = try response.filterSuccessfulStatusCodes()
                     let data = try response.mapJSON()
                     if let responseDict = data as? NSDictionary {
-                        completion(self.parseActiveCities(responseDict))
+                        completion(self.parseActiveCities(responseDict),nil)
                     }
                 } catch let error {
                     print(error.localizedDescription)

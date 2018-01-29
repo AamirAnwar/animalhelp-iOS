@@ -15,7 +15,6 @@ var kClientID:String!
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
@@ -40,22 +39,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.backgroundColor = UIColor.white
         let tabBarController = UITabBarController()
         
+        UITabBar.appearance().tintColor = CustomColorMainTheme
+        
         // Home Page
         let homeVC = HomeViewController()
         homeVC.viewModel = HomeViewModel()
         let homeNav = UINavigationController(rootViewController: homeVC)
         homeNav.tabBarItem.title = "Clinics"
+        homeNav.tabBarItem.image = #imageLiteral(resourceName: "clinic_tab_icon")
+        homeNav.tabBarItem.selectedImage = #imageLiteral(resourceName: "clinic_active_tab_icon")
+        
         
         // Account Page
         let accountVC = AccountViewController()
         let accountNav = UINavigationController(rootViewController: accountVC)
         accountNav.tabBarItem.title = "Account"
+        accountNav.tabBarItem.image = #imageLiteral(resourceName: "account_tab_icon")
+        accountNav.tabBarItem.selectedImage = #imageLiteral(resourceName: "account_tab_icon_active")
+        
         
         // Pet Search Page
         let petSearchVC = PetSearchViewController()
         petSearchVC.viewModel = PetSearchViewModel()
         let petNav = UINavigationController(rootViewController: petSearchVC)
         petNav.tabBarItem.title = "Pet Search"
+        petNav.tabBarItem.image = #imageLiteral(resourceName: "petsearch_tab_icon")
+        petNav.tabBarItem.selectedImage = #imageLiteral(resourceName: "petsearch_tab_icon_active")
+        
+        
         
         tabBarController.viewControllers = [homeNav, petNav, accountNav]
         window?.rootViewController = tabBarController
@@ -90,7 +101,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
-
-
 }
 

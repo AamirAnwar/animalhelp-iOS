@@ -8,6 +8,8 @@
 
 import Foundation
 import UIKit
+let kStatusBarAnimationDuration = 0.4
+
 class BaseViewController:UIViewController, CustomNavigationBarDelegate,UIGestureRecognizerDelegate,EmptyStateViewDelegate {
 
     let customNavBar = CustomNavigationBar()
@@ -34,9 +36,29 @@ class BaseViewController:UIViewController, CustomNavigationBarDelegate,UIGesture
         }
     }
     
+    public var showStatusBar = true
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        get {
+            return .default
+        }
+    }
+    
+    override var prefersStatusBarHidden: Bool {
+        get {
+            return !showStatusBar
+        }
+    }
+    override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
+        get {
+            return .slide
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         NotificationCenter.default.addObserver(self, selector: #selector(locationChanged), name: kNotificationUserLocationChanged.name, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(didShowStatusBar), name: kNotificationDidShowStatusBar.name, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(didHideStatusBar), name: kNotificationDidHideStatusBar.name, object: nil)
         self.view.backgroundColor = UIColor.white
         self.view.addSubview(customNavBar)
         self.navigationController?.isNavigationBarHidden = true
@@ -68,8 +90,8 @@ class BaseViewController:UIViewController, CustomNavigationBarDelegate,UIGesture
             make.trailing.equalToSuperview()
             make.bottom.equalToSuperview()
         }
-        self.emptyStateView.messageLabel.text = "Sorry!\n No clinics around you :("
-        self.emptyStateView.button.setTitle("Try a different location", for: .normal)
+        self.emptyStateView.messageLabel.text = "Sorry!\n Something went wrong :("
+        self.emptyStateView.button.setTitle("Try Again", for: .normal)
         self.emptyStateView.isHidden = true
         self.emptyStateView.delegate = self
     }
@@ -116,5 +138,35 @@ class BaseViewController:UIViewController, CustomNavigationBarDelegate,UIGesture
         
     }
     
+    //MARK: Status bar visibility
+    public func setStatusBarVisibility(shouldShow isVisible:Bool,withCompletion completion:(()->Void)?) {
+        UIView.animate(withDuration: kStatusBarAnimationDuration, animations: {
+            self.showStatusBar = isVisible
+            self.setNeedsStatusBarAppearanceUpdate()
+        }, completion: { (_) in
+            if isVisible {
+                NotificationCenter.default.post(kNotificationDidShowStatusBar)
+            }
+            else {
+                NotificationCenter.default.post(kNotificationDidHideStatusBar)
+            }
+            completion?()
+        })
+    }
+    
+    @objc func didHideStatusBar() {
+        guard self.showStatusBar == true else {return}
+        UIView.animate(withDuration: kStatusBarAnimationDuration, animations: {
+            self.showStatusBar = false
+            self.setNeedsStatusBarAppearanceUpdate()
+        })
+    }
+    
+    @objc func didShowStatusBar() {
+        guard self.showStatusBar == false else {return}
+        UIView.animate(withDuration: kStatusBarAnimationDuration, animations: {
+            self.showStatusBar = true
+            self.setNeedsStatusBarAppearanceUpdate()
+        })
+    }
 }
-

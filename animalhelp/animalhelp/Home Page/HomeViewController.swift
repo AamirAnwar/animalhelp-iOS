@@ -103,7 +103,7 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
     override func viewDidLoad() {
         super.viewDidLoad()
         if self.viewModel.locationManager.isLocationPermissionGranted {
-            self.customNavBar.setTitle("Detecting Location")
+            self.customNavBar.setTitle(kStringDetecingLocation)
         }
         else {
             self.customNavBar.setTitle(kStringSetLocation)
@@ -111,7 +111,6 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
         self.setupViews()
         self.viewModel.delegate = self
         self.viewModel.updateViewState()
-        
     }
     
     fileprivate func setupViews() {
@@ -255,7 +254,9 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
     
     
     override func didTapEmptyStateButton() {
-        self.didTapLocationButton()
+        self.viewModel.getNearbyClinics()
+        self.hideEmptyStateView()
+        self.showLoader()
     }
     
     

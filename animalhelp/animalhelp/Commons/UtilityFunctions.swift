@@ -120,7 +120,11 @@ enum UtilityFunctions {
     }
     
     public static func setUserLocationInNavBar(customNavBar:CustomNavigationBar) {
-        guard var locality = LocationManager.sharedManager.userLocality else {return}
+        guard var locality = LocationManager.sharedManager.userLocality else {
+            customNavBar.setTitle(kStringDetecingLocation)
+            return
+            
+        }
         customNavBar.locationButton.setTitle(nil, for: .normal)
         
         if locality.count > 18 {
@@ -147,6 +151,14 @@ enum UtilityFunctions {
             
         } else {
             print("Unable to open in google maps \(address)");
+        }
+    }
+    
+    public static func showErrorDropdown(withController controller:BaseViewController) {
+        controller.setStatusBarVisibility(shouldShow: false) {
+            DropdownView.showWith(message: "Something went wrong :(", completion: {
+                controller.setStatusBarVisibility(shouldShow: true, withCompletion:nil)
+            })
         }
     }
     
