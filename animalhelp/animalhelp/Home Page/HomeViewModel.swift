@@ -58,6 +58,7 @@ class HomeViewModel:NSObject {
     
     @objc func locationDetectionFailed() {
         self.delegate?.hideLoader()
+        self.delegate?.showEmptyStateView()
     }
     
     @objc func didChangeUserLocation() {
@@ -101,7 +102,16 @@ class HomeViewModel:NSObject {
     
     func getNearbyClinics() {
         self.delegate?.showLoader()
-        Clinic.getNearbyClinics { (clinics) in
+        Clinic.getNearbyClinics { (clinics, error) in
+            guard error == nil else {
+                self.delegate?.showEmptyStateView()
+                self.delegate?.hideLoader()
+                if let delegate = self.delegate, let vc = delegate as? BaseViewController {
+                    UtilityFunctions.showErrorDropdown(withController: vc)
+                }
+                return
+            }
+            
             guard clinics.isEmpty == false else {
                 self.delegate?.showEmptyStateView()
                 return
@@ -120,7 +130,6 @@ class HomeViewModel:NSObject {
             self.delegate?.hideEmptyStateView()
             self.delegate?.showMarkers(markers:self.nearbyClinicsMarkers!)
             self.delegate?.didRefreshClinics()
-            
             self.delegate?.zoomIntoNearestClinic()
         }
     }

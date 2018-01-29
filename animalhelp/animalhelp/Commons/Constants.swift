@@ -45,4 +45,4 @@ let kNotificationDidHideStatusBar = Notification(name: Notification.Name.init("d
 
 let kStringSetLocation = "Set Location"
 let kStringFindingLocation = "Finding clinics around you"
-
+let kStringDetecingLocation = "Detecting Location"

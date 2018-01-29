@@ -48,9 +48,9 @@ class PetSearchViewController:BaseViewController, PetSearchViewModelDelegate {
             make.bottom.equalTo(self.searchBar.snp.bottom)
         }
         
-        createTableView()
+        self.createTableView()
         self.viewModel.searchForMissingPets()
-        self.emptyStateView.setMessage("No missing pets here :)", buttonTitle: "Change location")
+        self.emptyStateView.setMessage("Something went wrong :(", buttonTitle: "Try Again")
         self.refreshControl.addTarget(self, action: #selector(didPromptRefresh), for: UIControlEvents.valueChanged)
     }
     
@@ -112,7 +112,9 @@ class PetSearchViewController:BaseViewController, PetSearchViewModelDelegate {
     }
     
     override func didTapEmptyStateButton() {
-        self.didTapLocationButton()
+        self.viewModel.searchForMissingPets()
+        self.hideEmptyStateView()
+        self.showLoader()
     }
     
     @objc func didPromptRefresh() {

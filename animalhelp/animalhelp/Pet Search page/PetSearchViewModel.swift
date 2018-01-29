@@ -15,6 +15,7 @@ protocol PetSearchViewModelDelegate {
     func didGetSearchResults(_ results:[MissingPet])
     func showLoader()
     func hideLoader()
+    func showEmptyStateView()
 }
     
 
@@ -30,8 +31,12 @@ class PetSearchViewModel {
         self.delegate?.showLoader()
         var q = query.lowercased() as NSString
         q = q.replacingOccurrences(of: " ", with: "+") as NSString
-        MissingPet.searchWithQuery(query: q as String) { (pets) in
+        MissingPet.searchWithQuery(query: q as String) { (pets, error) in
             self.delegate?.hideLoader()
+            guard error == nil else {
+                self.delegate?.showEmptyStateView()
+                return
+            }
             self.searchResults = pets
             self.delegate?.didGetSearchResults(pets)
         }
@@ -39,8 +44,13 @@ class PetSearchViewModel {
     
     func searchForMissingPets() {
         self.delegate?.showLoader()
-        MissingPet.getMissingPets { (pets) in
+        MissingPet.getMissingPets { (pets, error) in
             self.delegate?.hideLoader()
+            guard error == nil else {
+                self.delegate?.showEmptyStateView()
+                return
+            }
+            
             self.missingPets = pets
             self.delegate?.didUpdateMissingPets()
         }

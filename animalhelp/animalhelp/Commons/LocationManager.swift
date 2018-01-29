@@ -56,7 +56,6 @@ class LocationManager: NSObject {
             locationManager.requestWhenInUseAuthorization()
         }
         else {
-            
             locationManager.desiredAccuracy = kCLLocationAccuracyBest
             self.startLocationDetectionTimer()
             locationManager.startUpdatingLocation()
@@ -67,13 +66,14 @@ class LocationManager: NSObject {
     fileprivate func startLocationDetectionTimer() {
         self.timer = Timer.scheduledTimer(withTimeInterval: timeoutDuration, repeats: false, block: { (timer) in
             print("Stopping location services!")
+            self.locationManager.stopUpdatingLocation()
+            
             if let _ = self.userLocation {
-                self.locationManager.stopUpdatingLocation()
-            }
-            else {
-                // TODO Unable to get your location. Send a callback to the viewcontroller/view
                 NotificationCenter.default.post(kNotificationUserLocationChanged)
                 self.delegate?.userLocationDidChange()
+            }
+            else {
+                NotificationCenter.default.post(kNotificationLocationDetectionFailed)
             }
             timer.invalidate()
         })
@@ -122,7 +122,6 @@ extension LocationManager: CLLocationManagerDelegate {
                 }
             }
         }
-        
     }
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {

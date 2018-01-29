@@ -90,8 +90,8 @@ class BaseViewController:UIViewController, CustomNavigationBarDelegate,UIGesture
             make.trailing.equalToSuperview()
             make.bottom.equalToSuperview()
         }
-        self.emptyStateView.messageLabel.text = "Sorry!\n No clinics around you :("
-        self.emptyStateView.button.setTitle("Try a different location", for: .normal)
+        self.emptyStateView.messageLabel.text = "Sorry!\n Something went wrong :("
+        self.emptyStateView.button.setTitle("Try Again", for: .normal)
         self.emptyStateView.isHidden = true
         self.emptyStateView.delegate = self
     }

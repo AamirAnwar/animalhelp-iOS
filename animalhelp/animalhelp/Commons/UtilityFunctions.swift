@@ -120,7 +120,11 @@ enum UtilityFunctions {
     }
     
     public static func setUserLocationInNavBar(customNavBar:CustomNavigationBar) {
-        guard var locality = LocationManager.sharedManager.userLocality else {return}
+        guard var locality = LocationManager.sharedManager.userLocality else {
+            customNavBar.setTitle(kStringDetecingLocation)
+            return
+            
+        }
         customNavBar.locationButton.setTitle(nil, for: .normal)
         
         if locality.count > 18 {

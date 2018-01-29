@@ -34,7 +34,7 @@ class MissingPet:Codable {
         case imageURL = "image_url"
     }
     
-    static func getMissingPets(completion:@escaping ([MissingPet]) -> Void) {
+    static func getMissingPets(completion:@escaping ([MissingPet], Error?) -> Void) {
         // Get current city ID
         APIService.sharedService.request(.missingPets(cityID:1), completion: { (result) in
             switch result {
@@ -44,21 +44,26 @@ class MissingPet:Codable {
                     let data = try response.mapJSON()
                     print(data)
                     if let jsonDictionary = data as? NSDictionary {
-                        completion(self.parse(json: jsonDictionary))
-                        
+                        completion(self.parse(json: jsonDictionary), nil)
                     }
+                    else {
+                        completion([],nil)
+                    }
+                    
                     
                 } catch let error {
                     // Error occured
+                    completion([],nil)
                     print(error)
                 }
             case .failure(let error):
+                completion([],error)
                 print(error)
             }
         })
     }
     
-    static func searchWithQuery(query:String,completion:@escaping ([MissingPet]) -> Void) {
+    static func searchWithQuery(query:String,completion:@escaping ([MissingPet], Error?) -> Void) {
         // Get current city ID
         APIService.sharedService.request(.petSearch(cityID:1,query:query), completion: { (result) in
             switch result {
@@ -68,11 +73,14 @@ class MissingPet:Codable {
                     let data = try response.mapJSON()
                     print(data)
                     if let jsonDictionary = data as? NSDictionary {
-                        completion(self.parse(json: jsonDictionary))
+                        completion(self.parse(json: jsonDictionary), nil)
+                    } else {
+                        completion([], nil)
                     }
                     
                 } catch let error {
                     // Error occured
+                    completion([], error)
                     print(error)
                 }
             case .failure(let error):
