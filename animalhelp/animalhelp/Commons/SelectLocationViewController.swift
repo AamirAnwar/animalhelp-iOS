@@ -121,6 +121,7 @@ class SelectLocationViewController: BaseViewController {
     }
     
     override func locationChanged() {
+        self.customNavBar.setTitle(kStringSetLocation)
         self.presentingViewController?.dismiss(animated: true)
     }
 }
@@ -154,10 +155,12 @@ extension SelectLocationViewController:UISearchBarDelegate {
     
     @objc func didStartDetectingLocation() {
         self.showLoader()
+        self.customNavBar.setTitle(kStringDetecingLocation)
     }
     
     @objc func didFailToDetectLocation() {
         self.hideLoader()
+        self.customNavBar.setTitle(kStringSetLocation)
         UtilityFunctions.showErrorDropdown(withController: self)
     }
 }
@@ -172,12 +175,7 @@ extension SelectLocationViewController:UITableViewDelegate,UITableViewDataSource
         
         if section == 0 {
             // Detect location
-            if LocationManager.sharedManager.isLocationPermissionGranted == false {
-                return 1
-            }
-            else {
-                return 0
-            }
+            return 1
         }
         
         if self.isSearching {
@@ -219,7 +217,6 @@ extension SelectLocationViewController:UITableViewDelegate,UITableViewDataSource
         let cell = tableView.dequeueReusableCell(withIdentifier: kDetectLocationCellReuseIdentifier) as! StandardListTableViewCell
         cell.showsDisclosure(false)
         cell.showBottomPaddedSeparator()
-        guard LocationManager.sharedManager.isLocationPermissionGranted == false else {return cell}
         cell.setTitle(kStringDetectLocation)
         cell.setTitleColor(CustomColorMainTheme)
         return cell
