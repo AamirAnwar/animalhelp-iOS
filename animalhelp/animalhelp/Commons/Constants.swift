@@ -46,6 +46,9 @@ let kNotificationDidHideStatusBar = Notification(name: Notification.Name.init("d
 let kDrawerViewDragQuotient:CGFloat = -100
 let kHideButtonSize:CGFloat = 20
 
+let kUserProfileImageURLKey = "user_profile_image_key"
+let kUserProfileNameKey = "user_name_key"
+
 let kStringSetLocation = "Set Location"
 let kStringFindingLocation = "Finding clinics around you"
 let kStringDetecingLocation = "Detecting Location"
