@@ -15,7 +15,6 @@ class MissingPetTableViewCell:UITableViewCell {
     let petImageView = UIImageView()
     let petBreedLabel:UILabel = {
        let label = UILabel()
-        label.textAlignment = .center
         label.textColor = CustomColorTextBlack
         label.font = CustomFontTitleBold
         return label
@@ -23,18 +22,18 @@ class MissingPetTableViewCell:UITableViewCell {
     
     let petDescLabel:UILabel = {
         let label = UILabel()
-        label.textAlignment = .center
         label.textColor = CustomColorLightGray
-        label.font = CustomFontSmallBodyMedium
-        label.numberOfLines = 0
+        label.font = CustomFontBodyParagraphMedium
+        label.numberOfLines = 2
+        label.lineBreakMode = NSLineBreakMode.byTruncatingTail
         return label
     }()
     
-    let missingSinceLabel:UILabel = {
+    let postedSinceLabel:UILabel = {
         let label = UILabel()
         label.textAlignment = .natural
         label.textColor = CustomColorLightGray
-        label.font = CustomFontSmallBodyMedium
+        label.font = CustomFontHeadingSmall
         return label
     }()
     
@@ -47,25 +46,30 @@ class MissingPetTableViewCell:UITableViewCell {
         return label
     }()
     
-    let petTypeLabel:UILabel = {
+    let markLabel:UILabel = {
         let label = UILabel()
-        label.textAlignment = .natural
-        label.textColor = CustomColorLightGray
+        label.textColor = CustomColorMainTheme
         label.font = CustomFontSmallBodyMedium
+        label.backgroundColor = UIColor.white
         return label
     }()
     
-    let markLabelButton:UIButton = {
-        let button = UIButton()
-        button.setTitleColor(CustomColorMainTheme, for: .normal)
-        button.titleLabel?.font = CustomFontSmallBodyMedium
-        button.layer.borderColor = CustomColorMainTheme.cgColor
-        button.layer.borderWidth = 1
-        let inset:CGFloat = 5
-        button.contentEdgeInsets = UIEdgeInsetsMake(inset, inset, inset, inset)
-        button.backgroundColor = UIColor.white
-        return button
+    let locationIconLabel:UILabel = {
+        let label = UILabel()
+        label.font = UIFont.init(name: kFontAwesomeFamilyName, size: 17)
+        label.text = NSString.fontAwesomeIconString(forEnum: FAIcon.FAMapMarker)
+        label.textColor = CustomColorDarkGray
+        return label
     }()
+    
+    let markIconLabel:UILabel = {
+        let label = UILabel()
+        label.font = UIFont.init(name: kFontAwesomeFamilyName, size: 15)
+        label.text = NSString.fontAwesomeIconString(forEnum: FAIcon.FAExclamationCircle)
+        label.textColor = CustomColorMainTheme
+        return label
+    }()
+    
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("Init with coder not implemented")
@@ -78,6 +82,7 @@ class MissingPetTableViewCell:UITableViewCell {
         self.petImageView.contentMode = .scaleAspectFill
         self.petImageView.clipsToBounds = true
         self.petImageView.layer.cornerRadius = kCornerRadius
+
         if #available(iOS 11, *) {
             self.petImageView.layer.maskedCorners = [.layerMinXMinYCorner,.layerMaxXMinYCorner]
         }
@@ -85,16 +90,16 @@ class MissingPetTableViewCell:UITableViewCell {
         self.contentView.backgroundColor = UIColor.clear
         self.contentView.addSubview(self.containerView)
         self.containerView.layer.cornerRadius = kCornerRadius
+        self.containerView.backgroundColor = UIColor.white
 
         self.containerView.addSubview(self.petImageView)
         self.containerView.addSubview(self.petBreedLabel)
         self.containerView.addSubview(self.petDescLabel)
-        self.containerView.addSubview(self.petTypeLabel)
         self.containerView.addSubview(self.locationLabel)
-        self.containerView.addSubview(self.missingSinceLabel)
-        self.containerView.addSubview(self.markLabelButton)
-        
-        self.containerView.backgroundColor = UIColor.white
+        self.containerView.addSubview(self.postedSinceLabel)
+        self.containerView.addSubview(self.markLabel)
+        self.containerView.addSubview(self.locationIconLabel)
+        self.containerView.addSubview(self.markIconLabel)
         
         self.containerView.snp.makeConstraints { (make) in
             make.top.equalToSuperview().offset(13)
@@ -112,54 +117,54 @@ class MissingPetTableViewCell:UITableViewCell {
         
         self.petBreedLabel.snp.makeConstraints { (make) in
             make.top.equalTo(self.petImageView.snp.bottom).offset(8)
-            make.leading.equalTo(self.petImageView.snp.leading).offset(8)
-            make.trailing.equalTo(self.petImageView.snp.trailing).inset(8)
+            make.leading.equalTo(self.petImageView.snp.leading).offset(kSidePadding)
+            make.trailing.lessThanOrEqualTo(self.postedSinceLabel.snp.leading).offset(-kDefaultPadding)
+        }
+        
+        self.postedSinceLabel.snp.makeConstraints { (make) in
+            make.trailing.equalToSuperview().inset(kSidePadding)
+            make.centerY.equalTo(self.petBreedLabel.snp.centerY)
         }
         
         self.petDescLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(self.petBreedLabel.snp.bottom).offset(8)
-            make.leading.equalTo(self.petBreedLabel.snp.leading)
-            make.trailing.equalTo(self.petBreedLabel.snp.trailing)
-        }
-        
-        self.missingSinceLabel.snp.makeConstraints { (make) in
-            make.leading.equalTo(self.petDescLabel.snp.leading).offset(16)
-            make.width.lessThanOrEqualTo(self.containerView.snp.width).multipliedBy(0.5)
-            make.top.equalTo(self.petDescLabel.snp.bottom).offset(16)
+            make.top.equalTo(self.petBreedLabel.snp.bottom).offset(kDefaultPadding)
+            make.leading.equalToSuperview().offset(kSidePadding)
+            make.trailing.equalToSuperview().inset(kSidePadding)
         }
         
         self.locationLabel.snp.makeConstraints { (make) in
-            make.trailing.equalTo(self.petDescLabel.snp.trailing)
-            make.top.equalTo(self.missingSinceLabel.snp.top)
-            make.width.lessThanOrEqualTo(self.containerView.snp.width).multipliedBy(0.5)
+            make.top.equalTo(self.petDescLabel.snp.bottom).offset(2*kDefaultPadding)
+            make.leading.equalTo(self.locationIconLabel.snp.trailing).offset(4)
+            make.trailing.equalToSuperview().inset(kSidePadding)
         }
         
-        self.petTypeLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(self.locationLabel.snp.bottom).offset(11)
-            make.width.lessThanOrEqualTo(self.containerView.snp.width).multipliedBy(0.5)
-            make.leading.equalTo(self.missingSinceLabel.snp.leading)
-        }
-        
-        self.markLabelButton.snp.makeConstraints { (make) in
-            make.top.equalTo(self.petTypeLabel.snp.top)
+        self.markLabel.snp.makeConstraints { (make) in
+            make.top.equalTo(self.locationLabel.snp.bottom).offset(kDefaultPadding)
+            make.leading.equalTo(self.markIconLabel.snp.trailing).offset(4)
             make.trailing.equalTo(self.locationLabel.snp.trailing)
-            make.width.lessThanOrEqualTo(self.containerView.snp.width).multipliedBy(0.5)
             make.bottom.equalToSuperview().inset(13)
         }
         
+        self.locationIconLabel.snp.makeConstraints { (make) in
+            make.leading.equalToSuperview().offset(kSidePadding)
+            make.top.equalTo(self.locationLabel.snp.top).offset(2)
+            make.width.equalTo(14)
+        }
         
-        UtilityFunctions.assignFontLabelTo(self.petTypeLabel, icon: FAIcon.FAodnoklassniki)
-        UtilityFunctions.assignFontLabelTo(self.missingSinceLabel, icon: FAIcon.FAClockO)
-        UtilityFunctions.assignFontLabelTo(self.locationLabel, icon: FAIcon.FAMapMarker)
+        self.markIconLabel.snp.makeConstraints { (make) in
+            make.leading.equalTo(self.locationIconLabel)
+            make.top.equalTo(self.markLabel.snp.top).offset(2)
+            make.width.equalTo(14)
+            
+        }
     }
     
     func setMissingPet(_ pet:MissingPet) {
         self.petBreedLabel.text = pet.breed ?? ""
         self.petDescLabel.text = pet.petDescription ?? ""
         self.locationLabel.text = pet.lastKnownLocation ?? ""
-        self.petTypeLabel.text = pet.type
-        self.markLabelButton.setTitle("\(pet.distFeatures ?? "")", for: .normal)
-        self.missingSinceLabel.text = pet.missingSince
+        self.markLabel.text = "\(pet.distFeatures ?? "")"
+        self.postedSinceLabel.text = pet.missingSince
         self.petImageView.setImage(WithURL: pet.imageURL ?? "")
         
     }
@@ -168,9 +173,7 @@ class MissingPetTableViewCell:UITableViewCell {
         super.layoutSubviews()
         if self.contentView.frame.height > 0 &&  self.containerView.layer.shadowPath == nil {
             self.containerView.layoutIfNeeded()
-            self.markLabelButton.layer.cornerRadius = 2*kCornerRadius
             UtilityFunctions.addShadowTo(view: self.containerView)
-            
         }
     }
 }
