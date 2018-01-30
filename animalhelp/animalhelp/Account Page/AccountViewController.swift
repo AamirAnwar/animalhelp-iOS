@@ -72,6 +72,7 @@ class AccountViewController:BaseViewController,GIDSignInUIDelegate {
         }
         NotificationCenter.default.addObserver(self, selector: #selector(userAuthDidChange), name: kNotificationLoggedInSuccessfully.name, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(userAuthDidChange), name: kNotificationLoggedOutSuccessfully.name, object: nil)
+        self.refreshUserDetails()
     }
     
     @objc func userAuthDidChange() {
@@ -230,13 +231,20 @@ extension AccountViewController: UITableViewDelegate, UITableViewDataSource {
     
     func getUsernameCell(tableView:UITableView) -> StandardListTableViewCell {
         let usernameCell = tableView.dequeueReusableCell(withIdentifier: kUsernameCellReuseIdentifier) as! StandardListTableViewCell
-        
-        guard let user = self.loginManager.currentUser else {return usernameCell}
-        
-        usernameCell.setTitle(user.name)
-        usernameCell.setTitleFont(CustomFontUsername)
         usernameCell.showsDisclosure(false)
         usernameCell.selectionStyle = .none
+        
+        var name:String? = nil
+        // User name
+        if let username = self.loginManager.currentUser?.name {
+            name = username
+        }
+        else if let username = UserDefaults.standard.value(forKey: kUserProfileNameKey) as? String {
+            name = username
+        }
+        guard let username = name  else {return usernameCell}
+        usernameCell.setTitle(username)
+        usernameCell.setTitleFont(CustomFontUsername)
         return usernameCell
     }
     
@@ -252,13 +260,24 @@ extension AccountViewController: UITableViewDelegate, UITableViewDataSource {
         alertController.addAction(cancel)
         present(alertController, animated:true)
     }
+    
+    func refreshUserDetails() {
+        // User profile image
+        if let url = self.loginManager.currentUser?.profilePictureURL?.absoluteString {
+            self.profileImageView.setImage(WithURL: url)
+        }
+        else if let url = UserDefaults.standard.value(forKey: kUserProfileImageURLKey) as? String {
+            self.profileImageView.setImage(WithURL: url)
+        }
+        else {
+            self.profileImageView.image = nil
+        }
+    }
 }
 
 extension AccountViewController:LoginManagerDelegate {
     func didUpdateUserInfo() {
-        if let url = self.loginManager.currentUser?.profilePictureURL?.absoluteString {
-            self.profileImageView.setImage(WithURL: url)
-        }
+        self.refreshUserDetails()
         self.tableView.reloadData()
     }
 }
