@@ -16,11 +16,11 @@ class ContributeViewController:BaseViewController {
     var tableData:[(title:String, detailText:String)] {
         get {
             var data = [(title:String, detailText:String)]()
-            data += [("Spreading the word", "Enabling notifications allows us to notify you on any updates and developments when searching for a missing pet")]
+            data += [("Spreading the word", "Letting people know that they can use this platform in a time of need can help speed up the process of finding missing pets. The more people aware, the more chances of the pet being found.")]
             
-            data += [("Helping catalog and verifying help centers", "Enabling notifications allows us to notify you on any updates and developments when searching for a missing pet")]
+            data += [("Helping catalog and verifying help centers", "Writing to us about how good a clinic is can really help in not just finding the nearest clinic to you but also helps us factor in the quality of service.")]
             
-            data += [("Sending stories and feedback","Enabling notifications allows us to notify you on any updates and developments when searching for a missing pet")]
+            data += [("Sending stories and feedback","The more feedback we get the more we can do better, if you see something amiss or any improvements it would mean the world to us if you could let us know.")]
             return data
         }
     }
