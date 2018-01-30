@@ -56,7 +56,7 @@ class LocationManager: NSObject {
             locationManager.requestWhenInUseAuthorization()
         }
         else {
-            locationManager.desiredAccuracy = kCLLocationAccuracyBest
+            locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
             self.startLocationDetectionTimer()
             locationManager.startUpdatingLocation()
             NotificationCenter.default.post(kNotificationDidStartUpdatingLocation)
