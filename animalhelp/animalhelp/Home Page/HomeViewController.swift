@@ -187,6 +187,9 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
         if self.state == .HiddenDrawer || self.state == .MinimizedDrawer {
             self.showNearestClinicInMinimizedState()
         }
+        if let clinics = self.viewModel.nearbyClinics {
+            self.drawerView.refreshWith(clinics: clinics)
+        }
     }
     
     func showNearestClinicInMinimizedState() {
@@ -366,6 +369,7 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
                     self.drawerView.showClinics(clinics)
                     self.drawerView.isHidden = false
                     self.state = state
+                    self.customNavBar.setRightButtonIcon(icon:FAIcon.FAList)
                 }
                 
                 switch self.state {
@@ -403,6 +407,7 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
             self.drawerView.switchToMaximizedDrawer()
             self.drawerView.isHidden = false
             self.setHideButtonVisibility(false, delay: 0.1)
+            self.customNavBar.setRightButtonIcon(icon:FAIcon.FAmap)
             
             
         case .InitialSetup:
@@ -456,7 +461,6 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
     }
     
     override func didTapRightBarButton() {
-        
         switch self.state {
         case .MaximizedDrawer:
             self.customNavBar.setRightButtonIcon(icon:FAIcon.FAList)

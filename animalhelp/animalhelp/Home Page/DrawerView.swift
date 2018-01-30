@@ -93,11 +93,16 @@ class DrawerView:UIView {
     
     
     //MARK: Public API
+    
+    public func refreshWith(clinics:[Clinic]) {
+        self.nearbyClinics = clinics
+        self.collectionView.reloadData()
+    }
+    
     // Show a list of clinics in the collection view
     public func showClinics(_ clinics:[Clinic]) {
         self.collectionView.isHidden = false
-        self.nearbyClinics = clinics
-        self.collectionView.reloadData()
+        self.refreshWith(clinics: clinics)
     }
     
     // Show clinics and scroll to a clinic at a particular index

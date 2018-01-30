@@ -9,6 +9,7 @@
 import UIKit
 
 class SelectLocationViewController: BaseViewController {
+    let kDetectLocationCellReuseIdentifier = "DetectLocationCellReuseIdentifier"
     let kCityCellReuseIdentifier = "CityCellReuseIdentifier"
     let kCustomLocationCellReuseIdentifier = "CustomLocationCellReuseIdentifier"
     let tableView:UITableView =  {
@@ -48,6 +49,8 @@ class SelectLocationViewController: BaseViewController {
         self.emptyStateView.setMessage("Whoops something went wrong!", buttonTitle: "Try again")
         NotificationCenter.default.addObserver(self, selector: #selector(willShowKeyboard(notification:)), name: kNotificationWillShowKeyboard.name, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(willHideKeyboard), name: kNotificationWillHideKeyboard.name, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(didStartDetectingLocation), name: kNotificationDidStartUpdatingLocation.name, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(didFailToDetectLocation), name: kNotificationLocationDetectionFailed.name, object: nil)
         self.customNavBar.setTitle("Select Location")
         self.customNavBar.shouldShowCrossButton(true)
         self.view.addSubview(self.tableView)
@@ -62,7 +65,9 @@ class SelectLocationViewController: BaseViewController {
             make.bottom.equalToSuperview()
         }
         self.tableView.register(StandardListTableViewCell.self, forCellReuseIdentifier: kCityCellReuseIdentifier)
+        self.tableView.register(StandardListTableViewCell.self, forCellReuseIdentifier: kDetectLocationCellReuseIdentifier)
         self.tableView.register(ListItemDetailTableViewCell.self, forCellReuseIdentifier: kCustomLocationCellReuseIdentifier)
+        
         
         self.searchBar.snp.makeConstraints { (make) in
             make.top.equalTo(self.customNavBar.snp.bottom)
@@ -115,6 +120,9 @@ class SelectLocationViewController: BaseViewController {
         self.tableView.contentInset = UIEdgeInsets.init(top: 0, left: 0, bottom: 0, right: 0)
     }
     
+    override func locationChanged() {
+        self.presentingViewController?.dismiss(animated: true)
+    }
 }
 
 extension SelectLocationViewController:UISearchBarDelegate {
@@ -143,10 +151,35 @@ extension SelectLocationViewController:UISearchBarDelegate {
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
     }
+    
+    @objc func didStartDetectingLocation() {
+        self.showLoader()
+    }
+    
+    @objc func didFailToDetectLocation() {
+        self.hideLoader()
+        UtilityFunctions.showErrorDropdown(withController: self)
+    }
 }
 
 extension SelectLocationViewController:UITableViewDelegate,UITableViewDataSource {
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 2
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        if section == 0 {
+            // Detect location
+            if LocationManager.sharedManager.isLocationPermissionGranted == false {
+                return 1
+            }
+            else {
+                return 0
+            }
+        }
+        
         if self.isSearching {
             return self.customLocations.count
         }
@@ -156,6 +189,13 @@ extension SelectLocationViewController:UITableViewDelegate,UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        if indexPath.section == 0 {
+            // Detect location
+            return getDetectLocationCell(tableView, indexPath:indexPath)
+        }
+
+        
         if self.isSearching {
             return getCustomLocationCell(tableView, indexPath:indexPath)
         }
@@ -164,12 +204,24 @@ extension SelectLocationViewController:UITableViewDelegate,UITableViewDataSource
         }
     }
     
+    
+    
     func getCityCell(_ tableView:UITableView, indexPath:IndexPath) -> StandardListTableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: kCityCellReuseIdentifier) as! StandardListTableViewCell
         guard indexPath.row < self.activeCities.count else { return cell}
         cell.setTitle(self.activeCities[indexPath.row].name)
         cell.showsDisclosure(false)
         cell.showBottomPaddedSeparator()
+        return cell
+    }
+    
+    func getDetectLocationCell(_ tableView:UITableView, indexPath:IndexPath) -> StandardListTableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: kDetectLocationCellReuseIdentifier) as! StandardListTableViewCell
+        cell.showsDisclosure(false)
+        cell.showBottomPaddedSeparator()
+        guard LocationManager.sharedManager.isLocationPermissionGranted == false else {return cell}
+        cell.setTitle(kStringDetectLocation)
+        cell.setTitleColor(CustomColorMainTheme)
         return cell
     }
     
@@ -184,6 +236,13 @@ extension SelectLocationViewController:UITableViewDelegate,UITableViewDataSource
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        
+        if indexPath.section == 0 {
+            // Detect location
+            LocationManager.sharedManager.startDetectingLocation()
+            return
+        }
+        
         // Set app-wide location
         if isSearching {
             // Set from search results

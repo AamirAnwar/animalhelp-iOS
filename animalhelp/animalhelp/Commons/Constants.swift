@@ -49,3 +49,4 @@ let kHideButtonSize:CGFloat = 20
 let kStringSetLocation = "Set Location"
 let kStringFindingLocation = "Finding clinics around you"
 let kStringDetecingLocation = "Detecting Location"
+let kStringDetectLocation = "Detect Location"
