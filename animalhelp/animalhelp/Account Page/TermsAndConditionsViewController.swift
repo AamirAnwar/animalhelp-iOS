@@ -7,23 +7,28 @@
 //
 
 import UIKit
+import WebKit
 
 class TermsAndConditionsViewController: BaseViewController {
-
+    let webView = WKWebView()
     override func viewDidLoad() {
         super.viewDidLoad()
         self.customNavBar.setTitle("Terms and Conditions")
-        let imageView = UIImageView(image: #imageLiteral(resourceName: "defaultProfileImage"))
-        imageView.contentMode = .scaleAspectFill
-        imageView.clipsToBounds = true
-        view.addSubview(imageView)
-        imageView.snp.makeConstraints { (make) in
+        self.view.addSubview(self.webView)
+        self.webView.snp.makeConstraints { (make) in
+            make.top.equalTo(self.customNavBar.snp.bottom)
             make.leading.equalToSuperview().offset(kSidePadding)
             make.trailing.equalToSuperview().inset(kSidePadding)
-            make.top.equalTo(self.customNavBar.snp.bottom).offset(kSidePadding)
+            make.bottom.equalToSuperview()
+        }
+        self.webView.scrollView.maximumZoomScale = 1
+        if let htmlFile = Bundle.main.path(forResource: "terms", ofType: "html") {
+            if let htmlString = try? String.init(contentsOfFile: htmlFile, encoding: String.Encoding.utf8){
+                webView.loadHTMLString(htmlString, baseURL: nil)
+            }
         }
         
-    }
+   }
 
  
 }

@@ -81,9 +81,9 @@ class AccountViewController:BaseViewController,GIDSignInUIDelegate {
     
     func setupProfileImageView() {
         self.view.addSubview(self.profileImageView)
-        self.profileImageView.image = #imageLiteral(resourceName: "defaultProfileImage")
         self.profileImageView.contentMode = .scaleAspectFill
         self.profileImageView.clipsToBounds = true
+        self.profileImageView.backgroundColor = CustomColorLightGray
         self.profileImageView.snp.makeConstraints { (make) in
             make.top.equalTo(self.customNavBar.snp.bottom)
             make.leading.equalToSuperview()
