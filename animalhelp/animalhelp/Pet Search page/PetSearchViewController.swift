@@ -37,7 +37,7 @@ class PetSearchViewController:BaseViewController, PetSearchViewModelDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(willShowKeyboard(notification:)), name: kNotificationWillShowKeyboard.name, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(willHideKeyboard), name: kNotificationWillHideKeyboard.name, object: nil)
         self.viewModel.delegate = self
-        self.customNavBar.enableRightButtonWithTitle("Info")
+        self.customNavBar.enableRightButtonWithIcon(icon: .FAInfoCircle)
         self.createSearchBar()
         // Create separator
         let separator = CustomSeparator.separator

@@ -65,9 +65,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         petNav.tabBarItem.title = "Pet Search"
         petNav.tabBarItem.image = #imageLiteral(resourceName: "petsearch_tab_icon")
         petNav.tabBarItem.selectedImage = #imageLiteral(resourceName: "petsearch_tab_icon_active")
-        
-        
-        
         tabBarController.viewControllers = [homeNav, petNav, accountNav]
         window?.rootViewController = tabBarController
     }

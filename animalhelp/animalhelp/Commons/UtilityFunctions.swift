@@ -45,11 +45,11 @@ enum UtilityFunctions {
         guard let superview = view.superview else {return}
         let label = UILabel()
         superview.addSubview(label)
-        label.font = UIFont.init(name: kFontAwesomeFamilyName, size: 14)
+        label.font = UIFont.init(name: kFontAwesomeFamilyName, size: 20)
         label.text = NSString.fontAwesomeIconString(forEnum: icon)
         label.textColor = CustomColorMainTheme
         label.snp.makeConstraints { (make) in
-            make.top.equalTo(view.snp.top).offset(2)
+            make.top.equalTo(view.snp.top).offset(0)
             make.leading.equalTo(view.snp.leading).offset(-16)
         }
         

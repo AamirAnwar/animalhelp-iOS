@@ -27,6 +27,13 @@ class LocationManager: NSObject {
     fileprivate let geocoder = CLGeocoder()
     fileprivate var placeMark:CLPlacemark? = nil
     fileprivate var performingReverseGeocoding = false
+    fileprivate var isDetectingLocation = false {
+        didSet {
+            if isDetectingLocation == false {
+                self.bufferLocation = nil
+            }
+        }
+    }
     fileprivate var bufferLocation:CLLocation? = nil
     static let sharedManager = LocationManager()
     
@@ -56,23 +63,24 @@ class LocationManager: NSObject {
             locationManager.requestWhenInUseAuthorization()
         }
         else {
-            locationManager.desiredAccuracy = kCLLocationAccuracyBest
+            locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
             self.startLocationDetectionTimer()
             locationManager.startUpdatingLocation()
+            isDetectingLocation = true
             NotificationCenter.default.post(kNotificationDidStartUpdatingLocation)
         }
     }
     
     fileprivate func startLocationDetectionTimer() {
         self.timer = Timer.scheduledTimer(withTimeInterval: timeoutDuration, repeats: false, block: { (timer) in
-            print("Stopping location services!")
-            self.locationManager.stopUpdatingLocation()
-            
-            if let _ = self.userLocation {
+            print("Detecting location took too long!")
+            if self.isDetectingLocation {
+                print("Stopping location services!")
+                self.locationManager.stopUpdatingLocation()
                 NotificationCenter.default.post(kNotificationUserLocationChanged)
-                self.delegate?.userLocationDidChange()
             }
-            else {
+            
+            if self.userLocation == nil {
                 NotificationCenter.default.post(kNotificationLocationDetectionFailed)
             }
             timer.invalidate()
@@ -83,6 +91,7 @@ class LocationManager: NSObject {
 extension LocationManager: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         NotificationCenter.default.post(kNotificationLocationDetectionFailed)
+        self.isDetectingLocation = false
         print("Failed to update location")
         
     }
@@ -116,8 +125,8 @@ extension LocationManager: CLLocationManagerDelegate {
                             NotificationCenter.default.post(kNotificationUserLocationChanged)
                             self.delegate?.userLocationDidChange()
                             self.locationManager.stopUpdatingLocation()
+                            self.isDetectingLocation = false
                         }
-                        
                     })
                 }
             }

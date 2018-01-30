@@ -34,11 +34,9 @@ class ClinicCollectionViewCell:UICollectionViewCell {
     
     let nameLabel:UILabel = {
         let label = UILabel(frame: CGRect.zero)
-        label.font = CustomFontButtonTitle
+        label.font = CustomFontDemiMedium
         label.textColor = CustomColorTextBlack
         label.numberOfLines = 2
-        label.adjustsFontSizeToFitWidth = true
-        label.minimumScaleFactor = 0.5
         return label
     }()
     
@@ -96,7 +94,7 @@ class ClinicCollectionViewCell:UICollectionViewCell {
         super.init(frame: frame)
         // Create views here
         
-//        self.contentView.backgroundColor = UIColor.red.withAlphaComponent(0.3)
+        //        self.contentView.backgroundColor = UIColor.red.withAlphaComponent(0.3)
         
         self.contentView.addSubview(nameLabel)
         self.contentView.addSubview(addressLabel)
@@ -114,13 +112,13 @@ class ClinicCollectionViewCell:UICollectionViewCell {
         
         nameLabel.snp.makeConstraints { (make) in
             make.top.equalTo(locationIconLabel.snp.top)
-            make.leading.equalTo(locationIconLabel.snp.trailing).offset(8)
+            make.leading.equalTo(locationIconLabel.snp.trailing).offset(kDefaultPadding)
         }
         
         distanceLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(nameLabel.snp.top)
+            make.centerY.equalTo(self.locationIconLabel)
             make.trailing.equalToSuperview().inset(kSidePadding)
-            make.leading.greaterThanOrEqualTo(nameLabel.snp.trailing).offset(10)
+            make.leading.greaterThanOrEqualTo(nameLabel.snp.trailing).offset(kDefaultPadding)
             
         }
         
@@ -168,7 +166,6 @@ class ClinicCollectionViewCell:UICollectionViewCell {
         if let clinic = clinic {
             nameLabel.text = clinic.name
             addressLabel.text = "Address - \(clinic.address)"
-//            phoneLabel.text = "Phone - \(clinic.mobile)"
             if let distance = clinic.distance {
                 distanceLabel.text = "\(distance) km"
             }
@@ -180,8 +177,6 @@ class ClinicCollectionViewCell:UICollectionViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-//        distanceLabel.preferredMaxLayoutWidth = self.frame.size.width/2
-        self.nameLabel.sizeToFit()
-        
     }
 }
+

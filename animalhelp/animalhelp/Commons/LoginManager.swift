@@ -39,6 +39,8 @@ class LoginManager:NSObject {
     var delegate:LoginManagerDelegate? = nil
     var currentUser:User? = nil {
         didSet {
+            UserDefaults.standard.setValue(self.currentUser?.name, forKey: kUserProfileNameKey)
+            UserDefaults.standard.setValue(self.currentUser?.profilePictureURL?.absoluteString, forKey: kUserProfileImageURLKey)
             self.delegate?.didUpdateUserInfo()
         }
     }
@@ -72,7 +74,6 @@ class LoginManager:NSObject {
                 self.postLoginNotification(success: true)
                 
                 if let userID = token.userId {
-                    
                     FacebookCore.UserProfile.fetch(userId: userID, completion: { (result) in
                         switch result {
                         case .success(let profile):
@@ -87,6 +88,7 @@ class LoginManager:NSObject {
                                     
                                     if let response = response, let url = response.url {
                                         self.currentUser?.profilePictureURL = url
+                                        UserDefaults.standard.setValue(self.currentUser?.profilePictureURL?.absoluteString, forKey:kUserProfileImageURLKey)
                                         self.delegate?.didUpdateUserInfo()
                                     }
                                     

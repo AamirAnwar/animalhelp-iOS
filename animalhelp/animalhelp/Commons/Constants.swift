@@ -43,6 +43,13 @@ let kNotificationWillHideKeyboard = Notification(name: Notification.Name.UIKeybo
 let kNotificationDidShowStatusBar = Notification(name: Notification.Name.init("didShowStatusBar"))
 let kNotificationDidHideStatusBar = Notification(name: Notification.Name.init("didHideStatusBar"))
 
+let kDrawerViewDragQuotient:CGFloat = -100
+let kHideButtonSize:CGFloat = 20
+
+let kUserProfileImageURLKey = "user_profile_image_key"
+let kUserProfileNameKey = "user_name_key"
+
 let kStringSetLocation = "Set Location"
 let kStringFindingLocation = "Finding clinics around you"
 let kStringDetecingLocation = "Detecting Location"
+let kStringDetectLocation = "Detect Location"

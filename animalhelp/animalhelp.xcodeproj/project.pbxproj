@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4313A85E1FFE9A3F0043C927 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 4313A85D1FFE9A3F0043C927 /* UIImage+ImageEffects.m */; };
+		431B0BB82020792D007A2A8E /* terms.html in Resources */ = {isa = PBXBuildFile; fileRef = 431B0BB72020792D007A2A8E /* terms.html */; };
 		43367EED2008A771004D6B2C /* ClinicCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43367EEC2008A771004D6B2C /* ClinicCollectionViewCell.swift */; };
 		43378CCF200DF6CB00F088C4 /* MissingPet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43378CCE200DF6CB00F088C4 /* MissingPet.swift */; };
 		43378CD1200DF99200F088C4 /* PetSearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43378CD0200DF99200F088C4 /* PetSearchViewModel.swift */; };
@@ -92,6 +93,7 @@
 		4313A85B1FFE9A3D0043C927 /* animalhelp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "animalhelp-Bridging-Header.h"; sourceTree = "<group>"; };
 		4313A85C1FFE9A3F0043C927 /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageEffects.h"; sourceTree = "<group>"; };
 		4313A85D1FFE9A3F0043C927 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
+		431B0BB72020792D007A2A8E /* terms.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = terms.html; sourceTree = "<group>"; };
 		43367EEC2008A771004D6B2C /* ClinicCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClinicCollectionViewCell.swift; sourceTree = "<group>"; };
 		43378CCE200DF6CB00F088C4 /* MissingPet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissingPet.swift; sourceTree = "<group>"; };
 		43378CD0200DF99200F088C4 /* PetSearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetSearchViewModel.swift; sourceTree = "<group>"; };
@@ -311,6 +313,7 @@
 				4339A3F9201B3ED50094B310 /* group3.png */,
 				43E86AC71FBC320500B7130B /* LaunchScreen.storyboard */,
 				43E86ACA1FBC320500B7130B /* Info.plist */,
+				431B0BB72020792D007A2A8E /* terms.html */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -484,6 +487,7 @@
 				43BC0491200E811F00EF64FD /* GoogleSignIn.bundle in Resources */,
 				438A0D5E1FCDD709005A8CA4 /* GoogleMaps.bundle in Resources */,
 				43BC0499200E81C900EF64FD /* GoogleService-Info.plist in Resources */,
+				431B0BB82020792D007A2A8E /* terms.html in Resources */,
 				4339A3FC201B3ED50094B310 /* group3.png in Resources */,
 				43AE9B94201B1B9A0011272E /* FontAwesome.ttf in Resources */,
 				43AE9B95201B1E960011272E /* Info.plist in Resources */,

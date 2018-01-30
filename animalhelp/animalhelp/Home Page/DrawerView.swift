@@ -19,28 +19,19 @@ protocol DrawerViewDelegate {
 }
 
 protocol DrawerViewUIDelegate {
-    func didTapHideDrawerButton()
     func didPan(drawer:DrawerView, panGesture:UIPanGestureRecognizer)
     func didScrollDownWithDelta(_ delta:CGFloat)
     func didEndDragging(WithTotalDrag drag:CGFloat)
+    func isBeingDragged()->Bool
 }
 
 class DrawerView:UIView {
     var delegate:DrawerViewDelegate?
     var uiDelegate:DrawerViewUIDelegate?
-    let hideButton:UIButton = {
-        let button = UIButton(type: .system)
-        button.titleLabel?.font = UIFont.init(name: kFontAwesomeFamilyName, size: 14)
-        button.setTitle(NSString.fontAwesomeIconString(forEnum: FAIcon.FAChevronDown), for: .normal)
-        button.setTitleColor(UIColor.white, for: .normal)
-        button.addTarget(self, action: #selector(didTapHideDrawer), for: .touchUpInside)
-        button.backgroundColor = CustomColorMainTheme
-        button.contentEdgeInsets = UIEdgeInsetsMake(0, 3, 0, 3)
-        return button
-    }()
     var flowLayout:UICollectionViewFlowLayout = {
        let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
+        layout.sectionInset = UIEdgeInsets.zero
         return layout
     }()
     var collectionView:UICollectionView!
@@ -57,23 +48,10 @@ class DrawerView:UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = UIColor.white
-        self.panGesture = UIPanGestureRecognizer(target: self, action: #selector(didPan))
-        self.panGesture.delegate = self
-        self.addGestureRecognizer(panGesture)
         self.createCollectionView()
-        self.createHideButton()
         self.createMiniMessageButton()
     }
-    
-    fileprivate func createHideButton() {
-        self.addSubview(self.hideButton)
-        self.hideButton.snp.makeConstraints { (make) in
-            make.trailing.equalToSuperview().inset(10)
-            make.top.equalToSuperview().offset(8)
-            make.size.equalTo(20)
-        }
-    }
-    
+
     fileprivate func createCollectionView() {
         self.collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: self.flowLayout)
         self.collectionView.delegate = self
@@ -81,12 +59,24 @@ class DrawerView:UIView {
         self.collectionView.dataSource = self
         self.collectionView.isPagingEnabled = true
         self.collectionView.backgroundColor = UIColor.white
+        self.panGesture = UIPanGestureRecognizer(target: self, action: #selector(didPan))
+        self.panGesture.delegate = self
+        self.collectionView.addGestureRecognizer(panGesture)
+//        self.panGesture.require(toFail: self.collectionView.panGestureRecognizer)
+        self.collectionView.panGestureRecognizer.require(toFail: self.panGesture)
+//        self.collectionView.layer.borderColor = CustomColorMainTheme.cgColor
+//        self.collectionView.layer.borderWidth = 2
+        self.collectionView.delaysContentTouches = false
         self.collectionView.register(ClinicCollectionViewCell.self, forCellWithReuseIdentifier: self.clinicCellReuseIdentifier)
         self.addSubview(self.collectionView)
         self.collectionView.snp.makeConstraints { (make) in
-            make.edges.equalToSuperview()
-            make.height.greaterThanOrEqualTo(kCollectionViewHeight)
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.top.equalToSuperview()
+            make.bottom.equalToSuperview()
         }
+        
+        
     }
     
      fileprivate func createMiniMessageButton() {
@@ -103,11 +93,16 @@ class DrawerView:UIView {
     
     
     //MARK: Public API
+    
+    public func refreshWith(clinics:[Clinic]) {
+        self.nearbyClinics = clinics
+        self.collectionView.reloadData()
+    }
+    
     // Show a list of clinics in the collection view
     public func showClinics(_ clinics:[Clinic]) {
         self.collectionView.isHidden = false
-        self.nearbyClinics = clinics
-        self.collectionView.reloadData()
+        self.refreshWith(clinics: clinics)
     }
     
     // Show clinics and scroll to a clinic at a particular index
@@ -120,27 +115,25 @@ class DrawerView:UIView {
     public func switchToMinimizedDrawer(title:String) {
         self.miniMessageButton.isHidden = false
         self.collectionView.isHidden = true
-        self.hideButton.isHidden = true
         self.miniMessageButton.setTitle(title, for: .normal)
     }
     
     public func switchToMaximizedDrawer() {
         self.miniMessageButton.isHidden = true
         self.collectionView.isHidden = false
-        self.hideButton.isHidden = true
         self.setScrollDirection(.vertical)
     }
     
     public func switchToSingleDrawer() {
         self.miniMessageButton.isHidden = true
-        self.hideButton.isHidden = false
         self.setScrollDirection(.horizontal)
     }
     
     public func setScrollDirection(_ direction:UICollectionViewScrollDirection) {
-        guard self.flowLayout.scrollDirection != direction else {return}
-        self.flowLayout.scrollDirection = direction
-        self.collectionView.isPagingEnabled = (self.flowLayout.scrollDirection == .horizontal)
+        self.collectionView.performBatchUpdates({
+            self.flowLayout.scrollDirection = direction
+        }, completion: nil)
+        self.collectionView.isPagingEnabled = (direction == .horizontal)
     }
     
     //MARK: Tap Events
@@ -160,10 +153,6 @@ class DrawerView:UIView {
         self.collectionView.setCollectionViewLayout(self.flowLayout, animated: false)
     }
     
-    @objc func didTapHideDrawer() {
-        self.uiDelegate?.didTapHideDrawerButton()
-    }
-    
     @objc func didTapMiniMessageButton() {
         self.delegate?.didTapMiniMessageButton()
     }
@@ -177,7 +166,6 @@ class DrawerView:UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        self.hideButton.layer.cornerRadius = max(hideButton.height(), hideButton.width())/2
     }
 }
 
@@ -199,7 +187,7 @@ extension DrawerView:UICollectionViewDelegate,UICollectionViewDelegateFlowLayout
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: self.clinicCellReuseIdentifier, for: indexPath) as! ClinicCollectionViewCell
         cell.setClinic(self.nearbyClinics[indexPath.row])
         cell.delegate = self
-        if self.flowLayout.scrollDirection == .vertical {
+        if self.flowLayout.scrollDirection == .vertical && indexPath.row < self.nearbyClinics.count - 1 {
             cell.bottomSeparator.isHidden = false
         }
         else {
@@ -214,22 +202,26 @@ extension DrawerView:UICollectionViewDelegate,UICollectionViewDelegateFlowLayout
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        guard scrollView.contentOffset.y <= 0 && scrollView.isTracking else {return}
-        
+        scrollView.bounces = (scrollView.contentOffset.y > 100);
+        guard scrollView.isTracking else {return}
         let y = scrollView.contentOffset.y
-        
+        let delta = y - previousY
+//        print(" Content offset \(y) Delta \(delta)")
         if y < 0 {
-            let delta = y - previousY
             self.uiDelegate?.didScrollDownWithDelta(delta)
         }
-        print(previousY)
+//        else if y > 0 {
+//            if let delegate = self.uiDelegate, delegate.isBeingDragged() {
+////                self.uiDelegate?.didScrollDownWithDelta(1.1*delta)
+//            }
+//        }
         previousY = y
     }
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        guard scrollView.contentOffset.y <= 0 else {return}
-        self.uiDelegate?.didEndDragging(WithTotalDrag: previousY)
-        previousY = 0
+//        guard let delegate = self.uiDelegate, delegate.isBeingDragged() else {return}
+//        self.uiDelegate?.didEndDragging(WithTotalDrag: previousY)
+//        previousY = 0
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
@@ -241,10 +233,35 @@ extension DrawerView:UICollectionViewDelegate,UICollectionViewDelegateFlowLayout
 }
 
 extension DrawerView:UIGestureRecognizerDelegate {
+  
     override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         if gestureRecognizer == self.panGesture {
-            return (self.collectionView.contentOffset.y <= 0)
+            if self.flowLayout.scrollDirection == .vertical {
+                // Maximized state÷
+                
+                if self.collectionView.contentOffset.y <= 0 {
+                    if self.panGesture.translation(in: self.collectionView).y > 0 {
+                        return true
+                    }
+                }
+                
+                if let delegate = self.uiDelegate, delegate.isBeingDragged() {
+                    return true
+                }
+                
+                if self.collectionView.contentOffset.y < 0 {
+                    return true
+                }
+                return false
+            }
+            else {
+                let shouldTrack = self.collectionView.contentOffset.y <= 0 && self.panGesture.translation(in: self.collectionView).y < 0
+                print(self.panGesture.translation(in: self.collectionView).y)
+                print("is tracking \(shouldTrack)")
+                return shouldTrack
+            }
         }
         return true
     }
 }
+

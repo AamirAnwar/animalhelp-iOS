@@ -100,6 +100,16 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
         }
     }
     
+    let hideButton:UIButton = {
+        let button = UIButton(type: .system)
+        button.titleLabel?.font = UIFont.init(name: kFontAwesomeFamilyName, size: 14)
+        button.setTitle(NSString.fontAwesomeIconString(forEnum: FAIcon.FAChevronDown), for: .normal)
+        button.setTitleColor(UIColor.white, for: .normal)
+        button.backgroundColor = CustomColorMainTheme
+        button.contentEdgeInsets = UIEdgeInsetsMake(0, 3, 0, 3)
+        return button
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         if self.viewModel.locationManager.isLocationPermissionGranted {
@@ -118,6 +128,14 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
         self.setupMyLocationButton()
         self.setupNearestClinicButton()
         self.setupDrawerView()
+        self.createHideButton()
+    }
+    
+    fileprivate func createHideButton() {
+        self.view.addSubview(self.hideButton)
+        self.hideButton.layer.cornerRadius = ceil(kHideButtonSize/2)
+        self.hideButton.addTarget(self, action: #selector(didTapHideDrawerButton), for: .touchUpInside)
+        self.hideButton.frame = CGRect.init(x: view.width() - kDefaultPadding - kHideButtonSize, y: self.drawerView.originY() - kDefaultPadding, width: kHideButtonSize, height: kHideButtonSize)
     }
     
     fileprivate func createGoogleMapView() {
@@ -169,6 +187,9 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
         if self.state == .HiddenDrawer || self.state == .MinimizedDrawer {
             self.showNearestClinicInMinimizedState()
         }
+        if let clinics = self.viewModel.nearbyClinics {
+            self.drawerView.refreshWith(clinics: clinics)
+        }
     }
     
     func showNearestClinicInMinimizedState() {
@@ -198,6 +219,10 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
         for marker in markers {
             marker.map = self.googleMapView
         }
+        if let marker = self.viewModel.nearestClinicMarker, let label = marker.iconView as? UILabel {
+            label.textColor = UIColor.white
+            label.backgroundColor = CustomColorMainTheme
+        }
     }
     
     func showDrawerWith(clinics:[Clinic],scrollToIndex index:Int) {
@@ -209,8 +234,11 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
                                               longitude: location.longitude,
                                               zoom: zoomLevel)
         googleMapView.animate(to: camera)
+        self.refreshUserMarker()
+        
+        
         if let clinics = self.viewModel.nearbyClinics, clinics.isEmpty == false {
-            self.refreshUserMarker()
+            // Do nothing
         }
         else {
             self.showMiniDrawer(withMessage: kStringFindingLocation)
@@ -284,7 +312,10 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
             if self.drawerView.originY() >= self.maxStateY {
                 UIView.animate(withDuration: 0.3, animations: {
                     self.drawerView.setY(self.view.height() - (self.tabBarHeight + kSingleClinicStateHeight))
+                    self.updateHideButtonOriginY()
                     self.drawerView.setHeight(kSingleClinicStateHeight)
+                }, completion:{ (_) in
+                    self.setHideButtonVisibility(true, delay: 0.1)
                 })
             }
             else {
@@ -293,12 +324,15 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
                 }, completion: { (_) in
                     UIView.animate(withDuration: 1, animations: {
                         self.drawerView.setY(self.view.height() - (self.tabBarHeight + kSingleClinicStateHeight))
+                        self.updateHideButtonOriginY()
+                    }, completion:{(_) in
+                        self.setHideButtonVisibility(true, delay: 0.1)
                     })
                 })
             }
             
         case .MaximizedDrawer:
-            UIView.animate(withDuration: 0.3, delay: 0.0, options: [.curveEaseOut], animations: {
+            UIView.animate(withDuration: 0.2, delay: 0.0, options: [], animations: {
                 self.drawerView.setY(self.view.originY() + self.customNavBar.height())
                 self.drawerView.setHeight(self.view.height() - self.customNavBar.height() - self.tabBarHeight)
             }, completion: nil)
@@ -342,12 +376,14 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
                     self.drawerView.showClinics(clinics)
                     self.drawerView.isHidden = false
                     self.state = state
+                    self.customNavBar.setRightButtonIcon(icon:FAIcon.FAList)
                 }
                 
                 switch self.state {
                 case .MinimizedDrawer:
                     UIView.animate(withDuration: 0.3, animations: {
                         self.googleMapView.setHeight(self.view.height() - (self.tabBarHeight + CustomNavigationBar.kCustomNavBarHeight))})
+                    
                     UIView.animate(withDuration: 0.5, animations: {
                         self.drawerView.setY(self.view.height())
                         
@@ -362,6 +398,7 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
                     
                 default:
                     closure()
+                    self.setHideButtonVisibility(true, delay:0.1)
                     UIView.animate(withDuration: 0.3, animations: {
                         self.googleMapView.setHeight(self.view.height() - (self.tabBarHeight + self.customNavBar.height() + kSingleClinicStateHeight))
                     })
@@ -376,6 +413,8 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
             self.drawerView.showClinics(clinics)
             self.drawerView.switchToMaximizedDrawer()
             self.drawerView.isHidden = false
+            self.setHideButtonVisibility(false, delay: 0.1)
+            self.customNavBar.setRightButtonIcon(icon:FAIcon.FAmap)
             
             
         case .InitialSetup:
@@ -429,7 +468,6 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
     }
     
     override func didTapRightBarButton() {
-        
         switch self.state {
         case .MaximizedDrawer:
             self.customNavBar.setRightButtonIcon(icon:FAIcon.FAList)
@@ -452,7 +490,8 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
         present(vc,animated:true)
     }
     
-    func didTapHideDrawerButton() {
+    @objc func didTapHideDrawerButton() {
+        self.setHideButtonVisibility(false, delay: 0.0)
         if let _ = self.viewModel.nearestClinic {
             self.showNearestClinicInMinimizedState()
         }
@@ -462,8 +501,8 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
     }
     
     func didPan(drawer:DrawerView, panGesture:UIPanGestureRecognizer) {
-        print(panGesture.translation(in: drawer))
         let y = panGesture.translation(in: drawer).y
+        
         switch panGesture.state {
         case .began :
             totalPan = 0
@@ -490,18 +529,19 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
     }
     
     func updateDrawerWithTotalDrag(drag:CGFloat) {
-        guard drag <= 0 else {return}
+//        guard drag <= 0 else {return}
         
-        if drag < -200 {
-            self.drawerView.flowLayout.scrollDirection = .vertical
+        if drag < kDrawerViewDragQuotient {
+            self.drawerView.setScrollDirection(.vertical)
             self.transitionTo(state: .MaximizedDrawer)
         }
         else {
             UIView.animate(withDuration: 0.3, animations: {
                 self.drawerView.setY(self.view.height() - (self.tabBarHeight + kSingleClinicStateHeight))
-                self.drawerView.setHeight(kSingleClinicStateHeight)
+                self.updateHideButtonOriginY()
             }, completion: { (_) in
-                self.drawerView.flowLayout.scrollDirection = .horizontal
+                self.drawerView.setHeight(kSingleClinicStateHeight)
+                self.drawerView.setScrollDirection(.horizontal)
                 self.transitionTo(state: .SingleClinicDrawer)
             })
         }
@@ -533,15 +573,38 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
         }
         
         if finalY < self.singleClinicStateY {
-            self.drawerView.flowLayout.scrollDirection = .vertical
+            self.drawerView.setScrollDirection(.vertical)
         }
         else {
-            self.drawerView.flowLayout.scrollDirection = .horizontal
+            self.drawerView.setScrollDirection(.horizontal)
         }
         
         self.drawerView.setY(finalY)
         self.drawerView.setHeight(finalHeight)
-
+        
+        // clean up related views
+        updateHideButtonOriginY()
     }
+    
+    func updateHideButtonOriginY() {
+        self.hideButton.setY(self.drawerView.originY() - kDefaultPadding - kHideButtonSize)
+    }
+    
+    func setHideButtonVisibility(_ isVisible:Bool, delay:Double) {
+        var transform = CGAffineTransform.identity
+        if isVisible == false {
+            transform = self.hideButton.transform.translatedBy(x: 100, y: 0)
+        }
+        UIView.animate(withDuration: 0.3, delay: delay, options: [.curveEaseInOut], animations: {
+            self.hideButton.transform = transform
+        }, completion: nil)
+        
+    }
+    
+    func isBeingDragged() -> Bool {
+        return (self.drawerView.originY() < singleClinicStateY && self.drawerView.originY() > maxStateY)
+    }
+    
+
 }
 

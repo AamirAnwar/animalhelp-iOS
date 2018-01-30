@@ -81,6 +81,13 @@ class BaseViewController:UIViewController, CustomNavigationBarDelegate,UIGesture
         
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if self.customNavBar.loaderIsActive {
+           self.customNavBar.showLoader()
+        }
+    }
+    
     
     fileprivate func createEmptyStateView() {
         view.addSubview(self.emptyStateView)
