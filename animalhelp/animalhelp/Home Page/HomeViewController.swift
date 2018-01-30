@@ -219,6 +219,10 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
         for marker in markers {
             marker.map = self.googleMapView
         }
+        if let marker = self.viewModel.nearestClinicMarker, let label = marker.iconView as? UILabel {
+            label.textColor = UIColor.white
+            label.backgroundColor = CustomColorMainTheme
+        }
     }
     
     func showDrawerWith(clinics:[Clinic],scrollToIndex index:Int) {

@@ -72,7 +72,9 @@ class HomeViewModel:NSObject {
             let marker = GMSMarker()
             marker.position = CLLocationCoordinate2D(latitude: location.latitude, longitude: location.longitude)
             marker.title = location.name
-            marker.icon = GMSMarker.markerImage(with: CustomColorGreen)
+            let iconView = self.createMarkerIconView(withIcon:FAIcon.FAUser,textColor: UIColor.white, backgroundColor:CustomColorMainTheme)
+            marker.iconView = iconView
+            marker.iconView?.layer.cornerRadius = iconView.width()/2
             marker.appearAnimation = .pop
             
             // Clear the previous marker
@@ -140,7 +142,28 @@ class HomeViewModel:NSObject {
         marker.title = clinic.name
         marker.snippet = clinic.address
         marker.appearAnimation = .pop
+        let iconView = self.createMarkerIconView(withIcon:FAIcon.FAPlus,textColor: CustomColorMainTheme, backgroundColor: UIColor.white, borderColor: CustomColorSeparatorGrey)
+        marker.iconView = iconView
+        marker.iconView?.layer.cornerRadius = iconView.width()/2
         return marker
+    }
+    
+    func createMarkerIconView(withIcon icon:FAIcon, textColor:UIColor, backgroundColor:UIColor, borderColor:UIColor? = nil)->UIView {
+        let iconLabel = UILabel()
+        iconLabel.textAlignment = .center
+        iconLabel.font = UIFont.init(name: kFontAwesomeFamilyName, size: 19)
+        iconLabel.text = NSString.fontAwesomeIconString(forEnum: icon)
+        iconLabel.textColor = textColor
+        iconLabel.frame.size = CGSize(width: 30, height: 30)
+        iconLabel.layer.cornerRadius = 15
+        iconLabel.backgroundColor = backgroundColor
+        if let borderColor = borderColor {
+            iconLabel.layer.borderColor = borderColor.cgColor
+            iconLabel.layer.borderWidth = 1
+        }
+        
+        iconLabel.clipsToBounds = true
+        return iconLabel
     }
 }
 
