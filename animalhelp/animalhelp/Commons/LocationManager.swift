@@ -68,11 +68,7 @@ class LocationManager: NSObject {
             print("Stopping location services!")
             self.locationManager.stopUpdatingLocation()
             
-            if let _ = self.userLocation {
-                NotificationCenter.default.post(kNotificationUserLocationChanged)
-                self.delegate?.userLocationDidChange()
-            }
-            else {
+            if self.userLocation == nil {
                 NotificationCenter.default.post(kNotificationLocationDetectionFailed)
             }
             timer.invalidate()
