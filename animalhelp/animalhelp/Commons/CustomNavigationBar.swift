@@ -190,7 +190,7 @@ class CustomNavigationBar:UIView {
     }
     
     func showLoader() {
-        guard self.loaderIsActive == false else {return}
+//        guard self.loaderIsActive == false else {return}
         self.loaderIsActive = true
         layer.addSublayer(gradientLayer)
         let gradientAnimation = CABasicAnimation(keyPath: "locations")

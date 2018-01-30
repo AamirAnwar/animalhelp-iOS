@@ -234,8 +234,11 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
                                               longitude: location.longitude,
                                               zoom: zoomLevel)
         googleMapView.animate(to: camera)
+        self.refreshUserMarker()
+        
+        
         if let clinics = self.viewModel.nearbyClinics, clinics.isEmpty == false {
-            self.refreshUserMarker()
+            // Do nothing
         }
         else {
             self.showMiniDrawer(withMessage: kStringFindingLocation)
