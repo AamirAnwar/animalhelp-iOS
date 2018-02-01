@@ -162,4 +162,12 @@ enum UtilityFunctions {
         }
     }
     
+    public static func showDropdown(withController controller:BaseViewController, message:String) {
+        controller.setStatusBarVisibility(shouldShow: false) {
+            DropdownView.showWith(message: message, completion: {
+                controller.setStatusBarVisibility(shouldShow: true, withCompletion:nil)
+            })
+        }
+    }
+    
 }
