@@ -108,6 +108,11 @@ class BaseViewController:UIViewController, CustomNavigationBarDelegate,UIGesture
         self.emptyStateView.isHidden = false
     }
     
+    func showEmptyStateView(withMessage message:String, buttonTitle:String) {
+        self.emptyStateView.setMessage(message, buttonTitle: buttonTitle)
+        self.showEmptyStateView()
+    }
+    
     func hideEmptyStateView() {
         self.emptyStateView.isHidden = true
     }
