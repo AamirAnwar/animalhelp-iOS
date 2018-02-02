@@ -110,10 +110,7 @@ class HomeViewModel:NSObject {
             self.delegate?.hideLoader()
             guard error == nil else {
                 self.delegate?.showEmptyStateView()
-                
-                if let delegate = self.delegate, let vc = delegate as? BaseViewController {
-                    UtilityFunctions.showErrorDropdown(withController: vc)
-                }
+                UtilityFunctions.showErrorDropdown()
                 return
             }
             

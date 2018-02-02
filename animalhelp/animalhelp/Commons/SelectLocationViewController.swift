@@ -87,7 +87,7 @@ class SelectLocationViewController: BaseViewController {
         AppLocation.getActiveCities { (cities,error) in
             guard error == nil else {
                 self.hideLoader()
-                UtilityFunctions.showErrorDropdown(withController: self)
+                UtilityFunctions.showErrorDropdown()
                 self.showEmptyStateView()
                 return
             }
@@ -161,7 +161,7 @@ extension SelectLocationViewController:UISearchBarDelegate {
     @objc func didFailToDetectLocation() {
         self.hideLoader()
         self.customNavBar.setTitle(kStringSetLocation)
-        UtilityFunctions.showErrorDropdown(withController: self)
+        UtilityFunctions.showErrorDropdown()
     }
 }
 
