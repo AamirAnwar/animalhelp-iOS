@@ -25,6 +25,8 @@ protocol HomeViewModelDelegate {
     func didTapLocationButton()
     func showLoader()
     func hideLoader()
+    func showMiniDrawer(withMessage message:String)
+    func zoomToFit(markers:[GMSMarker])
 }
 
 class HomeViewModel:NSObject {
@@ -105,34 +107,41 @@ class HomeViewModel:NSObject {
     func getNearbyClinics() {
         self.delegate?.showLoader()
         Clinic.getNearbyClinics { (clinics, error) in
+            self.delegate?.hideLoader()
             guard error == nil else {
                 self.delegate?.showEmptyStateView()
-                self.delegate?.hideLoader()
-                if let delegate = self.delegate, let vc = delegate as? BaseViewController {
-                    UtilityFunctions.showErrorDropdown(withController: vc)
-                }
+                UtilityFunctions.showErrorDropdown()
                 return
             }
             
-            guard clinics.isEmpty == false else {
-                self.delegate?.showEmptyStateView()
-                return
-            }
-            self.nearbyClinics = clinics
             // Remove any previous markers from the map
             if let clinicMarkers = self.nearbyClinicsMarkers {
                 clinicMarkers.forEach({ (marker) in
                     marker.map = nil
                 })
             }
+            // Update data
+            self.nearbyClinics = clinics
             self.nearbyClinicsMarkers = clinics.map({ (clinic) -> GMSMarker in
                 return self.createMarkerWithClinic(clinic: clinic)
             })
+            self.delegate?.didRefreshClinics()
+            
+            guard clinics.isEmpty == false else {
+                let message = "No clinics around you :("
+                self.delegate?.showMiniDrawer(withMessage: message)
+                return
+            }
+            
             self.delegate?.hideLoader()
             self.delegate?.hideEmptyStateView()
             self.delegate?.showMarkers(markers:self.nearbyClinicsMarkers!)
-            self.delegate?.didRefreshClinics()
-            self.delegate?.zoomIntoNearestClinic()
+            if var markers = self.nearbyClinicsMarkers {
+                if let userLocationMarker = self.userLocationMarker {
+                    markers.append(userLocationMarker)
+                }
+                self.delegate?.zoomToFit(markers: markers)
+            }
         }
     }
 

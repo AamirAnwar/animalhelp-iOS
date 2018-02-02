@@ -108,6 +108,11 @@ class BaseViewController:UIViewController, CustomNavigationBarDelegate,UIGesture
         self.emptyStateView.isHidden = false
     }
     
+    func showEmptyStateView(withMessage message:String, buttonTitle:String) {
+        self.emptyStateView.setMessage(message, buttonTitle: buttonTitle)
+        self.showEmptyStateView()
+    }
+    
     func hideEmptyStateView() {
         self.emptyStateView.isHidden = true
     }
@@ -161,19 +166,33 @@ class BaseViewController:UIViewController, CustomNavigationBarDelegate,UIGesture
         })
     }
     
-    @objc func didHideStatusBar() {
+    @objc func didHideStatusBar(notification:Notification) {
         guard self.showStatusBar == true else {return}
         UIView.animate(withDuration: kStatusBarAnimationDuration, animations: {
             self.showStatusBar = false
             self.setNeedsStatusBarAppearanceUpdate()
+        }, completion: { _ in
+            if let info = notification.userInfo,let completion = info[kDropdownCompletionKey]  {
+                if let completion = completion as? ()->Void {
+                    completion()
+                }
+            }
+            
         })
     }
     
-    @objc func didShowStatusBar() {
+    @objc func didShowStatusBar(notification:Notification) {
         guard self.showStatusBar == false else {return}
         UIView.animate(withDuration: kStatusBarAnimationDuration, animations: {
             self.showStatusBar = true
             self.setNeedsStatusBarAppearanceUpdate()
+        }, completion: { _ in
+            if let info = notification.userInfo,let completion = info[kDropdownCompletionKey]  {
+                if let completion = completion as? ()->Void {
+                    completion()
+                }
+            }
+            
         })
     }
 }

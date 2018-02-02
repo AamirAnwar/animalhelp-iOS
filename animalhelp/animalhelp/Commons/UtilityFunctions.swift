@@ -154,9 +154,19 @@ enum UtilityFunctions {
         }
     }
     
-    public static func showErrorDropdown(withController controller:BaseViewController) {
-        controller.setStatusBarVisibility(shouldShow: false) {
+    public static func showErrorDropdown() {
+        let completion = {
             DropdownView.showWith(message: "Something went wrong :(", completion: {
+                NotificationCenter.default.post(kNotificationDidShowStatusBar)
+            })
+        }
+        NotificationCenter.default.post(name: kNotificationDidHideStatusBar.name, object: nil, userInfo: [kDropdownCompletionKey:completion])
+        
+    }
+    
+    public static func showDropdown(withController controller:BaseViewController, message:String) {
+        controller.setStatusBarVisibility(shouldShow: false) {
+            DropdownView.showWith(message: message, completion: {
                 controller.setStatusBarVisibility(shouldShow: true, withCompletion:nil)
             })
         }

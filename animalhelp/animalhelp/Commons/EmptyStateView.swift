@@ -34,7 +34,8 @@ class EmptyStateView: UIView {
             make.leading.equalToSuperview().offset(kSidePadding)
             make.trailing.equalToSuperview().inset(kSidePadding)
             make.centerX.equalToSuperview()
-            make.centerY.equalToSuperview().offset(-CustomNavigationBar.kCustomNavBarHeight)
+            make.centerY.equalToSuperview().offset(-CustomNavigationBar.kCustomNavBarHeight).priority(100)
+            make.top.greaterThanOrEqualToSuperview()
         }
         
         self.button.backgroundColor = CustomColorMainTheme

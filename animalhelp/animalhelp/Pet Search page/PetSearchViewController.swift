@@ -14,6 +14,7 @@ class PetSearchViewController:BaseViewController, PetSearchViewModelDelegate {
     
     let kMissingPetCellReuseIdentifier = "MissingPetTableViewCell"
     let kPetCountCellReuseIdentifier = "PetCountTableViewCell"
+    let kEmptyStateReuseIdentifier = "EmptyStateTableViewCell"
     
     let tableView = UITableView(frame: CGRect.zero, style: UITableViewStyle.plain)
     let searchBar = UISearchBar(frame: CGRect.zero)
@@ -79,6 +80,7 @@ class PetSearchViewController:BaseViewController, PetSearchViewModelDelegate {
         self.tableView.contentInset = UIEdgeInsets(top: 8, left: 0, bottom: 20, right: 0)
         self.tableView.register(MissingPetTableViewCell.self, forCellReuseIdentifier: self.kMissingPetCellReuseIdentifier)
         self.tableView.register(StandardListTableViewCell.self, forCellReuseIdentifier: self.kPetCountCellReuseIdentifier)
+        self.tableView.register(EmptyStateTableViewCell.self, forCellReuseIdentifier: kEmptyStateReuseIdentifier)
         
         self.tableView.snp.makeConstraints { (make) in
             make.top.equalTo(self.searchBar.snp.bottom)
@@ -90,13 +92,7 @@ class PetSearchViewController:BaseViewController, PetSearchViewModelDelegate {
     
     func didUpdateMissingPets() {
         self.refreshControl.endRefreshing()
-        
-        if self.viewModel.missingPets.isEmpty {
-            self.showEmptyStateView()
-        }
-        else {
-            self.hideEmptyStateView()
-        }
+        self.hideEmptyStateView()
         self.tableView.reloadData()
         
     }
@@ -184,12 +180,15 @@ extension PetSearchViewController:UISearchBarDelegate {
 
 extension PetSearchViewController:UITableViewDataSource, UITableViewDelegate {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return 3
     }
     
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.section == 0 {
             return 22
+        }
+        else if indexPath.section == 2 {
+            return tableView.height()
         }
         return 400
     }
@@ -208,6 +207,12 @@ extension PetSearchViewController:UITableViewDataSource, UITableViewDelegate {
             return self.viewModel.searchResults.count
         }
         else {
+            // empty state section
+            if section == 2 {
+                if self.viewModel.missingPets.isEmpty {
+                    return 1
+                }
+            }
             return self.viewModel.missingPets.count
         }
     }
@@ -215,6 +220,9 @@ extension PetSearchViewController:UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
             return self.getPetCountCell(tableView)
+        }
+        else if indexPath.section == 2 {
+            return self.getEmptyStateCell(tableView)
         }
         var pet:MissingPet! = nil
         if self.isSearching {
@@ -244,6 +252,17 @@ extension PetSearchViewController:UITableViewDataSource, UITableViewDelegate {
         return cell
     }
     
+    func getEmptyStateCell(_ tableView:UITableView) -> EmptyStateTableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: kEmptyStateReuseIdentifier) as! EmptyStateTableViewCell
+        cell.emptyStateView.setMessage("Not missing pets here :)", buttonTitle: "Change location")
+        cell.delegate = self
+        cell.selectionStyle = .none
+        cell.emptyStateView.snp.makeConstraints { (make) in
+            make.height.equalTo(self.view.height() - (self.searchBar.bottom() + self.tabBarHeight))
+        }
+        return cell
+    }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard indexPath.section > 0 && indexPath.row < self.viewModel.missingPets.count else {
             return
@@ -258,5 +277,11 @@ extension PetSearchViewController:UITableViewDataSource, UITableViewDelegate {
         }
         missingPetDetailVC.pet = pet
         self.navigationController?.pushViewController(missingPetDetailVC, animated: true)
+    }
+}
+
+extension PetSearchViewController:EmptyStateTableViewCellDelegate {
+    func didTapActionButton() {
+        self.present(SelectLocationViewController(), animated: true)
     }
 }
