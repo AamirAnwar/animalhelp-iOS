@@ -204,14 +204,27 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
         self.showNearestClinic(withMarker: self.viewModel.nearestClinicMarker)
     }
     
+    
+    func zoomToFit(markers:[GMSMarker]) {
+        guard markers.isEmpty == false else {return}
+        var bounds = GMSCoordinateBounds(coordinate: markers.first!.position, coordinate: markers.first!.position)
+        for marker in markers {
+            bounds = bounds.includingCoordinate(marker.position)
+        }
+        let inset = 50 + self.tabBarHeight
+        if let camera = googleMapView.camera(for: bounds , insets: UIEdgeInsetsMake(inset, inset, inset, inset)) {
+            googleMapView.camera = camera
+        }
+    }
+    
     func showNearestClinic(withMarker clinicMarker: GMSMarker?) {
         if let userLocation = self.viewModel.locationManager.userLocation,let marker = clinicMarker {
             self.refreshUserMarker()
             let userLocationCoordinate = CLLocationCoordinate2D.init(latitude: userLocation.latitude, longitude: userLocation.longitude)
             let bounds = GMSCoordinateBounds(coordinate: marker.position, coordinate: userLocationCoordinate)
             let inset = 50 + self.tabBarHeight
-            let camera = googleMapView.camera(for: bounds , insets: UIEdgeInsetsMake(inset, inset, inset, inset))!
-            googleMapView.camera = camera
+            let cameraPosition = googleMapView.camera(for: bounds , insets: UIEdgeInsetsMake(inset, inset, inset, inset))!
+            googleMapView.animate(to: cameraPosition)
         }
     }
     
@@ -230,14 +243,15 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
     }
     
     func showUserLocation(location:AppLocation) {
-        let camera = GMSCameraPosition.camera(withLatitude: location.latitude,
-                                              longitude: location.longitude,
-                                              zoom: zoomLevel)
-        googleMapView.animate(to: camera)
         self.refreshUserMarker()
+        let userLocationCoordinate = CLLocationCoordinate2D.init(latitude: location.latitude, longitude: location.longitude)
+        let bounds = GMSCoordinateBounds.init(coordinate: userLocationCoordinate, coordinate: userLocationCoordinate)
+        let inset = 50 + self.tabBarHeight
         
-        
-        if let clinics = self.viewModel.nearbyClinics, clinics.isEmpty == false {
+        let cameraPosition = googleMapView.camera(for: bounds , insets: UIEdgeInsetsMake(inset, inset, inset, inset))!
+        googleMapView.animate(with: GMSCameraUpdate.setCamera(cameraPosition))
+//        googleMapView.animate(to: cameraPosition)
+        if let _ = self.viewModel.nearbyClinics {
             // Do nothing
         }
         else {
@@ -604,6 +618,8 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
     func isBeingDragged() -> Bool {
         return (self.drawerView.originY() < singleClinicStateY && self.drawerView.originY() > maxStateY)
     }
+    
+    
     
 
 }
