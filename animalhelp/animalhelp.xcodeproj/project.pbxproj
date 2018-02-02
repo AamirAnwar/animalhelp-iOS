@@ -23,6 +23,7 @@
 		437312D0201289F7000EC23E /* ContributeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437312CF201289F7000EC23E /* ContributeViewController.swift */; };
 		437312D220128D2D000EC23E /* FeedbackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437312D120128D2D000EC23E /* FeedbackViewController.swift */; };
 		437312D420128FBB000EC23E /* TermsAndConditionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437312D320128FBB000EC23E /* TermsAndConditionsViewController.swift */; };
+		437F0E0C202447BD00599008 /* EmptyStateTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437F0E0B202447BD00599008 /* EmptyStateTableViewCell.swift */; };
 		438216842009D5980077FA5E /* animalhelpTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 438216832009D5980077FA5E /* animalhelpTests.swift */; };
 		438A0D431FCDCB25005A8CA4 /* GoogleMapsCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 438A0D411FCDCB25005A8CA4 /* GoogleMapsCore.framework */; };
 		438A0D451FCDCB27005A8CA4 /* GoogleMapsBase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 438A0D441FCDCB27005A8CA4 /* GoogleMapsBase.framework */; };
@@ -108,6 +109,7 @@
 		437312CF201289F7000EC23E /* ContributeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContributeViewController.swift; sourceTree = "<group>"; };
 		437312D120128D2D000EC23E /* FeedbackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackViewController.swift; sourceTree = "<group>"; };
 		437312D320128FBB000EC23E /* TermsAndConditionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsAndConditionsViewController.swift; sourceTree = "<group>"; };
+		437F0E0B202447BD00599008 /* EmptyStateTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateTableViewCell.swift; sourceTree = "<group>"; };
 		438216812009D5980077FA5E /* animalhelpTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = animalhelpTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		438216832009D5980077FA5E /* animalhelpTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = animalhelpTests.swift; sourceTree = "<group>"; };
 		438216852009D5980077FA5E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -286,6 +288,7 @@
 				43705BEF2014C9F200D7296B /* EmptyStateView.swift */,
 				43705BF32014EED600D7296B /* InfoPopView.swift */,
 				43A94EB5201E68D90018F3EA /* DropdownView.swift */,
+				437F0E0B202447BD00599008 /* EmptyStateTableViewCell.swift */,
 			);
 			path = Commons;
 			sourceTree = "<group>";
@@ -565,6 +568,7 @@
 				43617C4220124B3D0025FEA5 /* MissingPetTableViewCell.swift in Sources */,
 				43705BF02014C9F200D7296B /* EmptyStateView.swift in Sources */,
 				437312D0201289F7000EC23E /* ContributeViewController.swift in Sources */,
+				437F0E0C202447BD00599008 /* EmptyStateTableViewCell.swift in Sources */,
 				43E86AC11FBC320500B7130B /* HomeViewController.swift in Sources */,
 				437312CE201276CF000EC23E /* ButtonTableViewCell.swift in Sources */,
 				43BC0485200E6CC400EF64FD /* MissingPetDetailViewController.swift in Sources */,

@@ -245,12 +245,14 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
     func showUserLocation(location:AppLocation) {
         self.refreshUserMarker()
         let userLocationCoordinate = CLLocationCoordinate2D.init(latitude: location.latitude, longitude: location.longitude)
-        let bounds = GMSCoordinateBounds.init(coordinate: userLocationCoordinate, coordinate: userLocationCoordinate)
-        let inset = 50 + self.tabBarHeight
+//        let bounds = GMSCoordinateBounds.init(coordinate: userLocationCoordinate, coordinate: userLocationCoordinate)
+//        let inset = 50 + self.tabBarHeight
         
-        let cameraPosition = googleMapView.camera(for: bounds , insets: UIEdgeInsetsMake(inset, inset, inset, inset))!
-        googleMapView.animate(with: GMSCameraUpdate.setCamera(cameraPosition))
-//        googleMapView.animate(to: cameraPosition)
+//        let cameraPosition = googleMapView.camera(for: bounds , insets: UIEdgeInsetsMake(inset, inset, inset, inset))!
+        
+//        googleMapView.animate(with: GMSCameraUpdate.setCamera(cameraPosition))
+//        googleMapView.animate(with: GMSCameraUpdate.setTarget(userLocationCoordinate, zoom: zoomLevel))
+        googleMapView.moveCamera(GMSCameraUpdate.setTarget(userLocationCoordinate, zoom: zoomLevel))
         if let _ = self.viewModel.nearbyClinics {
             // Do nothing
         }
