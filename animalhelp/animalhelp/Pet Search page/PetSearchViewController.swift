@@ -9,7 +9,6 @@
 import Foundation
 import UIKit
 
-
 class PetSearchViewController:BaseViewController, PetSearchViewModelDelegate {
     
     let kMissingPetCellReuseIdentifier = "MissingPetTableViewCell"
@@ -18,6 +17,18 @@ class PetSearchViewController:BaseViewController, PetSearchViewModelDelegate {
     
     let tableView = UITableView(frame: CGRect.zero, style: UITableViewStyle.plain)
     let searchBar = UISearchBar(frame: CGRect.zero)
+    let emptyStateImageView = UIImageView()
+    let emptyStateMessageLabel:UILabel = {
+        let label = UILabel()
+        label.numberOfLines = 0
+        label.font = CustomFontDemiMedium
+        label.isHidden = true
+        label.textColor = CustomColorTextBlack
+        label.textAlignment = .center
+        label.text = "No missing pets around you :)"
+        return label
+        
+    }()
     var viewModel:PetSearchViewModel!
     let refreshControl:UIRefreshControl = {
        let control = UIRefreshControl()
@@ -50,9 +61,31 @@ class PetSearchViewController:BaseViewController, PetSearchViewModelDelegate {
         }
         
         self.createTableView()
+        self.createEmptyStateImageView()
+        // message label
+        self.view.addSubview(self.emptyStateMessageLabel)
+        self.emptyStateMessageLabel.snp.makeConstraints { (make) in
+            make.leading.equalTo(self.emptyStateImageView)
+            make.trailing.equalTo(self.emptyStateImageView)
+            make.top.equalTo(self.emptyStateImageView.snp.bottom).offset(2*kDefaultPadding)
+        }
+        
         self.viewModel.searchForMissingPets()
         self.emptyStateView.setMessage("Something went wrong :(", buttonTitle: "Try Again")
         self.refreshControl.addTarget(self, action: #selector(didPromptRefresh), for: UIControlEvents.valueChanged)
+    }
+    
+    func createEmptyStateImageView() {
+        self.view.addSubview(self.emptyStateImageView)
+        self.emptyStateImageView.isHidden = true
+        self.emptyStateImageView.contentMode = .scaleAspectFit
+        self.emptyStateImageView.image = #imageLiteral(resourceName: "pet_search_empty_state")
+        self.emptyStateImageView.snp.makeConstraints { (make) in
+            make.leading.equalToSuperview().offset(kSidePadding)
+            make.trailing.equalToSuperview().inset(kSidePadding)
+            make.top.equalTo(self.searchBar.snp.bottom).offset(CustomNavigationBar.kCustomNavBarHeight)
+            make.height.equalTo(200)
+        }
     }
     
     func createSearchBar() {
@@ -80,7 +113,6 @@ class PetSearchViewController:BaseViewController, PetSearchViewModelDelegate {
         self.tableView.contentInset = UIEdgeInsets(top: 8, left: 0, bottom: 20, right: 0)
         self.tableView.register(MissingPetTableViewCell.self, forCellReuseIdentifier: self.kMissingPetCellReuseIdentifier)
         self.tableView.register(StandardListTableViewCell.self, forCellReuseIdentifier: self.kPetCountCellReuseIdentifier)
-        self.tableView.register(EmptyStateTableViewCell.self, forCellReuseIdentifier: kEmptyStateReuseIdentifier)
         
         self.tableView.snp.makeConstraints { (make) in
             make.top.equalTo(self.searchBar.snp.bottom)
@@ -93,6 +125,9 @@ class PetSearchViewController:BaseViewController, PetSearchViewModelDelegate {
     func didUpdateMissingPets() {
         self.refreshControl.endRefreshing()
         self.hideEmptyStateView()
+        self.emptyStateImageView.isHidden = !self.viewModel.missingPets.isEmpty
+        self.emptyStateMessageLabel.isHidden = self.emptyStateImageView.isHidden
+        self.tableView.isHidden = !self.emptyStateImageView.isHidden
         self.tableView.reloadData()
         
     }
@@ -180,7 +215,7 @@ extension PetSearchViewController:UISearchBarDelegate {
 
 extension PetSearchViewController:UITableViewDataSource, UITableViewDelegate {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 3
+        return 2
     }
     
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -207,12 +242,6 @@ extension PetSearchViewController:UITableViewDataSource, UITableViewDelegate {
             return self.viewModel.searchResults.count
         }
         else {
-            // empty state section
-            if section == 2 {
-                if self.viewModel.missingPets.isEmpty {
-                    return 1
-                }
-            }
             return self.viewModel.missingPets.count
         }
     }
@@ -221,9 +250,7 @@ extension PetSearchViewController:UITableViewDataSource, UITableViewDelegate {
         if indexPath.section == 0 {
             return self.getPetCountCell(tableView)
         }
-        else if indexPath.section == 2 {
-            return self.getEmptyStateCell(tableView)
-        }
+        
         var pet:MissingPet! = nil
         if self.isSearching {
             pet = self.viewModel.searchResults[indexPath.row]
@@ -249,17 +276,6 @@ extension PetSearchViewController:UITableViewDataSource, UITableViewDelegate {
         cell.updateVerticalPadding(with: 3)
         let count = self.isSearching ? self.viewModel.searchResults.count:self.viewModel.missingPets.count
         cell.setTitle("Showing \(count) missing pets around \(LocationManager.sharedManager.userLocality ?? "current vicinity")")
-        return cell
-    }
-    
-    func getEmptyStateCell(_ tableView:UITableView) -> EmptyStateTableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: kEmptyStateReuseIdentifier) as! EmptyStateTableViewCell
-        cell.emptyStateView.setMessage("Not missing pets here :)", buttonTitle: "Change location")
-        cell.delegate = self
-        cell.selectionStyle = .none
-        cell.emptyStateView.snp.makeConstraints { (make) in
-            make.height.equalTo(self.view.height() - (self.searchBar.bottom() + self.tabBarHeight))
-        }
         return cell
     }
     
