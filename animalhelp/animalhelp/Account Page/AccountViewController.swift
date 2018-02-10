@@ -190,15 +190,13 @@ extension AccountViewController: UITableViewDelegate, UITableViewDataSource {
     
     func showFeedbackPage() {
 //        let vc = FeedbackViewController()
-//        self.navigationController?.pushViewController(vc, animated: true)
+//        self.navigationController?.pushViewController(vc, animated: true)  
         guard MFMailComposeViewController.canSendMail() else {return}
         let mailVC = MFMailComposeViewController()
         mailVC.setSubject("Feedback")
         mailVC.mailComposeDelegate = self
-        mailVC.setToRecipients(["feedback@animalhelp.in"])
+        mailVC.setToRecipients([kFeedbackEmailAddress])
         self.present(mailVC, animated: true)
-            
-        
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {

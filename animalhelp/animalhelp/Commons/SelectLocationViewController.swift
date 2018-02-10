@@ -122,8 +122,11 @@ class SelectLocationViewController: BaseViewController {
     
     override func locationChanged() {
         self.customNavBar.setTitle(kStringSetLocation)
-        self.presentingViewController?.dismiss(animated: true)
+        if let _ = LocationManager.sharedManager.userLocation {
+            self.presentingViewController?.dismiss(animated: true)
+        }
     }
+
 }
 
 extension SelectLocationViewController:UISearchBarDelegate {
