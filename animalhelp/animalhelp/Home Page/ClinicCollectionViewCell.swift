@@ -14,6 +14,7 @@ let kCustomButtonHeight:CGFloat = 33
 
 protocol ClinicCollectionViewCellDelegate {
     func didTapGoogleMapsButton(sender:UICollectionViewCell)
+    func didTapCallClinicButton(sender:UICollectionViewCell)
 }
 
 class ClinicCollectionViewCell:UICollectionViewCell {
@@ -92,10 +93,6 @@ class ClinicCollectionViewCell:UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        // Create views here
-        
-        //        self.contentView.backgroundColor = UIColor.red.withAlphaComponent(0.3)
-        
         self.contentView.addSubview(nameLabel)
         self.contentView.addSubview(addressLabel)
         self.contentView.addSubview(phoneLabel)
@@ -157,6 +154,7 @@ class ClinicCollectionViewCell:UICollectionViewCell {
         self.bottomSeparator.isHidden = true
         
         navigateButton.addTarget(self, action: #selector(googleMapsButtonTapped), for: .touchUpInside)
+        callButton.addTarget(self, action: #selector(callButtonTapped), for: .touchUpInside)
         nameLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         distanceLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
         
@@ -171,8 +169,13 @@ class ClinicCollectionViewCell:UICollectionViewCell {
             }
         }
     }
+    
     @objc func googleMapsButtonTapped() {
         self.delegate?.didTapGoogleMapsButton(sender:self)
+    }
+    
+    @objc func callButtonTapped() {
+        self.delegate?.didTapCallClinicButton(sender: self)
     }
     
     override func layoutSubviews() {

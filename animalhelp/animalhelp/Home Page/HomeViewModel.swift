@@ -197,6 +197,13 @@ extension HomeViewModel:DrawerViewDelegate {
         }
    }
     
+    func didTapCallClinic(forIndex indexPath: IndexPath) {
+        guard let nearbyClinics = self.nearbyClinicsMarkers, indexPath.row < nearbyClinics.count else {return}
+        if let clinic = self.nearbyClinics?[indexPath.row] {
+            UtilityFunctions.callNumber(Number: clinic.phone)
+        }
+    }
+    
     func didTapManuallySelectLocation() {
         self.delegate?.didTapLocationButton()
     }

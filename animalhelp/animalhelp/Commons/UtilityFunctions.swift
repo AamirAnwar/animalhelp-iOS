@@ -164,6 +164,22 @@ enum UtilityFunctions {
         
     }
     
+    public static func redirectToMissingPetForm() {
+        let urlString = "https://docs.google.com/forms/d/e/1FAIpQLSdalzKmyq7DVT96ZZDzzXDxeGvOjd1Trj23wSL_3v8PW0J44A/viewform?usp=sf_link"
+        if let url = URL(string:urlString) {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        }
+    }
+    
+    public static func callNumber(Number numberString:String) {
+        let urlString = "telprompt:\(numberString)"
+        if let url = URL(string:urlString) {
+            if UIApplication.shared.canOpenURL(url) {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            }
+        }
+    }
+    
     public static func showDropdown(withController controller:BaseViewController, message:String) {
         controller.setStatusBarVisibility(shouldShow: false) {
             DropdownView.showWith(message: message, completion: {

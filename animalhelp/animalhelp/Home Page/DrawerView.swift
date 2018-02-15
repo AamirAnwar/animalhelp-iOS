@@ -14,6 +14,7 @@ protocol DrawerViewDelegate {
     func didTapDetectLocation()
     func didTapManuallySelectLocation()
     func didTapOpenInGoogleMaps(forIndex indexPath:IndexPath)
+    func didTapCallClinic(forIndex indexPath:IndexPath)
     func didSwipeToClinicAt(index:Int)
     func didTapMiniMessageButton()
 }
@@ -140,6 +141,12 @@ class DrawerView:UIView {
     func didTapGoogleMapsButton(sender: UICollectionViewCell) {
         if let indexPath = self.collectionView.indexPath(for: sender) {
             self.delegate?.didTapOpenInGoogleMaps(forIndex: indexPath)
+        }
+    }
+    
+    func didTapCallClinicButton(sender: UICollectionViewCell) {
+        if let indexPath = self.collectionView.indexPath(for: sender) {
+            self.delegate?.didTapCallClinic(forIndex: indexPath)
         }
     }
     
