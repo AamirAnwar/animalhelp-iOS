@@ -38,8 +38,6 @@ extension APIService: TargetType {
             return URL(string:"https://maps.googleapis.com/maps/api/place/textsearch/json?query=\(query))&key=\(GoogleMapsAPIKey!)")!
         default:break;
         }
-        
-        
         return URL(string: "https://lit-escarpment-51045.herokuapp.com")!
     }
     
@@ -47,8 +45,8 @@ extension APIService: TargetType {
         switch self {
         case .nearestClinic: return "/clinics/nearest"
         case .clinics:return "/clinics"
-        case .missingPets:return "/missing_pets"
-        case .petSearch:return "/missing_pets/search"
+        case .missingPets:return "/missingpets"
+        case .petSearch:return "/missingpets/search"
         case .activeCities: return "/active_cities"
             
         default:return ""
