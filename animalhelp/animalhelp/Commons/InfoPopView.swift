@@ -86,7 +86,11 @@ class InfoPopView: UIView {
         self.backgroundImageView.isUserInteractionEnabled = true
         self.backgroundImageView.addGestureRecognizer(tap)
         self.backgroundImageView.alpha = 0
-        
+        self.button.addTarget(self, action: #selector(didTapActionButton), for: .touchUpInside)
+    }
+    
+    @objc func didTapActionButton(_ sender:Any) {
+        UtilityFunctions.redirectToMissingPetForm()
     }
     
     @objc func didTapPopUp() {

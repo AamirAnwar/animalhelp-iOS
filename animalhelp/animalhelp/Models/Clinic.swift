@@ -13,8 +13,8 @@ struct Clinic:Codable {
     var name:String
     var lon:Double
     var lat:Double
-    var city:String
-    var mobile:String
+//    var city:String
+    var phone:String
     var address:String
     var distance:Double? = nil
     
