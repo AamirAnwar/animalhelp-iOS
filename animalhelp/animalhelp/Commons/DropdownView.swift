@@ -59,6 +59,7 @@ class DropdownView: UIView {
     }
     
     static func showWith(message:String, completion:(()->Void)?) {
+    
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, DropdownView.sharedDropdown == nil, let window = appDelegate.window else {
             return
         }
@@ -67,11 +68,11 @@ class DropdownView: UIView {
         DropdownView.sharedDropdown = dropdown
         dropdown.messageLabel.text = message
         dropdown.completionBlock = completion
-        dropdown.transform = CGAffineTransform(translationX: 0, y: -dropdown.frame.height)
+        dropdown.transform = CGAffineTransform(translationX: 0, y: -window.safeAreaInsets.top)
         window.addSubview(dropdown)
         
         UIView.animate(withDuration: kDropdownAnimationDuration, animations: {
-            dropdown.transform = .identity
+            dropdown.transform = CGAffineTransform(translationX: 0, y: window.safeAreaInsets.top)
         }) { (_) in
             DispatchQueue.main.asyncAfter(deadline: .now() + 2.5, execute: {
                 if dropdown.didBeginPan == false {
@@ -82,12 +83,12 @@ class DropdownView: UIView {
     }
     
     static func hide(dropdown:DropdownView) {
-        guard DropdownView.sharedDropdown === dropdown else {
+        guard DropdownView.sharedDropdown === dropdown, let superview = dropdown.superview else {
             return
         }
         dropdown.panGesture.isEnabled = false
         UIView.animate(withDuration: kDropdownAnimationDuration, animations: {
-            dropdown.transform = CGAffineTransform(translationX: 0, y: -dropdown.frame.height)
+            dropdown.transform = CGAffineTransform(translationX: 0, y: -superview.safeAreaInsets.top)
         }) { (_) in
             DropdownView.sharedDropdown?.completionBlock?()
             DropdownView.sharedDropdown = nil

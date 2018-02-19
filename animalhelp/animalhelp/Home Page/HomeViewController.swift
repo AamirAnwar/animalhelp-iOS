@@ -78,13 +78,13 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
     
     var maxStateHeight:CGFloat {
         get {
-            return self.view.height() - self.customNavBar.height() - self.tabBarHeight
+            return self.view.height() - self.tabBarHeight - self.view.safeAreaInsets.top
         }
     }
     
     var maxStateY:CGFloat {
         get {
-            return self.view.originY() + self.customNavBar.height()
+            return self.customNavBar.bottom()
         }
     }
     
@@ -138,10 +138,15 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
         self.hideButton.frame = CGRect.init(x: view.width() - kDefaultPadding - kHideButtonSize, y: self.drawerView.originY() - kDefaultPadding, width: kHideButtonSize, height: kHideButtonSize)
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        self.googleMapView.setY(CustomNavigationBar.kCustomNavBarHeight + self.view.safeAreaInsets.top)
+    }
+    
     fileprivate func createGoogleMapView() {
         view.addSubview(googleMapView)
         self.googleMapView.delegate = self.viewModel
-        self.googleMapView.frame = CGRect.init(x: 0.0, y: CustomNavigationBar.kCustomNavBarHeight, width: self.view.width(), height: self.view.height() - (self.customNavBar.height() + self.tabBarHeight))
+        self.googleMapView.frame = CGRect.init(x: 0.0, y: CustomNavigationBar.kCustomNavBarHeight + self.view.safeAreaInsets.top , width: self.view.width(), height: self.view.height() - (self.customNavBar.height() + self.view.safeAreaInsets.top + self.tabBarHeight))
     }
     
     fileprivate func setupDrawerView() {
@@ -157,7 +162,7 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
         view.addSubview(self.myLocationButton)
         myLocationButton.snp.makeConstraints { (make) in
             make.trailing.equalToSuperview().offset(-20)
-            make.top.equalTo(self.view.snp.top).offset(100)
+            make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset(100)
             make.size.equalTo(kMapButtonSize)
         }
         myLocationButton.addTarget(self, action: #selector(didTapMyLocationButton), for: .touchUpInside)
@@ -349,7 +354,7 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
             
         case .MaximizedDrawer:
             UIView.animate(withDuration: 0.2, delay: 0.0, options: [], animations: {
-                self.drawerView.setY(self.view.originY() + self.customNavBar.height())
+                self.drawerView.setY(self.maxStateY)
                 self.drawerView.setHeight(self.view.height() - self.customNavBar.height() - self.tabBarHeight)
             }, completion: nil)
         }
@@ -367,13 +372,13 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
             self.updateVisibleMapElements(self,true)
             self.present(OnboardingViewController(), animated: true)
             UIView.animate(withDuration: 0.3, animations: {
-                self.googleMapView.setHeight(self.view.height() - (self.tabBarHeight + self.customNavBar.height()))
+                self.googleMapView.setHeight(self.view.height() - (self.tabBarHeight + self.customNavBar.height() + self.view.safeAreaInsets.top))
             })
             
         case .HiddenDrawer:
             self.updateVisibleMapElements(self,false)
             UIView.animate(withDuration: 0.3, animations: {
-                self.googleMapView.setHeight(self.view.height() - (self.tabBarHeight + self.customNavBar.height()))
+                self.googleMapView.setHeight(self.view.height() - (self.tabBarHeight + self.customNavBar.height() + self.view.safeAreaInsets.top))
             })
             
             
@@ -398,7 +403,7 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
                 switch self.state {
                 case .MinimizedDrawer:
                     UIView.animate(withDuration: 0.3, animations: {
-                        self.googleMapView.setHeight(self.view.height() - (self.tabBarHeight + CustomNavigationBar.kCustomNavBarHeight))})
+                        self.googleMapView.setHeight(self.view.height() - (self.tabBarHeight + CustomNavigationBar.kCustomNavBarHeight + self.view.safeAreaInsets.top))})
                     
                     UIView.animate(withDuration: 0.5, animations: {
                         self.drawerView.setY(self.view.height())
@@ -406,7 +411,7 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
                     }, completion: { (_) in
                         closure()
                         UIView.animate(withDuration: 0.3, delay: 0.3, options: [.curveEaseOut], animations: {
-                            self.googleMapView.setHeight(self.view.height() - (self.tabBarHeight + CustomNavigationBar.kCustomNavBarHeight + kSingleClinicStateHeight))
+                            self.googleMapView.setHeight(self.view.height() - (self.tabBarHeight + CustomNavigationBar.kCustomNavBarHeight + kSingleClinicStateHeight + self.view.safeAreaInsets.top))
                         }, completion: nil)
                     })
                     self.isTransitioning = false
@@ -416,7 +421,7 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
                     closure()
                     self.setHideButtonVisibility(true, delay:0.1)
                     UIView.animate(withDuration: 0.3, animations: {
-                        self.googleMapView.setHeight(self.view.height() - (self.tabBarHeight + self.customNavBar.height() + kSingleClinicStateHeight))
+                        self.googleMapView.setHeight(self.view.height() - (self.tabBarHeight + self.customNavBar.height() + self.view.safeAreaInsets.top + kSingleClinicStateHeight))
                     })
                 }
             }
@@ -436,7 +441,7 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
         case .InitialSetup:
             self.drawerView.isHidden = true
             UIView.animate(withDuration: 0.1, animations: {
-                self.googleMapView.setHeight(self.view.height() - (self.tabBarHeight + self.customNavBar.height()))
+                self.googleMapView.setHeight(self.view.height() - (self.tabBarHeight + self.customNavBar.height() + self.view.safeAreaInsets.top))
             })
         }
         self.state = state
@@ -459,13 +464,13 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
         if self.state == .SingleClinicDrawer || self.state == .MaximizedDrawer {
             UIView.animate(withDuration: 0.4, animations: {
                 self.drawerView.setY(self.view.height())
-                self.googleMapView.setHeight(self.view.height() - (self.tabBarHeight + self.customNavBar.height()))
+                self.googleMapView.setHeight(self.view.height() - (self.tabBarHeight + self.customNavBar.height() + self.view.safeAreaInsets.top))
             }, completion: { (_) in
                 
                 self.drawerView.switchToMinimizedDrawer(title:message)
                 self.drawerView.setHeight(kDrawerMinimizedStateHeight)
                 UIView.animate(withDuration: 0.3, animations: {
-                    self.googleMapView.setHeight(self.view.height() - (self.tabBarHeight + self.customNavBar.height() + kDrawerMinimizedStateHeight))
+                    self.googleMapView.setHeight(self.view.height() - (self.tabBarHeight + self.customNavBar.height() + self.view.safeAreaInsets.top + kDrawerMinimizedStateHeight))
                     self.drawerView.setY(self.view.height() - (self.tabBarHeight + kDrawerMinimizedStateHeight))
                 }, completion:{_ in
                     self.state = .MinimizedDrawer
@@ -475,7 +480,7 @@ class HomeViewController: BaseViewController, HomeViewModelDelegate, DrawerViewU
         }
         else {
             UIView.animate(withDuration: 0.2, animations: {
-                self.googleMapView.setHeight(self.view.height() - (self.tabBarHeight + self.customNavBar.height() + kDrawerMinimizedStateHeight))
+                self.googleMapView.setHeight(self.view.height() - (self.tabBarHeight + self.customNavBar.height() + self.view.safeAreaInsets.top + kDrawerMinimizedStateHeight))
             })
             self.state = .MinimizedDrawer
             self.isTransitioning = false

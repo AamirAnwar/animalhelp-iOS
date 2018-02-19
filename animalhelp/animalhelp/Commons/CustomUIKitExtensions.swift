@@ -61,6 +61,12 @@ extension UIImageView {
     }
 }
 
+extension UIDevice {
+    var isiPhoneX: Bool {
+        return UIScreen.main.nativeBounds.height == 2436
+    }
+}
+
 extension UITableViewCell {
     func showBottomPaddedSeparator() {
         let separator = CustomSeparator.separator

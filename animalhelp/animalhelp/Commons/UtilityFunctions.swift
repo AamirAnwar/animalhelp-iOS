@@ -155,13 +155,14 @@ enum UtilityFunctions {
     }
     
     public static func showErrorDropdown() {
-        let completion = {
-            DropdownView.showWith(message: "Something went wrong :(", completion: {
-                NotificationCenter.default.post(kNotificationDidShowStatusBar)
-            })
-        }
-        NotificationCenter.default.post(name: kNotificationDidHideStatusBar.name, object: nil, userInfo: [kDropdownCompletionKey:completion])
         
+//        let completion = {
+//            DropdownView.showWith(message: "Something went wrong :(", completion: {
+//                NotificationCenter.default.post(kNotificationDidShowStatusBar)
+//            })
+//        }
+//        NotificationCenter.default.post(name: kNotificationDidHideStatusBar.name, object: nil, userInfo: [kDropdownCompletionKey:completion])
+//
     }
     
     public static func redirectToMissingPetForm() {
