@@ -22,7 +22,7 @@ protocol CustomNavigationBarDelegate {
 }
 
 class CustomNavigationBar:UIView {
-    static let kCustomNavBarHeight:CGFloat = 64
+    static let kCustomNavBarHeight:CGFloat = 44
     var delegate:CustomNavigationBarDelegate? = nil
     let locationButton:UIButton = {
         let button = UIButton(type:.system)
@@ -108,7 +108,7 @@ class CustomNavigationBar:UIView {
         self.addSubview(self.crossButton)
         
         self.locationButton.snp.makeConstraints { (make) in
-            self.locationButtonCenterY = make.centerY.equalToSuperview().offset(10)
+            self.locationButtonCenterY = make.centerY.equalToSuperview()
             make.centerX.equalToSuperview()
         }
         self.locationButton.addTarget(self, action: #selector(locationButtonTapped), for: .touchUpInside)

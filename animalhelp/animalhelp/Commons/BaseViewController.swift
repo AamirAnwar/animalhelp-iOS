@@ -67,7 +67,7 @@ class BaseViewController:UIViewController, CustomNavigationBarDelegate,UIGesture
         UtilityFunctions.setUserLocationInNavBar(customNavBar: self.customNavBar)
         customNavBar.delegate = self
         customNavBar.snp.makeConstraints { (make) in
-            make.top.equalToSuperview()
+            make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
         }
