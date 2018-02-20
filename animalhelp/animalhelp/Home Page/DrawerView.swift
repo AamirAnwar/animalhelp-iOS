@@ -63,10 +63,7 @@ class DrawerView:UIView {
         self.panGesture = UIPanGestureRecognizer(target: self, action: #selector(didPan))
         self.panGesture.delegate = self
         self.collectionView.addGestureRecognizer(panGesture)
-//        self.panGesture.require(toFail: self.collectionView.panGestureRecognizer)
         self.collectionView.panGestureRecognizer.require(toFail: self.panGesture)
-//        self.collectionView.layer.borderColor = CustomColorMainTheme.cgColor
-//        self.collectionView.layer.borderWidth = 2
         self.collectionView.delaysContentTouches = false
         self.collectionView.register(ClinicCollectionViewCell.self, forCellWithReuseIdentifier: self.clinicCellReuseIdentifier)
         self.addSubview(self.collectionView)
@@ -94,7 +91,6 @@ class DrawerView:UIView {
     
     
     //MARK: Public API
-    
     public func refreshWith(clinics:[Clinic]) {
         self.nearbyClinics = clinics
         self.collectionView.reloadData()
@@ -213,22 +209,10 @@ extension DrawerView:UICollectionViewDelegate,UICollectionViewDelegateFlowLayout
         guard scrollView.isTracking else {return}
         let y = scrollView.contentOffset.y
         let delta = y - previousY
-//        print(" Content offset \(y) Delta \(delta)")
         if y < 0 {
             self.uiDelegate?.didScrollDownWithDelta(delta)
         }
-//        else if y > 0 {
-//            if let delegate = self.uiDelegate, delegate.isBeingDragged() {
-////                self.uiDelegate?.didScrollDownWithDelta(1.1*delta)
-//            }
-//        }
         previousY = y
-    }
-    
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-//        guard let delegate = self.uiDelegate, delegate.isBeingDragged() else {return}
-//        self.uiDelegate?.didEndDragging(WithTotalDrag: previousY)
-//        previousY = 0
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
