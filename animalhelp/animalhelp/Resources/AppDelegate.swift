@@ -62,7 +62,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let petSearchVC = PetSearchViewController()
         petSearchVC.viewModel = PetSearchViewModel()
         let petNav = UINavigationController(rootViewController: petSearchVC)
-        petNav.tabBarItem.title = "Pet Search"
+        petNav.tabBarItem.title = "Missing Pets"
         petNav.tabBarItem.image = #imageLiteral(resourceName: "petsearch_tab_icon")
         petNav.tabBarItem.selectedImage = #imageLiteral(resourceName: "petsearch_tab_icon_active")
         tabBarController.viewControllers = [homeNav, petNav, accountNav]

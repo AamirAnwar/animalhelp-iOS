@@ -13,6 +13,17 @@ import FacebookLogin
 import SnapKit
 import MessageUI
 
+// Data Structure for account items
+struct AccountItem {
+    static let kAccountItemTermsAndConditionsID = 1
+    static let kAccountItemFeedbackID = 2
+    static let kAccountItemHowToHelpID = 3
+    static let kAccountItemLogoutID = 4
+    var id:Int
+    var title:String
+    var action:()->Void
+}
+
 enum AccountSection:Int {
     case TransparentProfile
     case LoginOrSignUp
@@ -27,18 +38,36 @@ class AccountViewController:BaseViewController,GIDSignInUIDelegate {
     let kStandardListCellReuseIdentifier = "StandardListTableViewCell"
     let kUsernameCellReuseIdentifier = "UserNameCell"
     let kProfileImageBounceFactor:CGFloat = 1.5
-    let standardAccountItems = ["Terms and Conditions", "Feedback", "How to help"]
-    let tableView = UITableView(frame: CGRect.zero, style: .plain)
-    let profileImageView = UIImageView()
-    var accountItems:[String] {
+    var standardAccountItems:[AccountItem] {
         get {
-            if loginManager.isLoggedIn {
-//                ["Pet Lookout","Push Notifications"]
-                return  standardAccountItems + ["Logout"]
+            // Terms and conditions
+            let tcItem = AccountItem.init(id: AccountItem.kAccountItemTermsAndConditionsID, title: "Terms and Conditions") {
+                self.showTCPage()
             }
-            return standardAccountItems
+            // Feedback
+            let fbItem = AccountItem.init(id: AccountItem.kAccountItemFeedbackID, title: "Feedback") {
+                self.showFeedbackPage()
+            }
+            // How to help
+            let helpItem = AccountItem.init(id: AccountItem.kAccountItemHowToHelpID, title: "How to help") {
+                self.showHowToContributePage()
+            }
+            return [tcItem,fbItem,helpItem]
         }
     }
+    
+    var accountItems:[AccountItem] {
+        get {
+            if loginManager.isLoggedIn {
+                return  self.standardAccountItems + [AccountItem.init(id: AccountItem.kAccountItemLogoutID, title: "Logout", action: {
+                    self.showLogoutAlert()
+                })]
+            }
+            return self.standardAccountItems
+        }
+    }
+    let tableView = UITableView(frame: CGRect.zero, style: .plain)
+    let profileImageView = UIImageView()
     let loginManager = LoginManager.sharedInstance
     var heightConstraint:Constraint? = nil
     var currentHeight = kProfileImageHeight
@@ -51,7 +80,13 @@ class AccountViewController:BaseViewController,GIDSignInUIDelegate {
         self.customNavBar.setTitle("Account")
         self.customNavBar.disableLocationButton()
         self.setupProfileImageView()
-        
+        self.setupTableView()
+        NotificationCenter.default.addObserver(self, selector: #selector(userAuthDidChange), name: kNotificationLoggedInSuccessfully.name, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(userAuthDidChange), name: kNotificationLoggedOutSuccessfully.name, object: nil)
+        self.refreshUserDetails()
+    }
+    
+    func setupTableView() {
         self.view.addSubview(self.tableView)
         // Register Cell Types
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: self.kEmptyCellReuseIdentifier)
@@ -70,14 +105,6 @@ class AccountViewController:BaseViewController,GIDSignInUIDelegate {
             make.left.equalToSuperview()
             make.right.equalToSuperview()
         }
-        NotificationCenter.default.addObserver(self, selector: #selector(userAuthDidChange), name: kNotificationLoggedInSuccessfully.name, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(userAuthDidChange), name: kNotificationLoggedOutSuccessfully.name, object: nil)
-        self.refreshUserDetails()
-    }
-    
-    @objc func userAuthDidChange() {
-        self.profileImageView.isHidden = (self.loginManager.isLoggedIn == false)
-        self.tableView.reloadData()
     }
     
     func setupProfileImageView() {
@@ -93,6 +120,54 @@ class AccountViewController:BaseViewController,GIDSignInUIDelegate {
         }
         if self.loginManager.isLoggedIn == false {
             self.profileImageView.isHidden = true
+        }
+    }
+    
+    @objc func userAuthDidChange() {
+        self.profileImageView.isHidden = (self.loginManager.isLoggedIn == false)
+        self.tableView.reloadData()
+    }
+    
+    func showTCPage() {
+        let vc = TermsAndConditionsViewController()
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func showHowToContributePage() {
+        let vc = ContributeViewController()
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func showFeedbackPage() {
+        guard MFMailComposeViewController.canSendMail() else {return}
+        let mailVC = MFMailComposeViewController()
+        mailVC.setSubject("Feedback")
+        mailVC.mailComposeDelegate = self
+        mailVC.setToRecipients([kFeedbackEmailAddress])
+        self.present(mailVC, animated: true)
+    }
+    
+    func showLogoutAlert() {
+        let alertController = UIAlertController(title: "Logout", message: "Are you sure you want to logout", preferredStyle: .alert)
+        let logOutAction = UIAlertAction.init(title: "Logout", style: .destructive) { (action) in
+            self.loginManager.logout()
+        }
+        let cancel = UIAlertAction.init(title: "Cancel", style: .cancel)
+        alertController.addAction(logOutAction)
+        alertController.addAction(cancel)
+        present(alertController, animated:true)
+    }
+    
+    func refreshUserDetails() {
+        
+        if let url = self.loginManager.currentUser?.profilePictureURL?.absoluteString {
+            self.profileImageView.setImage(WithURL: url)
+        }
+        else if let url = UserDefaults.standard.value(forKey: kUserProfileImageURLKey) as? String {
+            self.profileImageView.setImage(WithURL: url)
+        }
+        else {
+            self.profileImageView.image = nil
         }
     }
 }
@@ -159,44 +234,9 @@ extension AccountViewController: UITableViewDelegate, UITableViewDataSource {
         if let section = AccountSection(rawValue: indexPath.section) {
             if section == .Settings {
                 guard indexPath.row < self.accountItems.count else {return}
-                // TODO, Fix these comparisons ftlog
-                if self.accountItems[indexPath.row] == "Logout" {
-                    self.showLogoutAlert()
-                    
-                }
-                else if self.accountItems[indexPath.row] == "How to help" {
-                    self.showHowToContributePage()
-                }
-                else if self.accountItems[indexPath.row] == "Feedback" {
-                    self.showFeedbackPage()
-                }
-                else if self.accountItems[indexPath.row] == "Terms and Conditions" {
-                    self.showTCPage()
-                }
+                self.accountItems[indexPath.row].action()
             }
         }
-        
-    }
-    
-    func showTCPage() {
-        let vc = TermsAndConditionsViewController()
-        self.navigationController?.pushViewController(vc, animated: true)
-    }
-    
-    func showHowToContributePage() {
-        let vc = ContributeViewController()
-        self.navigationController?.pushViewController(vc, animated: true)
-    }
-    
-    func showFeedbackPage() {
-//        let vc = FeedbackViewController()
-//        self.navigationController?.pushViewController(vc, animated: true)  
-        guard MFMailComposeViewController.canSendMail() else {return}
-        let mailVC = MFMailComposeViewController()
-        mailVC.setSubject("Feedback")
-        mailVC.mailComposeDelegate = self
-        mailVC.setToRecipients([kFeedbackEmailAddress])
-        self.present(mailVC, animated: true)
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -205,7 +245,7 @@ extension AccountViewController: UITableViewDelegate, UITableViewDataSource {
     
     func getStandardSettingsCell(tableView:UITableView, indexPath:IndexPath) -> StandardListTableViewCell {
         let standardCell = tableView.dequeueReusableCell(withIdentifier: kStandardListCellReuseIdentifier) as! StandardListTableViewCell
-        standardCell.setTitle(accountItems[indexPath.row])
+        standardCell.setTitle(accountItems[indexPath.row].title)
         standardCell.tintColor = CustomColorTextBlack
         // Show a bottom separator for all cells except the last
         if indexPath.row < self.accountItems.count - 1 {
@@ -244,32 +284,6 @@ extension AccountViewController: UITableViewDelegate, UITableViewDataSource {
         usernameCell.setTitle(username)
         usernameCell.setTitleFont(CustomFontUsername)
         return usernameCell
-    }
-    
-    func showLogoutAlert() {
-        let alertController = UIAlertController(title: "Logout", message: "Are you sure you want to logout", preferredStyle: .alert)
-        let logOutAction = UIAlertAction.init(title: "Logout", style: .destructive) { (action) in
-            self.loginManager.logout()
-        }
-        let cancel = UIAlertAction.init(title: "Cancel", style: .cancel) { (action) in
-            
-        }
-        alertController.addAction(logOutAction)
-        alertController.addAction(cancel)
-        present(alertController, animated:true)
-    }
-    
-    func refreshUserDetails() {
-        // User profile image
-        if let url = self.loginManager.currentUser?.profilePictureURL?.absoluteString {
-            self.profileImageView.setImage(WithURL: url)
-        }
-        else if let url = UserDefaults.standard.value(forKey: kUserProfileImageURLKey) as? String {
-            self.profileImageView.setImage(WithURL: url)
-        }
-        else {
-            self.profileImageView.image = nil
-        }
     }
 }
 

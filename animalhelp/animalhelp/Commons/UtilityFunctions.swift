@@ -68,6 +68,8 @@ enum UtilityFunctions {
         return cell
     }
     
+    
+    //Function to handle calculations related to expanding an image view w.r.t to a scroll view
     static func expandImageWith(scrollView:UIScrollView,
                                 view:UIView,
                                 currentHeight:inout CGFloat,
