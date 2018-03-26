@@ -1,4 +1,4 @@
-# Watchdog
+# Watchdog :dog:
 
 ![logo](https://github.com/AamirAnwar/watchdog-iOS/raw/master/Github_Art.png)
 
