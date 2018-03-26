@@ -7,5 +7,8 @@ An iOS Application which shows animal help centres around your location using Co
 - Google Maps Text Search API
 - NodeJS (Back end)
 - MongoDB (Back end Database)
-
+- Moya (iOS Framework for API layer Architecture)
+- Google and Facebook Login SDKs
+- [Snapkit](http://snapkit.io/) 
+- Carthage (Swift Lib Dependency manager)
 [Appstore  :point_right: ](https://itunes.apple.com/in/app/watchdog-app/id1340377198?mt=8)
