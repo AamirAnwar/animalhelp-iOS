@@ -1,6 +1,8 @@
 # Watchdog
 
-An iOS Application which shows animal help centres around your location using Cocoa-Touch technologies to detect and update your current location. The app uses the following tech - 
+[logo]:https://github.com/AamirAnwar/watchdog-iOS/Github_Art.png
+
+An iOS Application which shows animal help centres around your location using Cocoa-Touch technologies to detect and update your current location. The app uses the following tech -
 
 - Cocoa Touch
 - Google Maps SDK
